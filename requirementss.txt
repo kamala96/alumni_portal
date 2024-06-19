@@ -1,6 +1,0 @@
-Django
-mysqlclient
-gunicorn
-Pillow
-django-cleanup
-django-phonenumber-field[phonenumbers]
