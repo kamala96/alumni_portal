@@ -46,3 +46,15 @@ class Navigationmenu(models.Model):
 
     class Meta:
         ordering = ['order_id']
+
+class ASiteSettings(models.Model):
+    site_name = models.CharField(max_length=50, blank=True, null=True)
+    icon_class = models.CharField(max_length=50, blank=True, null=True)
+    main_logo = models.ImageField(upload_to='static/images/logo/', blank=True, null=True)
+    favourite_icon = models.ImageField(upload_to='static/images/favicon/', blank=True, null=True)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return "Site Setting"
