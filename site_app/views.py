@@ -20,27 +20,29 @@ def default_error_page(request):
 
 def handle_nav_menu_click(request, menu_slug):
     try:
-        menu = Navigationmenu.objects.get(slug=menu_slug)
+        nav_menu = Navigationmenu.objects.get(slug=menu_slug)
     except Navigationmenu.DoesNotExist:
         return redirect('default_error_page')
     
-    if menu.slug in ['home']:
+    template_name = '_default.html'
+    
+    if nav_menu.slug in ['home']:
         return redirect('index')
 
-    elif menu.slug in ['about']:
+    elif nav_menu.slug in ['about']:
         template_name = 'about.html'
 
-    elif menu.slug in ['event']:
+    elif nav_menu.slug in ['event']:
         template_name = 'event.html'
 
-    elif menu.slug in ['gallery']:
+    elif nav_menu.slug in ['gallery']:
         template_name = 'gallery.html'
 
-    elif menu.slug in ['contact']:
+    elif nav_menu.slug in ['contact']:
         template_name = 'contact.html'
         
     context = {
-        'menu': menu,
+        'nav_menu': nav_menu,
     }
 
     return render(request, f'nav_menus/{template_name}', context)

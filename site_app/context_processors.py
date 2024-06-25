@@ -1,4 +1,5 @@
 from django.conf import settings
+from site_app.models import Navigationmenu
 
 
 def site_name(request):
