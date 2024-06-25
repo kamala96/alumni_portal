@@ -1,9 +1,6 @@
 from django.conf import settings
-<<<<<<< HEAD
 from .models import *
-=======
 
->>>>>>> 0ce97b92f9ae0e532dbfdf0a5877896f27732f30
 
 def site_name(request):
     return {'site_name': settings.SITE_NAME}
