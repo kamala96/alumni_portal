@@ -2,6 +2,45 @@ from django.core.exceptions import ValidationError
 from django.utils.text import slugify
 from django.db import models
 
+class TopHeader(models.Model):
+    LEFT = 'left'
+    RIGHT = 'right'
+    MENU_POSITION_CHOICES = [
+        (LEFT, 'Left'),
+        (RIGHT, 'Right'),
+    ]
+    
+    INTERNAL = 'internal'
+    EXTERNAL = 'external'
+    LINK_TYPE_CHOICES = [
+        (INTERNAL, 'Internal'),
+        (EXTERNAL, 'External'),
+    ]
+    
+    MenuFor = models.CharField(max_length=255, blank=True, null=True)
+    title = models.CharField(max_length=255)
+    slug = models.SlugField(unique=True, max_length=255, blank=True, null=True)
+    link_type = models.CharField(max_length=8, choices=LINK_TYPE_CHOICES)
+    link = models.URLField(blank=True, null=True)
+    icon_class = models.CharField(max_length=255, blank=True, null=True)
+    position = models.CharField(
+        max_length=5,
+        choices=MENU_POSITION_CHOICES,
+        default=RIGHT,
+    )
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        if self.link_type == self.INTERNAL and not self.slug:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title
+
+
 class Navigationmenu(models.Model):
     MENU_TYPE_CHOICES = [
         ('main', 'Main'),
