@@ -1,8 +1,11 @@
 from django.contrib import admin
-from django.contrib import admin
-from .models import Navigationmenu, ASiteSettings
+from .models import TopHeader, Navigationmenu, ASiteSettings
 
 # Register your models here.
+@admin.register(TopHeader)
+class TopHeaderAdmin(admin.ModelAdmin):
+    list_display = ('MenuFor','title', 'position', 'link_type', 'link', 'icon_class', 'is_active')
+    prepopulated_fields = {'slug': ('title',)}
 
 @admin.register(Navigationmenu)
 class NavigationmenuAdmin(admin.ModelAdmin):
