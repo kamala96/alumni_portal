@@ -1,7 +1,5 @@
 from django.conf import settings
-<<<<<<< HEAD
 from .models import *
-=======
 
 
 def site_name(request):
