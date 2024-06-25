@@ -1,4 +1,5 @@
 {% load static %}
+{% load menu_tags %}
 
 <div class="container">
     <div class="header-inner">
@@ -31,6 +32,40 @@
                 </div>
 
                 <ul class="codeboxr-main-menu">
+                    {% for menu in main_menu %}
+                        <li class="{% if menu.submenus.count > 0 %}has-submenu{% endif %} menu-item-depth-{{ menu.indentation }}">
+                            <a href="{% if menu.link_type == 'internal' %}/{{ menu.slug }}{% else %}{{ menu.link }}{% endif %}">
+                                {{ menu.menu_name }}
+                            </a>
+                            {% if menu|submenus %}
+                                <ul class="sub-menu">
+                                    {% for submenu in menu|submenus %}
+                                        <li class="{% if submenu.submenus.count > 0 %}has-submenu{% endif %} menu-item-depth-{{ submenu.indentation }}">
+                                            <a href="{% if submenu.link_type == 'internal' %}/{{ submenu.slug }}{% else %}{{ submenu.link }}{% endif %}">
+                                                {{ submenu.menu_name }}
+                                            </a>
+                                            {% if submenu|submenus %}
+                                                <ul class="sub-menu">
+                                                    {% for subsubmenu in submenu|submenus %}
+                                                        <li class="menu-item-depth-{{ subsubmenu.indentation }}">
+                                                            <a href="{% if subsubmenu.link_type == 'internal' %}/{{ subsubmenu.slug }}{% else %}{{ subsubmenu.link }}{% endif %}">
+                                                                {{ subsubmenu.menu_name }}
+                                                            </a>
+                                                        </li>
+                                                    {% endfor %}
+                                                </ul>
+                                            {% endif %}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+
+
+
+                {% comment %} <ul class="codeboxr-main-menu">
                     <li>
                         <a href="{% url 'handle_nav_menu_click' 'home' %}">Home</a>
                     </li>
@@ -80,7 +115,7 @@
                     <li class="menu-item-depth-0">
                         <a href="contact.html">Contact</a>
                     </li>
-                </ul>
+                </ul> {% endcomment %}
             </div>
             <!-- /.menu-wrapper -->
         </nav>
