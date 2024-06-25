@@ -1,13 +1,8 @@
 from django.conf import settings
 <<<<<<< HEAD
-from site_app.models import Navigationmenu
-=======
-<<<<<<< HEAD
 from .models import *
 =======
->>>>>>> 121dc4c1a053ece313e228b40272a0ae323797cd
 
->>>>>>> 0ce97b92f9ae0e532dbfdf0a5877896f27732f30
 
 def site_name(request):
     return {'site_name': settings.SITE_NAME}
