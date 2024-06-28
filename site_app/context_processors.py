@@ -17,3 +17,7 @@ def top_header(request):
 def navigation_menu(request):
     main_menu = Navigationmenu.objects.filter(menu_type='main', is_active=True).order_by('order_id')
     return {'main_menu': main_menu}
+
+def slider_context(request):
+    sliders = Slider.objects.filter(is_slider_active=True)
+    return {'sliders': sliders}

@@ -71,7 +71,7 @@
     <!-- Google Web Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&amp;display=swap" rel="stylesheet" />
 
-
+    
 </head>
 
 <body id="home-v1" class="home-page-one" data-style="default">
@@ -118,6 +118,22 @@
 
     <!-- Site Scripts -->
     <script src="{% static 'js/app.js' %}"></script>
+    <!-- Include jQuery and Owl Carousel JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+
+    <script>
+    $(document).ready(function(){
+        $(".slider-active-wrap").owlCarousel({
+            items: 1,
+            loop: true,
+            autoplay: true,
+            autoplayTimeout: 5000,
+            dots: true,
+            nav: false,
+        });
+    });
+    </script>
 
 
 </body>

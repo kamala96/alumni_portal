@@ -97,3 +97,29 @@ class ASiteSettings(models.Model):
 
     def __str__(self):
         return "Site Setting"
+
+class Slider(models.Model):
+    title = models.CharField(max_length=200)
+    slug = models.SlugField(unique=True, max_length=200, blank=True, null=True)
+    image = models.ImageField(upload_to='static/images/slider/')
+    description = models.TextField(blank=True, null=True)
+    button_text = models.CharField(max_length=50, blank=True, null=True)
+    button_link = models.URLField(blank=True, null=True)
+    slider_link = models.URLField(blank=True, null=True)
+    show_button = models.BooleanField(default=False)
+    show_title = models.BooleanField(default=True)
+    show_description = models.BooleanField(default=True)
+    is_slider_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        ordering = ['-created_at']

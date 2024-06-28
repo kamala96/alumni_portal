@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import TopHeader, Navigationmenu, ASiteSettings
+from .models import *
 
 # Register your models here.
 @admin.register(TopHeader)
@@ -19,3 +19,8 @@ class SiteSettingsAdmin(admin.ModelAdmin):
     list_display = ('site_name', 'main_logo', 'favourite_icon', 'is_active', 'created_at', 'updated_at')
     list_filter = ('is_active', 'created_at', 'updated_at')
     search_fields = ('main_logo', 'favourite_icon')
+
+@admin.register(Slider)
+class SliderAdmin(admin.ModelAdmin):
+    list_display = ('title', 'is_slider_active', 'created_at', 'updated_at')
+    prepopulated_fields = {"slug": ("title",)}
