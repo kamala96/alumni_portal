@@ -87,6 +87,7 @@ class Navigationmenu(models.Model):
 
     class Meta:
         ordering = ['order_id']
+        
 
 class ASiteSettings(models.Model):
     site_name = models.CharField(max_length=50, blank=True, null=True)
@@ -99,8 +100,6 @@ class ASiteSettings(models.Model):
 
     def __str__(self):
         return "Site Setting"
-
-<<<<<<< HEAD
 
 
 
@@ -285,7 +284,8 @@ class Responsibility(models.Model):
     updated = models.DateTimeField(auto_now=True)
     def _str_(self): 
         return self.title
-=======
+
+
 class Slider(models.Model):
     title = models.CharField(max_length=200)
     slug = models.SlugField(unique=True, max_length=200, blank=True, null=True)
@@ -311,4 +311,4 @@ class Slider(models.Model):
 
     class Meta:
         ordering = ['-created_at']
->>>>>>> 384bfaecbc00761d8e6f3df255186ed65c5f983b
+
