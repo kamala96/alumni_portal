@@ -1,5 +1,9 @@
 from django.contrib import admin
+<<<<<<< HEAD
 from .models import * #TopHeader, Navigationmenu, ASiteSettings, EventsPost, NewsPost, JobPosting
+=======
+from .models import *
+>>>>>>> 384bfaecbc00761d8e6f3df255186ed65c5f983b
 
 # Register your models here.
 @admin.register(TopHeader)
@@ -20,6 +24,7 @@ class SiteSettingsAdmin(admin.ModelAdmin):
     list_filter = ('is_active', 'created_at', 'updated_at')
     search_fields = ('main_logo', 'favourite_icon')
 
+<<<<<<< HEAD
 @admin.register(EventsPost)
 class EventsPostAdmin(admin.ModelAdmin):
     list_display = ('title', 'updated_at')
@@ -51,3 +56,9 @@ class NewsCategoryAdmin(admin.ModelAdmin):
 @admin.register(JobCategory)
 class JobCategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'description')
+=======
+@admin.register(Slider)
+class SliderAdmin(admin.ModelAdmin):
+    list_display = ('title', 'is_slider_active', 'created_at', 'updated_at')
+    prepopulated_fields = {"slug": ("title",)}
+>>>>>>> 384bfaecbc00761d8e6f3df255186ed65c5f983b
