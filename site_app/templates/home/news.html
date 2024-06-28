@@ -1,0 +1,73 @@
+{% load static %}
+        <!--=======================-->
+        <!--=         Blog        =-->
+        <!--=======================-->
+        <section id="blog-area" class="section-padding">
+          <div class="container">
+              <!--== Section Title Start ==-->
+              <div class="row">
+                  <div class="col-lg-12 text-center">
+                      <div class="section-title">
+                          <h2>Recent News</h2>
+                      </div>
+                  </div>
+              </div>
+              <!--== Section Title End ==-->
+
+              <!--== Blog Content Wrapper ==-->
+              <div class="row">
+                {% if all_news %}
+                {% for new in all_news %}
+                  <!--== Single Blog Post start ==-->
+                  <div class="col-lg-4 col-md-6">
+                      <article class="single-blog-post">
+                          <figure class="blog-thumb">
+                              <div class="blog-thumbnail">
+                                {% if new.image.url != '' %}
+                                  <img src="{{ new.image.url }}" alt="Blog" class="img-fluid" />
+                                {% else %}
+                                <img src="{% static 'images/default.jpg' %}" alt="Blog" class="img-fluid" />
+                                {% endif %}
+                              </div>
+                              <figcaption class="blog-meta clearfix">
+                                  <a href="single-blog.html" class="author">
+                                      <div class="author-pic">
+                                          <img src="{% static 'images/blog/author.jpg' %}" alt="Author">
+                                      </div>
+                                      <div class="author-info">
+                                          <h5>Daney williams</h5>
+                                          <p>2 hours Ago</p>
+                                      </div>
+                                  </a>
+                                  <div class="like-comm pull-right">
+                                      <a href="#"><i class="fa fa-comment-o"></i>77</a>
+                                      <a href="#"><i class="fa fa-heart-o"></i>12</a>
+                                  </div>
+                              </figcaption>
+                          </figure>
+
+                          <div class="blog-content">
+                              <h3><a href="{% url 'handle_news_click' new.id %}">{{ new.title }}</a></h3>
+                              <p>{{ new.description }}</p>
+                              <a href="{% url 'handle_news_click' new.id %}" class="btn btn-brand">More</a>
+                          </div>
+                      </article>
+                  </div>
+                  <!--== Single Blog Post End ==-->
+                  {% endfor %}
+                  {% else %}
+                  <div class="up-event-text">
+                    <h3>No News Available</h3>
+                  </div>
+                  {% endif %}
+
+              </div>
+              <!--== Blog Content Wrapper ==-->
+              
+              <div class="row">
+                <div class="col-lg-12 text-center">
+                    <a href="{% url 'all_news' %}" class="btn btn-brand btn-loadmore">All News list</a>
+                </div>
+            </div>
+          </div>
+      </section>

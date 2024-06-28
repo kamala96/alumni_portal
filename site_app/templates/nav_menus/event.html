@@ -7,4 +7,150 @@
 {% block content %}
 
 
+        <!--==========================-->
+        <!--=         Banner         =-->
+        <!--==========================-->
+        <section id="page-title-area">
+          <div class="container">
+              <div class="row">
+                  <div class="col-lg-8 m-auto text-center">
+                      <div class="page-title-content">
+                          <h1 class="h2">All Event Archive</h1>
+                          <p>
+                              Alumni Needs enables you to harness the power of your alumni network. Whatever may be the need
+                          </p>
+                          <a href="#page-content-wrap" class="btn btn-brand smooth-scroll">Let's See</a>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </section>
+
+      <!--=========================-->
+      <!--=          Event        =-->
+      <!--=========================-->
+      <section id="page-content-wrap">
+          <div class="event-page-content-wrap section-padding">
+              <div class="container">
+                  <div class="row">
+                      <div class="col-lg-12">
+                          <div class="event-filter-area">
+                              <form action="https://codeboxr.net/themedemo/unialumni/html/index.html" class="form-inline d-flex">
+                                  <select name="year" id="year">
+                                      <option selected>Year</option>
+                                      <option>2018</option>
+                                      <option>2017</option>
+                                      <option>2016</option>
+                                      <option>2015</option>
+                                      <option>2014</option>
+                                  </select>
+
+                                  <select name="place" id="place">
+                                      <option selected>Place</option>
+                                      <option>Alabama</option>
+                                      <option>Alaska</option>
+                                      <option>Arizona</option>
+                                      <option>Colorado</option>
+                                      <option>Delaware</option>
+                                  </select>
+
+                                  <select name="type" id="type">
+                                      <option selected>Type</option>
+                                      <option>Meetup</option>
+                                      <option>Seminar</option>
+                                      <option>Get Together</option>
+                                  </select>
+
+                                  <button class="btn btn-brand">Filter</button>
+                              </form>
+                          </div>
+                      </div>
+                  </div>
+
+              
+                  <div class="row">
+                      <div class="col-lg-12">
+                          <div class="all-event-list">
+
+                              {% if events %}
+                              {% for event in events %}
+
+                              <!-- Single Event Start -->
+                              <div class="single-upcoming-event">
+                                  <div class="row">
+                                      <div class="col-lg-5">
+                                          <div class="up-event-thumb">
+                                            {% if event.image.url != '' %}
+                                             <img src="{{ event.image.url }}" class="img-fluid" alt="Upcoming {{ event.item_type }}">
+                                            {% else %} 
+                                             <img src="{% static 'images/default.jpg' %}" class="img-fluid" alt="Upcoming {{ event.item_type }}">
+                                            {% endif %}
+                                              <h4 class="up-event-date">It’s {{ event.start_date }}</h4>
+                                          </div>
+                                      </div>
+
+                                      <div class="col-lg-7">
+                                          <div class="display-table">
+                                              <div class="display-table-cell">
+                                                  <div class="up-event-text">
+                                                      <div class="event-countdown">
+                                                          <div class="event-countdown-counter" data-date="{{ event.start_date|date:'Y/m/d' }}"></div>
+                                                          <p>Remaining</p>
+                                                      </div>
+                                                      <h3><a href="{% url 'handle_event_click' event.id %}">{{ event.title }}</a></h3>
+                                                      <p>{{ event.description }}</p>
+                                                      <a href="{% url 'handle_event_click' event.id %}" class="btn btn-brand btn-brand-dark">join
+                                                          with us</a>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+
+                              {% endfor %}
+                  {% else %}
+                  <div class="up-event-text">
+                    <h3>No Event Archive Available</h3>
+                  </div>
+                  {% endif %}
+
+                          </div>
+                      </div>
+                  </div>
+                  
+
+
+                  <!-- Pagination Start -->
+                  <div class="row">
+                      <div class="col-lg-12">
+                          <div class="pagination-wrap text-center">
+                              <nav>
+                                  <ul class="pagination">
+                                      <li class="page-item">
+                                          <a class="page-link" href="#">
+                                              <i class="fa fa-angle-left"></i>
+                                          </a>
+                                      </li>
+                                      <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                      <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                      <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                      <li class="page-item"><a class="page-link" href="#">...</a></li>
+                                      <li class="page-item"><a class="page-link" href="#">50</a></li>
+                                      <li class="page-item">
+                                          <a class="page-link" href="#">
+                                              <i class="fa fa-angle-right"></i>
+                                          </a>
+                                      </li>
+                                  </ul>
+                              </nav>
+                          </div>
+                      </div>
+                  </div>
+                  <!-- Pagination End -->
+              </div>
+          </div>
+      </section>
+
+
 {% endblock content %}
