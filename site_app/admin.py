@@ -78,3 +78,8 @@ class SubscriberAdmin(admin.ModelAdmin):
     search_fields = ('email',)
 
 
+
+@admin.register(Responsibility)
+class ResponsibilityAdmin(admin.ModelAdmin):
+    list_display = ('title', 'desc', 'image', 'created')
+    # prepopulated_fields = {"slug": ("title",)}
