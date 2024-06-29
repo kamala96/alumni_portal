@@ -44,9 +44,11 @@ class TopHeader(models.Model):
 
 
 class Navigationmenu(models.Model):
+    MAIN_MENU_TYPE = 'main'
+    SUB_MENU_TYPE = 'sub'
     MENU_TYPE_CHOICES = [
-        ('main', 'Main'),
-        ('sub', 'Sub'),
+        (MAIN_MENU_TYPE, 'Main/Root Menu'),
+        (SUB_MENU_TYPE, 'Sub Menu'),
     ]
 
     LINK_TYPE_CHOICES = [
@@ -61,7 +63,7 @@ class Navigationmenu(models.Model):
     menu_type = models.CharField(max_length=4, choices=MENU_TYPE_CHOICES)
     parent = models.ForeignKey(
         'self', on_delete=models.CASCADE, null=True, blank=True, related_name='submenus',
-        limit_choices_to={'menu_type': 'main'}
+        limit_choices_to={'menu_type': MAIN_MENU_TYPE}
     )
     order_id = models.PositiveIntegerField(null=True, blank=True)
     icon_class = models.CharField(max_length=50, blank=True, null=True)

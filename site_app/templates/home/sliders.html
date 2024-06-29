@@ -2,6 +2,9 @@
 
 <section id="slider-area">
     <div class="slider-active-wrap owl-carousel text-center text-md-start">
+        <!-- For active sliders -->
+        {% get_active_sliders as sliders %}
+        
         {% for slide in sliders %}
             {% if slide.is_slider_active %}
                 <div class="single-slide-wrap" style="background-image: url('{{ slide.image.url }}');">
@@ -29,7 +32,7 @@
         {% endfor %}
     </div>
 
-    <div class="social-networks-icon" style="padding right:10px;" >
+    <div class="social-networks-icon" style="padding-right:10px;" >
         <ul>
             <li><a href="#"><i class="fab fa-facebook-f"></i> <span>7.2k Likes</span></a></li>
             <li><a href="#"><i class="fab fa-twitter"></i> <span>3.2m Followers</span></a></li>
