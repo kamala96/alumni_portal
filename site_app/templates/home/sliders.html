@@ -4,7 +4,7 @@
 <section id="slider-area">
     <div class="slider-active-wrap owl-carousel text-center text-md-start">
         <!-- For active sliders -->
-        {% get_active_sliders as sliders %}
+        {% get_sliders as sliders %}
         
         {% for slide in sliders %}
             {% if slide.is_slider_active %}
