@@ -16,45 +16,23 @@
 
               <!--== Responsibility Content Wrapper ==-->
               <div class="row text-center text-sm-left">
+                {% if responsibilitys %}
+                {% for responsibility in responsibilitys %}
                   <!--== Single Responsibility Start ==-->
                   <div class="col-lg-3 col-sm-6">
                       <div class="single-responsibility">
-                          <img src="{% static 'images/responsibility/01.png' %}" alt="Responsibility">
-                          <h4>Scholarship</h4>
-                          <p>De create building thinking about your requirment and latest treand on our marketplace area</p>
+                          <img src="{% if responsibility.image.url != '' %}{{responsibility.image.url}}{% else %}{% static 'images/responsibility/01.png' %}{% endif %}" alt="Responsibility">
+                          <h4>{{responsibility.title}}</h4>
+                          <p>{{responsibility.desc}}</p>
                       </div>
                   </div>
-                  <!--== Single Responsibility End ==-->
-
-                  <!--== Single Responsibility Start ==-->
-                  <div class="col-lg-3 col-sm-6">
-                      <div class="single-responsibility">
-                          <img src="{% static 'images/responsibility/02.png' %}" alt="Responsibility">
-                          <h4>Help Current Students</h4>
-                          <p>De create building thinking about your requirment and latest treand on our marketplace area</p>
-                      </div>
+                  <!--== Single Responsibility End {% static 'images/default.jpg' %} ==-->
+                  {% endfor %}
+                  {% else %}
+                  <div class="up-event-text">
+                    <h3>No Responsibility Available</h3>
                   </div>
-                  <!--== Single Responsibility End ==-->
-
-                  <!--== Single Responsibility Start ==-->
-                  <div class="col-lg-3 col-sm-6">
-                      <div class="single-responsibility">
-                          <img src="{% static 'images/responsibility/03.png' %}" alt="Responsibility">
-                          <h4>Help Our University</h4>
-                          <p>De create building thinking about your requirment and latest treand on our marketplace area</p>
-                      </div>
-                  </div>
-                  <!--== Single Responsibility End ==-->
-
-                  <!--== Single Responsibility Start ==-->
-                  <div class="col-lg-3 col-sm-6">
-                      <div class="single-responsibility">
-                          <img src="{% static 'images/responsibility/04.png' %}" alt="Responsibility">
-                          <h4>Build Our Community</h4>
-                          <p>De create building thinking about your requirment and latest treand on our marketplace area</p>
-                      </div>
-                  </div>
-                  <!--== Single Responsibility End ==-->
+                  {% endif %}
               </div>
               <!--== Responsibility Content Wrapper ==-->
           </div>

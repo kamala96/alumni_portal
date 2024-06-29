@@ -62,3 +62,8 @@ class SliderAdmin(admin.ModelAdmin):
     list_display = ('title', 'is_slider_active', 'created_at', 'updated_at')
     prepopulated_fields = {"slug": ("title",)}
 
+
+@admin.register(Responsibility)
+class ResponsibilityAdmin(admin.ModelAdmin):
+    list_display = ('title', 'desc', 'image', 'created')
+    # prepopulated_fields = {"slug": ("title",)}
