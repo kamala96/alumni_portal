@@ -29,12 +29,16 @@ class EventsPostAdmin(admin.ModelAdmin):
     list_display = ('title', 'updated_at')
     # list_filter = ('is_active', 'created_at', 'updated_at')
     # search_fields = ('main_logo', 'favourite_icon')
+    prepopulated_fields = {'slug': ('title',)}
+
 
 @admin.register(NewsPost)
 class NewsPostAdmin(admin.ModelAdmin):
     list_display = ('title', 'updated_at')
     # list_filter = ('is_active', 'created_at', 'updated_at')
     # search_fields = ('main_logo', 'favourite_icon')
+    prepopulated_fields = {'slug': ('title',)}
+
 
 @admin.register(JobPosting)
 class JobPostingAdmin(admin.ModelAdmin):
@@ -61,4 +65,16 @@ class JobCategoryAdmin(admin.ModelAdmin):
 class SliderAdmin(admin.ModelAdmin):
     list_display = ('title', 'is_slider_active', 'created_at', 'updated_at')
     prepopulated_fields = {"slug": ("title",)}
+
+@admin.register(FooterLink)
+class FooterLinkAdmin(admin.ModelAdmin):
+    list_display = ('name', 'link_type', 'url', 'is_active', 'is_for_newtab', 'created', 'updated')
+    list_filter = ('link_type', 'is_active', 'created', 'updated')
+    search_fields = ('name', 'url')
+@admin.register(Subscriber)
+class SubscriberAdmin(admin.ModelAdmin):
+    list_display = ('email', 'is_active', 'created_at', 'updated_at')
+    list_filter = ('is_active', 'created_at', 'updated_at')
+    search_fields = ('email',)
+
 
