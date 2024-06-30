@@ -5,8 +5,7 @@ from site_app.models import *
 
 register = template.Library()
 
-<<<<<<< HEAD
-=======
+
 
 @register.simple_tag
 def get_top_header_items(left=False):
@@ -47,4 +46,4 @@ def get_sliders():
 @register.simple_tag
 def get_social_media_slider():
     return SocialMedia.objects.filter(is_on_slider=True, is_active=True)
->>>>>>> aa56de4b5530f29c8f19672a0be1b77c32adf932
+

@@ -96,7 +96,7 @@ class ResponsibilityAdmin(admin.ModelAdmin):
     list_display = ('title', 'desc', 'image', 'created')
     # prepopulated_fields = {"slug": ("title",)}
 
-<<<<<<< HEAD
+
 
 @admin.register(AboutUs)
 class AboutUsAdmin(admin.ModelAdmin):
@@ -113,8 +113,9 @@ class AlumniCommitteeAdmin(admin.ModelAdmin):
 @admin.register(AlumniSpeech)
 class AlumniSpeechAdmin(admin.ModelAdmin):
     list_display = ('speech', 'is_published', 'created_at')
-=======
+
+
 @admin.register(SocialMedia)
 class SocialMediaAdmin(admin.ModelAdmin):
     list_display = ('name','text_to_display','url')
->>>>>>> aa56de4b5530f29c8f19672a0be1b77c32adf932
+
