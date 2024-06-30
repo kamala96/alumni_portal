@@ -1,6 +1,6 @@
 from django import template
 
-from site_app.models import Navigationmenu, Slider, TopHeader
+from site_app.models import *
 
 
 register = template.Library()
@@ -41,3 +41,7 @@ def submenus(menu):
 @register.simple_tag
 def get_sliders():
     return Slider.objects.filter(is_slider_active=True)
+
+@register.simple_tag
+def get_social_media_slider():
+    return SocialMedia.objects.filter(is_on_slider=True, is_active=True)

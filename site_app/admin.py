@@ -78,8 +78,11 @@ class SubscriberAdmin(admin.ModelAdmin):
     search_fields = ('email',)
 
 
-
 @admin.register(Responsibility)
 class ResponsibilityAdmin(admin.ModelAdmin):
     list_display = ('title', 'desc', 'image', 'created')
     # prepopulated_fields = {"slug": ("title",)}
+
+@admin.register(SocialMedia)
+class SocialMediaAdmin(admin.ModelAdmin):
+    list_display = ('name','text_to_display','url')
