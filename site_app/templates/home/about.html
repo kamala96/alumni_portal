@@ -1,7 +1,6 @@
 {% load static %}
-<!--=========================-->
-     <!--=         About         =-->
-     <!--=========================-->
+
+    {% if about_us %}
      <section id="about-area" class="section-padding">
           <div class="about-area-wrapper">
               <div class="container">
@@ -9,24 +8,20 @@
                       <div class="col-lg-10">
                           <div class="about-content-wrap">
                               <div class="section-title text-lg-left">
-                                  <h2>Our Misssion</h2>
+                                  <h2> Welcome Note</h2>
                               </div>
 
                               <div class="about-thumb">
                                   <img src="{% static 'images/misc/about-bg.jpg' %}" alt="" class="img-fluid">
                               </div>
 
-                              <p>There are many company Lorem ipsm dolor sitg amet, csetur adipicing elit, sed do eiusmod
-                                  tempor dncint ut labore et dolore magna alis enim ad minim veniam, quis csetur adipicing
-                                  elit, sed do eiusmod tempor dncint ut labore et dolore magna alis enim ad minim veniam, quis
-                                  nostrud exercitation ullamco.</p>
-                              <p>There are many company Lorem ipsm dolor sitg amet, csetur adipicing elit, sed do eiusmod
-                                  tempor dncint ut labore et dolore magna alis enim ad minim veniam, quis nostrud exercitation
-                                  ullamco.</p>
-                              <a href="about.html" class="btn btn-brand about-btn">know more</a>
+                              <p>{{ about_us.welcome_note }}</p>
+                              <a href="{% url 'handle_nav_menu_click' about_us.slug %}" class="btn btn-brand about-btn">know more</a>
                           </div>
                       </div>
                   </div>
               </div>
           </div>
       </section>
+    {% else %}
+    {% endif %}

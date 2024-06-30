@@ -9,6 +9,14 @@ def index(request):
     news = NewsPost.objects.all() 
     responsibilitys = Responsibility.objects.all()
     jobs = JobPosting.objects.all()
+    alumni_members = AlumniProfile.objects.all()
+
+    about_us = []
+
+    try:
+        about_us = AboutUs.objects.get(is_active=True)
+    except AboutUs.DoesNotExist:
+        pass
 
     for event in events:
         event.item_type = 'Upcoming Events'
@@ -17,10 +25,6 @@ def index(request):
 
     combined_posts = list(chain(events, news))
 
-    
-    # sliders = Slider.objects.order_by('-created_at')[:7]
-    # sliders = Slider.objects.filter(is_active=True).order_by('-created_at')
-    # accounting_officer = AccountingOfficer.load()
 
     context = {
         'combined_posts': combined_posts,
@@ -28,7 +32,9 @@ def index(request):
         'news': news.filter(is_published=True, is_published_on_slider=True).order_by('-created_at'), #[:6]
         'all_news': news.filter(is_published=True).order_by('-created_at'), #[:6]
         'responsibilitys': responsibilitys.filter(is_active=True).order_by('-created'), #[:6]
-        'jobs': jobs.filter(is_active=True).order_by('-created_at') #[:6]
+        'jobs': jobs.filter(is_active=True).order_by('-created_at'), #[:6]
+        'about_us': about_us,
+        'total_alumni_member': alumni_members.filter(user__is_active=True).count,
     }
     return render(request, 'index.html', context)
 
@@ -44,9 +50,19 @@ def handle_nav_menu_click(request, menu_slug):
     except Navigationmenu.DoesNotExist:
         return redirect('default_error_page')
     
+    # about_us = []
+
+    try:
+        about_us = AboutUs.objects.get(is_active=True)
+    except AboutUs.DoesNotExist:
+        pass
+    
     events = EventsPost.objects.all() 
     news = NewsPost.objects.all()
     jobs = JobPosting.objects.all()
+    committees = AlumniCommittee.objects.all()
+    alumni_speechs = AlumniSpeech.objects.all()
+    alumni_members = AlumniProfile.objects.all()
     
     template_name = '_default.html'
     
@@ -70,12 +86,25 @@ def handle_nav_menu_click(request, menu_slug):
 
     elif nav_menu.slug in ['job']:
         template_name = 'job.html'
+    
+    elif nav_menu.slug in ['committee']:
+        template_name = 'committee.html'
+
+    elif nav_menu.slug in ['directory']:
+        template_name = 'directory.html'
+        
         
     context = {
         'nav_menu': nav_menu,
         'events': events.filter(is_published=True).order_by('-created_at'), #[:6]
         'news': news.filter(is_published=True).order_by('-created_at'), #[:6]
-        'jobs': jobs.filter(is_active=True).order_by('-created_at') #[:6]
+        'jobs': jobs.filter(is_active=True).order_by('-created_at'), #[:6]
+        'about_us': about_us,
+        'committees': committees.filter(is_active=True).order_by('-order_id'), #[:5], about
+        'all_committees': committees.filter(is_active=True).order_by('-order_id'), #[:5], committee garally
+        'alumni_speechs': alumni_speechs.filter(is_published=True).order_by('-order_id'), #[:5],
+        'alumni_members': alumni_members.filter(user__is_active=True).order_by('-graduation_year'),
+        'total_alumni_member': alumni_members.filter(user__is_active=True).count,
     }
 
     return render(request, f'nav_menus/{template_name}', context)

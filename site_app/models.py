@@ -4,6 +4,45 @@ from django.db import models
 from django.contrib.auth.models import User
 from phonenumber_field.modelfields import PhoneNumberField
 
+
+
+class AlumniProfile(models.Model):
+    DEPARTIMENT_CHOICES = (
+        ('cct', 'Computing And Communication Technology'),
+        ('lts', 'Logistic And Transport Study'),
+
+    )
+    COMPAS_CHOICES = (
+        ('nit', 'Mabibo Compass (DSM)'),
+        ('arusha', 'Arusha Compass'),
+        ('lindi', 'Lindi Compass'),
+    )
+    SONIT_LEADER_CHOICES = (
+        ('president', 'President'),
+        ('vice-president', 'Vice President'),
+    )
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    year_from = models.PositiveIntegerField(default=2024)
+    graduation_year = models.PositiveIntegerField(default=2024)
+    birthday = models.DateField(blank=True, null=True)
+    gender = models.CharField(max_length=20, blank=True, null=True)
+    compass = models.CharField(max_length=255, null=False, choices=COMPAS_CHOICES, help_text='Which Compass Belong ?')
+    department = models.CharField(max_length=255, null=False, choices=DEPARTIMENT_CHOICES, help_text='Which Departments Belong ?')
+    batch_year = models.PositiveIntegerField(default=2024)
+    is_sonit_leader = models.BooleanField(default=False)
+    sonit_leader_position = models.CharField(max_length=255, choices=SONIT_LEADER_CHOICES, blank=True, null=True)
+    phone = PhoneNumberField(region="TZ", unique=True, null=True, blank=True)
+    profile_picture = models.ImageField(upload_to='images/testimonial/', blank=True, null=True)
+    location = models.CharField(max_length=255, null=True, blank=True)
+
+    def __str__(self):
+        return self.compass.upper()
+    def __str__(self):
+        return f'{self.user.first_name} - {self.user.last_name}' #{self.user.username}
+    
+
+
+
 class TopHeader(models.Model):
     LEFT = 'left'
     RIGHT = 'right'
@@ -271,25 +310,25 @@ class SocialMedia(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     def _str_(self): 
-        return self.name
+        return self.name.upper()
     
     
 class Responsibility(models.Model): 
     title = models.CharField(max_length=255) 
     desc = models.TextField()
-    image = models.ImageField(upload_to='responsibilities/') 
+    image = models.ImageField(upload_to='images/responsibilities/') 
     icon_class = models.CharField(max_length=100)
     is_active = models.BooleanField(default=True) 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     def _str_(self): 
-        return self.title
+        return self.title.upper()
 
 
 class Slider(models.Model):
     title = models.CharField(max_length=200)
     slug = models.SlugField(unique=True, max_length=200, blank=True, null=True)
-    image = models.ImageField(upload_to='static/images/slider/')
+    image = models.ImageField(upload_to='images/slider/')
     description = models.TextField(blank=True, null=True)
     button_text = models.CharField(max_length=50, blank=True, null=True)
     button_link = models.URLField(blank=True, null=True)
@@ -307,8 +346,61 @@ class Slider(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.title
+        return self.title.upper()
 
     class Meta:
         ordering = ['-created_at']
 
+
+class AboutUs(models.Model): 
+    slug = models.SlugField(max_length=100, unique=True)
+    description = models.TextField(null=True, blank=True) # about us nit Alumni
+    welcome_note = models.TextField(null=True, blank=True)
+    mission = models.TextField(blank=True, null=True)
+    vision = models.TextField(blank=True, null=True)
+    achivements = models.TextField(blank=True, null=True)
+    image = models.ImageField(upload_to='images/misc/', null=True) 
+    icon_class = models.CharField(max_length=100, null=True)
+    is_active = models.BooleanField(default=True) 
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    def _str_(self): 
+        return self.welcome_note.upper()
+    
+
+class AlumniCommittee(models.Model): 
+    ALUMNI_POSITION_CHOICES = (
+        ('president', 'President'),
+        ('vice-president', 'Vice President'),
+        ('secretary', 'Secretary'),
+        ('asistance-secretary', 'Asistance Secretary'),
+        ('finance-member', 'Finance Member'),
+        ('committee-member', 'Committee Member'),
+        ('alumni-admin', 'Alumni Admin'),
+    )
+
+    fullname = models.ForeignKey(User, on_delete=models.CASCADE, related_name='alumni_fullname', null=False)
+    year_from = models.PositiveIntegerField(default=2024)
+    year_to = models.PositiveIntegerField(default=2024)
+    alumni_position = models.CharField(max_length=255, choices=ALUMNI_POSITION_CHOICES, null=False)
+    slug = models.SlugField(max_length=100, unique=True, null=True)
+    committee_profile_picture = models.ImageField(upload_to='images/committee/', blank=True, null=True)
+    is_active = models.BooleanField(default=False) 
+    order_id = models.PositiveIntegerField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def _str_(self): 
+        return self.fullname.upper()
+
+
+class AlumniSpeech(models.Model): 
+    publisher = models.ForeignKey(User, on_delete=models.CASCADE, related_name='alumni_publisher', null=False)
+    speech = models.TextField()
+    is_published = models.BooleanField(default=False) 
+    order_id = models.PositiveIntegerField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def _str_(self): 
+        return self.publisher.upper()
