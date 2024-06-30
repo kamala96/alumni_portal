@@ -42,12 +42,16 @@ class EventsPostAdmin(admin.ModelAdmin):
     list_display = ('title', 'updated_at')
     # list_filter = ('is_active', 'created_at', 'updated_at')
     # search_fields = ('main_logo', 'favourite_icon')
+    prepopulated_fields = {'slug': ('title',)}
+
 
 @admin.register(NewsPost)
 class NewsPostAdmin(admin.ModelAdmin):
     list_display = ('title', 'updated_at')
     # list_filter = ('is_active', 'created_at', 'updated_at')
     # search_fields = ('main_logo', 'favourite_icon')
+    prepopulated_fields = {'slug': ('title',)}
+
 
 @admin.register(JobPosting)
 class JobPostingAdmin(admin.ModelAdmin):
@@ -75,12 +79,24 @@ class SliderAdmin(admin.ModelAdmin):
     list_display = ('title', 'is_slider_active', 'created_at', 'updated_at')
     prepopulated_fields = {"slug": ("title",)}
 
+@admin.register(FooterLink)
+class FooterLinkAdmin(admin.ModelAdmin):
+    list_display = ('name', 'link_type', 'url', 'is_active', 'is_for_newtab', 'created', 'updated')
+    list_filter = ('link_type', 'is_active', 'created', 'updated')
+    search_fields = ('name', 'url')
+@admin.register(Subscriber)
+class SubscriberAdmin(admin.ModelAdmin):
+    list_display = ('email', 'is_active', 'created_at', 'updated_at')
+    list_filter = ('is_active', 'created_at', 'updated_at')
+    search_fields = ('email',)
+
 
 @admin.register(Responsibility)
 class ResponsibilityAdmin(admin.ModelAdmin):
     list_display = ('title', 'desc', 'image', 'created')
     # prepopulated_fields = {"slug": ("title",)}
 
+<<<<<<< HEAD
 
 @admin.register(AboutUs)
 class AboutUsAdmin(admin.ModelAdmin):
@@ -97,3 +113,8 @@ class AlumniCommitteeAdmin(admin.ModelAdmin):
 @admin.register(AlumniSpeech)
 class AlumniSpeechAdmin(admin.ModelAdmin):
     list_display = ('speech', 'is_published', 'created_at')
+=======
+@admin.register(SocialMedia)
+class SocialMediaAdmin(admin.ModelAdmin):
+    list_display = ('name','text_to_display','url')
+>>>>>>> aa56de4b5530f29c8f19672a0be1b77c32adf932

@@ -71,6 +71,27 @@
     <!-- Google Web Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&amp;display=swap" rel="stylesheet" />
 
+    <style type="stylesheet" >
+        .social-networks-icon {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+        .social-networks-icon ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .social-networks-icon li {
+            margin-bottom: 10px;
+        }
+        .social-networks-icon i {
+            font-size: 16px; /* Reduce icon size */
+        }
+        .social-networks-icon span {
+            font-size: 14px; /* Adjust text size */
+        }
+    </style>
     
 </head>
 
@@ -123,6 +144,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
 
     <script>
+        
     $(document).ready(function(){
         $(".slider-active-wrap").owlCarousel({
             items: 1,
@@ -133,6 +155,9 @@
             nav: false,
         });
     });
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+
     </script>
 
 

@@ -83,9 +83,11 @@ class TopHeader(models.Model):
 
 
 class Navigationmenu(models.Model):
+    MAIN_MENU_TYPE = 'main'
+    SUB_MENU_TYPE = 'sub'
     MENU_TYPE_CHOICES = [
-        ('main', 'Main'),
-        ('sub', 'Sub'),
+        (MAIN_MENU_TYPE, 'Main/Root Menu'),
+        (SUB_MENU_TYPE, 'Sub Menu'),
     ]
 
     LINK_TYPE_CHOICES = [
@@ -100,7 +102,7 @@ class Navigationmenu(models.Model):
     menu_type = models.CharField(max_length=4, choices=MENU_TYPE_CHOICES)
     parent = models.ForeignKey(
         'self', on_delete=models.CASCADE, null=True, blank=True, related_name='submenus',
-        limit_choices_to={'menu_type': 'main'}
+        limit_choices_to={'menu_type': MAIN_MENU_TYPE}
     )
     order_id = models.PositiveIntegerField(null=True, blank=True)
     icon_class = models.CharField(max_length=50, blank=True, null=True)
@@ -240,8 +242,6 @@ class NewsPost(models.Model):
         verbose_name_plural = "News Posts"
 
 
-
-
 class JobCategory(models.Model):
     JOB_CATEGORY_NAME_CHOICES = (
         ('internal', 'Internal Job'),
@@ -302,11 +302,14 @@ class FooterLink(models.Model):
      
 
 class SocialMedia(models.Model): 
-    name = models.CharField(max_length=100) 
+    name = models.CharField(max_length=100)
+    text_to_display = models.CharField(blank=True, null=True, max_length=200) 
     icon_class = models.CharField(max_length=100) 
     url = models.URLField(max_length=255) 
     description = models.TextField(blank=True, null=True)
-    is_active = models.BooleanField(default=True) 
+    is_on_slider = models.BooleanField(default=True)
+    is_on_footer = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     def _str_(self): 
@@ -350,7 +353,13 @@ class Slider(models.Model):
 
     class Meta:
         ordering = ['-created_at']
+class Subscriber(models.Model):
+    email = models.EmailField(unique=True)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
+<<<<<<< HEAD
 
 class AboutUs(models.Model): 
     slug = models.SlugField(max_length=100, unique=True)
@@ -404,3 +413,7 @@ class AlumniSpeech(models.Model):
 
     def _str_(self): 
         return self.publisher.upper()
+=======
+    def __str__(self):
+        return self.email
+>>>>>>> aa56de4b5530f29c8f19672a0be1b77c32adf932

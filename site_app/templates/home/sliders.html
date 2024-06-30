@@ -1,7 +1,34 @@
+<!-- sliders.html -->
 {% load static %}
+{% load custom_tags %}
+
+<style>
+    .social-networks-icon {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+    }
+    .social-networks-icon ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    .social-networks-icon li {
+        margin-bottom: 10px;
+    }
+    .social-networks-icon i {
+        font-size: 16px; /* Reduce icon size */
+    }
+    .social-networks-icon span {
+        font-size: 14px; /* Adjust text size */
+    }
+</style>
 
 <section id="slider-area">
     <div class="slider-active-wrap owl-carousel text-center text-md-start">
+        <!-- For active sliders -->
+        {% get_sliders as sliders %}
+        
         {% for slide in sliders %}
             {% if slide.is_slider_active %}
                 <div class="single-slide-wrap" style="background-image: url('{{ slide.image.url }}');">
@@ -29,73 +56,21 @@
         {% endfor %}
     </div>
 
-    <div class="social-networks-icon" style="padding right:10px;" >
+    <!-- Include the social media slider here -->
+    <div class="social-networks-icon">
         <ul>
-            <li><a href="#"><i class="fab fa-facebook-f"></i> <span>7.2k Likes</span></a></li>
-            <li><a href="#"><i class="fab fa-twitter"></i> <span>3.2m Followers</span></a></li>
-            <li><a href="#"><i class="fab fa-pinterest"></i> <span>7.2k Likes</span></a></li>
-            <li><a href="#"><i class="fab fa-youtube"></i> <span>2.2k Subscribers</span></a></li>
+            {% get_social_media_slider as social_medias %}
+            {% for social_media in social_medias %}
+                <li>
+                    <a href="{{ social_media.url }}" target="_blank">
+                        <i class="{{ social_media.icon_class }}"></i>
+                        <span>{{ social_media.text_to_display }}</span>
+                    </a>
+                </li>
+            {% endfor %}
         </ul>
     </div>
 </section>
-
-
-
-
-      <section id="upcoming-area">
-        <div class="container">
-            <div class="row">
-                {% if events %}
-                <div class="col-lg-12">
-                    <div class="upcoming-event-wrap">
-                        <div class="up-event-titile">
-                            <h3>Upcoming Event</h3>
-                        </div>
-                        <div class="upcoming-event-content owl-carousel">
-                            {% for event in events %}
-                        
-                            <div class="single-upcoming-event">
-                                <div class="row">
-                                    <div class="col-lg-5">
-                                        <div class="up-event-thumb">
-                                           {% if event.image.url != '' %}
-                                            <img src="{{ event.image.url }}" class="img-fluid" alt="Upcoming {{ event.item_type }}">
-                                           {% else %} 
-                                            <img src="{% static 'images/default.jpg' %}" class="img-fluid" alt="Upcoming {{ event.item_type }}">
-                                           {% endif %}
-                                            <h4 class="up-event-date">It’s {{ event.start_date }}</h4>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-7">
-                                        <div class="display-table">
-                                            <div class="display-table-cell">
-                                                <div class="up-event-text">
-                                                    <div class="event-countdown">
-                                                        <div class="event-countdown-counter" data-date="{{ event.start_date|date:'Y/m/d' }}"></div>
-                                                        <p>Remaining</p>
-                                                    </div>
-                                                    <h3><a href="{% url 'handle_event_click' event.id %}">{{ event.title }}</a></h3>
-                                                    <p>{{ event.description }}</p>
-                                                    <a href="{% url 'handle_event_click' event.id %}" class="btn btn-brand btn-brand-dark">join
-                                                        with us</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            {% endfor %}
-                            
-                        </div>
-                    </div>
-                </div>
-                {% else %}
-                {% endif %}
-            </div>
-        </div>
-    </section>
-
 
 
       <!-- <section id="upcoming-area">
