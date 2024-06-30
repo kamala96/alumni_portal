@@ -353,13 +353,14 @@ class Slider(models.Model):
 
     class Meta:
         ordering = ['-created_at']
+
+
 class Subscriber(models.Model):
     email = models.EmailField(unique=True)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-<<<<<<< HEAD
 
 class AboutUs(models.Model): 
     slug = models.SlugField(max_length=100, unique=True)
@@ -413,7 +414,3 @@ class AlumniSpeech(models.Model):
 
     def _str_(self): 
         return self.publisher.upper()
-=======
-    def __str__(self):
-        return self.email
->>>>>>> aa56de4b5530f29c8f19672a0be1b77c32adf932
