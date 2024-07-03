@@ -28,60 +28,41 @@
 <div id="page-content-wrap">
   <div class="blog-page-content-wrap section-padding">
       <div class="container">
+
+        {% if news %}
           <div class="row">
+
               <!-- Blog content Area Start -->
               <div class="col-lg-8">
                   <article class="single-blog-content-wrap">
                       <header class="article-head">
                           <div class="single-blog-thumb">
-                              <img src="{% static 'images/blog/blog-1.jpg' %}" class="img-fluid" alt="Blog">
+                              <img src="{% if news.image.url != '' %} {{ news.image.url }} {% else %} {% static 'images/default.jpg' %} {% endif %}" class="img-fluid" alt="Blog">
                           </div>
                           <div class="single-blog-meta">
-                              <h2>Awesome Article for Memory of Our Campus Life</h2>
+                              <h2>{{ news.title }}</h2>
                               <div class="posting-info">
                                   <a href="#">23 May 2017</a> • Posted by: <a href="#">Admin</a>
                               </div>
                           </div>
                       </header>
                       <section class="blog-details">
-                          <p>
-                              Lorem ipsum condimentum ligula. Fusce fringilla magna non sapien dictum, eget faucibus
-                              dui maximus. Donec fringilla vel mi consequat tempor.
-                          </p>
-                          <p>
-                              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam quis diam erat. Duvelit
-                              lecspoe a blandit sit amet, tempor at lorem. Donec ultricies, lorem sed ultrices
-                              interdum, leo luctfiiius sem, vel vulputate diam ipsum sed lorem. Donec tempor arcu
-                              nisl, et molestie massa hhisque ut. Nunc at rutrum leo. Mauris metus mauris, tridd.
-                          </p>
-                          <p>
-                              Mauris tempus erat laoreet turpis lobortis, eu tincidunt erat fermentum. Aliquam nonh
-                              edunt urna. Integer tincidunt nec nisl vitae ullamcorper. Proin sed ultrices erat.
-                              Praesent vdd warius ultricemassa at faucibus. Aenean dignissim, orci sed faucibus
-                              pharetra, dui mi dir ssim tortor, sit amet ntum mi ligula sit amet augue. Pellentesqs
-                              placerat.
-                          </p>
+                          <p>{{ news.description }}</p>
                           <img src="{% static 'images/blog/single-blog.jpg' %}" class="img-fluid" alt="Blog">
                           <div class="row">
                               <div class="col-lg-6">
                                   <h5>The Guest Series</h5>
                                   <p>
-                                      Mauris tempus erat laoreet turpis lobortis, eu tincidunt erat fermentum. Aliquam
-                                      non tidunt urna. Integer tincidunt nec nisl vitae Proin sed ultrices erat.
+                                      Mauris tempus erat laoreet turpis lobortis, eu tincidunt
                                   </p>
                               </div>
                               <div class="col-lg-6">
                                   <h5>How and why</h5>
-                                  <p>
-                                      Aenean dignissim, orci sed faucibus nissim tortor, sit amet condimentum mi
-                                      ligula
-                                      sit amet augue.
-                                  </p>
+                                  <p>Aenean dignissim, orci sed faucibus nissim tortor, sit amet condimentum mi</p>
                               </div>
                           </div>
                           <blockquote class="blockquote">
-                              Integer tincidunt nec nisl vitae ullamcorper. Proin sed ultrices erat. Praesent varius
-                              ultrices massa at faucibus.
+                              Integer tincidunt nec nisl vitae
                           </blockquote>
                       </section>
                       <footer class="post-share">
@@ -106,6 +87,7 @@
                   </article>
               </div>
               <!-- Blog content Area End -->
+
 
               <!-- Sidebar Area Start -->
               <div class="col-lg-4 order-first order-lg-last">
@@ -160,6 +142,8 @@
               </div>
               <!-- Sidebar Area End -->
           </div>
+          {% else %}
+          {% endif %}
       </div>
   </div>
 </div>

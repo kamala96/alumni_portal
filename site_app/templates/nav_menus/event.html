@@ -6,10 +6,6 @@
 
 {% block content %}
 
-
-        <!--==========================-->
-        <!--=         Banner         =-->
-        <!--==========================-->
         <section id="page-title-area">
           <div class="container">
               <div class="row">
@@ -80,11 +76,7 @@
                                   <div class="row">
                                       <div class="col-lg-5">
                                           <div class="up-event-thumb">
-                                            {% if event.image.url != '' %}
-                                             <img src="{{ event.image.url }}" class="img-fluid" alt="Upcoming {{ event.item_type }}">
-                                            {% else %} 
-                                             <img src="{% static 'images/default.jpg' %}" class="img-fluid" alt="Upcoming {{ event.item_type }}">
-                                            {% endif %}
+                                             <img src="{% if event.image.url != '' %} {{ event.image.url }} {% else %} {% static 'images/default.jpg' %} {% endif %}" class="img-fluid" alt="Upcoming {{ event.item_type }}">
                                               <h4 class="up-event-date">It’s {{ event.start_date }}</h4>
                                           </div>
                                       </div>

@@ -3,6 +3,8 @@ from django.utils.text import slugify
 from django.db import models
 from django.contrib.auth.models import User
 from phonenumber_field.modelfields import PhoneNumberField
+from .validators import *
+
 
 
 
@@ -21,6 +23,12 @@ class AlumniProfile(models.Model):
         ('president', 'President'),
         ('vice-president', 'Vice President'),
     )
+
+    # GENDER_CHOICES = (
+    #     ('Male', 'Male'),
+    #     ('Female', 'Female'),
+    #     ('Prefer not to say', 'Prefer not to say'),
+    # )
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     year_from = models.PositiveIntegerField(default=2024)
     graduation_year = models.PositiveIntegerField(default=2024)
@@ -35,8 +43,6 @@ class AlumniProfile(models.Model):
     profile_picture = models.ImageField(upload_to='images/testimonial/', blank=True, null=True)
     location = models.CharField(max_length=255, null=True, blank=True)
 
-    def __str__(self):
-        return self.compass.upper()
     def __str__(self):
         return f'{self.user.first_name} - {self.user.last_name}' #{self.user.username}
     
@@ -223,7 +229,7 @@ class NewsCategory(models.Model):
 
 class NewsPost(models.Model):
     title = models.CharField(max_length=200)
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='author')
+    author = models.ForeignKey(AlumniProfile, on_delete=models.CASCADE, related_name='author')
     slug = models.SlugField(unique=True, max_length=200)
     description = models.TextField()
     image = models.ImageField(upload_to='images/blog/', blank=True, null=True)
@@ -319,7 +325,7 @@ class SocialMedia(models.Model):
 class Responsibility(models.Model): 
     title = models.CharField(max_length=255) 
     desc = models.TextField()
-    image = models.ImageField(upload_to='images/responsibilities/') 
+    image = models.ImageField(upload_to='images/responsibilities/')
     icon_class = models.CharField(max_length=100)
     is_active = models.BooleanField(default=True) 
     created = models.DateTimeField(auto_now_add=True)
@@ -365,11 +371,15 @@ class Subscriber(models.Model):
 class AboutUs(models.Model): 
     slug = models.SlugField(max_length=100, unique=True)
     description = models.TextField(null=True, blank=True) # about us nit Alumni
+    description_image = models.ImageField(upload_to='images/about-page/', null=True, blank=True)
     welcome_note = models.TextField(null=True, blank=True)
+    welcome_note_image = models.ImageField(upload_to='images/misc/', null=True, blank=True) 
     mission = models.TextField(blank=True, null=True)
+    mission_image = models.ImageField(upload_to='images/about-page/', null=True, blank=True)
     vision = models.TextField(blank=True, null=True)
+    vision_image = models.ImageField(upload_to='images/about-page/', null=True, blank=True)
     achivements = models.TextField(blank=True, null=True)
-    image = models.ImageField(upload_to='images/misc/', null=True) 
+    achivements_image = models.ImageField(upload_to='images/about-page/', null=True, blank=True)
     icon_class = models.CharField(max_length=100, null=True)
     is_active = models.BooleanField(default=True) 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -389,23 +399,23 @@ class AlumniCommittee(models.Model):
         ('alumni-admin', 'Alumni Admin'),
     )
 
-    fullname = models.ForeignKey(User, on_delete=models.CASCADE, related_name='alumni_fullname', null=False)
+    fullname = models.ForeignKey(AlumniProfile, on_delete=models.CASCADE, related_name='alumni_fullname', null=False)
     year_from = models.PositiveIntegerField(default=2024)
     year_to = models.PositiveIntegerField(default=2024)
     alumni_position = models.CharField(max_length=255, choices=ALUMNI_POSITION_CHOICES, null=False)
     slug = models.SlugField(max_length=100, unique=True, null=True)
-    committee_profile_picture = models.ImageField(upload_to='images/committee/', blank=True, null=True)
+    committee_profile_picture = models.ImageField(upload_to='images/committee/', blank=True, null=True) # null required to False also we can use varidation later  "validators=[validate_alumni_committee_image],"
     is_active = models.BooleanField(default=False) 
     order_id = models.PositiveIntegerField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def _str_(self): 
-        return self.fullname.upper()
+        return f'{self.fullname.user.first_name.upper()} - {self.fullname.user.last_name.upper()}'
 
 
 class AlumniSpeech(models.Model): 
-    publisher = models.ForeignKey(User, on_delete=models.CASCADE, related_name='alumni_publisher', null=False)
+    publisher = models.ForeignKey(AlumniProfile, on_delete=models.CASCADE, related_name='alumni_publisher', null=False)
     speech = models.TextField()
     is_published = models.BooleanField(default=False) 
     order_id = models.PositiveIntegerField(null=True, blank=True)
@@ -413,4 +423,57 @@ class AlumniSpeech(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def _str_(self): 
-        return self.publisher.upper()
+        return f'{self.publisher.user.first_name.upper()} - {self.publisher.user.last_name.upper()}'
+
+    
+
+
+class AlumniAlbum(models.Model):
+    title = models.CharField(max_length=100)
+    description = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def _str_(self): 
+        return self.title.upper()
+    
+
+class AlbumPhoto(models.Model):
+    MEDIA_TYPE_CHOICES = (
+        ('photo', 'Photo'),
+        ('video', 'Video'),
+    )
+
+    VISIBILITY_CHOICES = (
+        ('A', 'Old Memory'),
+        ('B', 'Student Events'),
+        ('C', 'Our Picnic'),
+        ('D', 'Recent'),
+    )
+
+    album = models.ForeignKey(AlumniAlbum, related_name='album', on_delete=models.CASCADE)
+    title = models.CharField(max_length=100)
+    description = models.TextField(null=True, blank=True)
+    media_type = models.CharField(max_length=5, choices=MEDIA_TYPE_CHOICES)
+    event_date = models.DateTimeField(auto_now=False)
+    visibility_option = models.CharField(max_length=100, choices=VISIBILITY_CHOICES)
+    photo = models.ImageField(upload_to='images/gallery/', blank=True, null=True)
+    video_url = models.CharField(max_length=255, blank=True, null=True)
+    is_published = models.BooleanField(default=False) 
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    def clean(self):
+        if self.media_type == 'photo' and not self.photo:
+            raise ValidationError('Photo must have an image.')
+        if self.media_type == 'video' and not self.video_url:
+            raise ValidationError('Video must have a video url.')
+        if self.media_type == 'photo' and self.video_url:
+            raise ValidationError('Photo cannot have a video url.')
+        # if self.media_type == 'video' and self.photo:
+        #     raise ValidationError('Video cannot have an image.')
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        super().save(*args, **kwargs)
+    
+    def _str_(self): 
+        return f'{self.media_type} - {self.title}'

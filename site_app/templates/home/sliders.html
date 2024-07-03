@@ -73,6 +73,58 @@
 </section>
 
 
+{% if events %}
+<section id="upcoming-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="upcoming-event-wrap">
+                    <div class="up-event-titile">
+                        <h3>Upcoming event</h3>
+                    </div>
+                    <div class="upcoming-event-content owl-carousel">
+                        {% for event in events %}
+                        <!-- No 1 Event -->
+                        <div class="single-upcoming-event">
+                            <div class="row">
+                                <div class="col-lg-5">
+                                    <div class="up-event-thumb">
+                                        <img src="{% if event.image.url != '' %} {{ event.image.url }} {% else %} {% static 'images/default.jpg' %} {% endif %}" class="img-fluid" alt="Upcoming Event">
+                                        <h4 class="up-event-date">It’s {{ event.start_date }}</h4>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-7">
+                                    <div class="display-table">
+                                        <div class="display-table-cell">
+                                            <div class="up-event-text">
+                                                <div class="event-countdown">
+                                                    <div class="event-countdown-counter" data-date="{{ event.start_date|date:'Y/m/d' }}"></div>
+                                                    <p>Remaining</p>
+                                                </div>
+                                                <h3><a href="{% url 'handle_event_click' event.id %}">{{ event.title }}</a></h3>
+                                                <p>{{ event.description }}</p>
+                                                <a href="{% url 'handle_event_click' event.id %}" class="btn btn-brand btn-brand-dark">join
+                                                    with us</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- partial -->
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% else %}
+{% endif %}
+
+
+
       <!-- <section id="upcoming-area">
           <div class="container">
               <div class="row">
