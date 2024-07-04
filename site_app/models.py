@@ -4,6 +4,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from phonenumber_field.modelfields import PhoneNumberField
 
+
 class TopHeader(models.Model):
     LEFT = 'left'
     RIGHT = 'right'
@@ -11,14 +12,14 @@ class TopHeader(models.Model):
         (LEFT, 'Left'),
         (RIGHT, 'Right'),
     ]
-    
+
     INTERNAL = 'internal'
     EXTERNAL = 'external'
     LINK_TYPE_CHOICES = [
         (INTERNAL, 'Internal'),
         (EXTERNAL, 'External'),
     ]
-    
+
     MenuFor = models.CharField(max_length=255, blank=True, null=True)
     title = models.CharField(max_length=255)
     slug = models.SlugField(unique=True, max_length=255, blank=True, null=True)
@@ -89,13 +90,15 @@ class Navigationmenu(models.Model):
 
     class Meta:
         ordering = ['order_id']
-        
+
 
 class ASiteSettings(models.Model):
     site_name = models.CharField(max_length=50, blank=True, null=True)
     icon_class = models.CharField(max_length=50, blank=True, null=True)
-    main_logo = models.ImageField(upload_to='images/logo/', blank=True, null=True)
-    favourite_icon = models.ImageField(upload_to='images/favicon/', blank=True, null=True)
+    main_logo = models.ImageField(
+        upload_to='images/logo/', blank=True, null=True)
+    favourite_icon = models.ImageField(
+        upload_to='images/favicon/', blank=True, null=True)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -104,14 +107,13 @@ class ASiteSettings(models.Model):
         return "Site Setting"
 
 
-
-
 class EventCategory(models.Model):
     EVENT_CATEGORY_NAME_CHOICES = (
         ('current', 'Current Events'),
         ('recent', 'Recent Events'),
     )
-    name = models.CharField(max_length=100, unique=True, choices=EVENT_CATEGORY_NAME_CHOICES)
+    name = models.CharField(max_length=100, unique=True,
+                            choices=EVENT_CATEGORY_NAME_CHOICES)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -129,7 +131,8 @@ class Organizer(models.Model):
         ('nit', 'National Institute Of Transport'),
         ('hidden', 'Other'),
     )
-    name = models.CharField(max_length=100, unique=True, choices=ORGANIZER_NAME)
+    name = models.CharField(max_length=100, unique=True,
+                            choices=ORGANIZER_NAME)
     description = models.TextField()
     location = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -139,18 +142,21 @@ class Organizer(models.Model):
         return self.name.upper()
 
 
-
 class EventsPost(models.Model):
     title = models.CharField(max_length=200)
-    organizer = models.ForeignKey(Organizer, on_delete=models.CASCADE, related_name='event_organizer', null=True, blank=True)
-    category = models.ForeignKey(EventCategory, on_delete=models.CASCADE, related_name='event_posts')
+    organizer = models.ForeignKey(
+        Organizer, on_delete=models.CASCADE, related_name='event_organizer', null=True, blank=True)
+    category = models.ForeignKey(
+        EventCategory, on_delete=models.CASCADE, related_name='event_posts')
     slug = models.SlugField(unique=True, max_length=200)
     description = models.TextField()
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
     image = models.ImageField(upload_to='images/event/', blank=True, null=True)
-    is_published = models.BooleanField(default=False, help_text='Whether it is publishable or not')
-    is_published_on_slider = models.BooleanField(default=False, help_text='Whether it is publishable or not on the Slider')
+    is_published = models.BooleanField(
+        default=False, help_text='Whether it is publishable or not')
+    is_published_on_slider = models.BooleanField(
+        default=False, help_text='Whether it is publishable or not on the Slider')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -163,13 +169,13 @@ class EventsPost(models.Model):
         verbose_name_plural = "Event Posts"
 
 
-
 class NewsCategory(models.Model):
     NEWS_CATEGORY_NAME_CHOICES = (
         ('current', 'Current News'),
         ('recent', 'Recent News'),
     )
-    name = models.CharField(max_length=100, unique=True, choices=NEWS_CATEGORY_NAME_CHOICES)
+    name = models.CharField(max_length=100, unique=True,
+                            choices=NEWS_CATEGORY_NAME_CHOICES)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -184,13 +190,17 @@ class NewsCategory(models.Model):
 
 class NewsPost(models.Model):
     title = models.CharField(max_length=200)
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='author')
+    author = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='author')
     slug = models.SlugField(unique=True, max_length=200)
     description = models.TextField()
     image = models.ImageField(upload_to='images/blog/', blank=True, null=True)
-    category = models.ForeignKey(NewsCategory, on_delete=models.CASCADE, related_name='news_posts')
-    is_published = models.BooleanField(default=False, help_text='Whether it is publishable or not')
-    is_published_on_slider = models.BooleanField(default=False, help_text='Whether it is publishable or not on the Slider')
+    category = models.ForeignKey(
+        NewsCategory, on_delete=models.CASCADE, related_name='news_posts')
+    is_published = models.BooleanField(
+        default=False, help_text='Whether it is publishable or not')
+    is_published_on_slider = models.BooleanField(
+        default=False, help_text='Whether it is publishable or not on the Slider')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -203,28 +213,32 @@ class NewsPost(models.Model):
         verbose_name_plural = "News Posts"
 
 
-
-
 class JobCategory(models.Model):
     JOB_CATEGORY_NAME_CHOICES = (
         ('internal', 'Internal Job'),
         ('external', 'External Job'),
     )
-    name = models.CharField(max_length=100, unique=True, choices=JOB_CATEGORY_NAME_CHOICES)
+    name = models.CharField(max_length=100, unique=True,
+                            choices=JOB_CATEGORY_NAME_CHOICES)
     description = models.TextField(blank=True, null=True)
-    #created_at = models.DateTimeField(auto_now_add=True)
+    # created_at = models.DateTimeField(auto_now_add=True)
+
     def _str_(self):
         return self.name.upper()
 
+
 class JobPosting(models.Model):
     company_name = models.CharField(max_length=255)
-    company_logo = models.ImageField(upload_to='images/job/', blank=True, null=True)
+    company_logo = models.ImageField(
+        upload_to='images/job/', blank=True, null=True)
     job_title = models.CharField(max_length=255)
     job_description = models.TextField()
-    alumni_provider = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='job_postings')
+    alumni_provider = models.ForeignKey(
+        User, on_delete=models.SET_NULL, null=True, related_name='job_postings')
     job_deadline_date = models.DateField()
     is_active = models.BooleanField(default=True)
-    category = models.ForeignKey(JobCategory, on_delete=models.SET_NULL, null=True, related_name='job_category')
+    category = models.ForeignKey(
+        JobCategory, on_delete=models.SET_NULL, null=True, related_name='job_category')
     job_location = models.CharField(max_length=255, blank=True, null=True)
     employment_type = models.CharField(max_length=50, choices=[
         ('Full-time', 'Full-time'),
@@ -248,43 +262,46 @@ class JobPosting(models.Model):
 
     def _str_(self):
         return self.job_title.upper()
-    
 
 
 class FooterLink(models.Model):
-     LINK_TYPE_CHOICES = [ ('university', 'University'), ('useful', 'Useful Link'), ]
-     name = models.CharField(max_length=100)
-     link_type = models.CharField(max_length=20, choices=LINK_TYPE_CHOICES) 
-     url = models.URLField(max_length=255) 
-     is_active = models.BooleanField(default=True) 
-     is_for_newtab = models.BooleanField(default=False) 
-     created = models.DateTimeField(auto_now_add=True) 
-     updated = models.DateTimeField(auto_now=True)
-     def _str_(self): 
-         return f"{self.name} ({self.get_link_type_display()})"
-     
+    LINK_TYPE_CHOICES = [('university', 'University'),
+                         ('useful', 'Useful Link'), ]
+    name = models.CharField(max_length=100)
+    link_type = models.CharField(max_length=20, choices=LINK_TYPE_CHOICES)
+    url = models.URLField(max_length=255)
+    is_active = models.BooleanField(default=True)
+    is_for_newtab = models.BooleanField(default=False)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
-class SocialMedia(models.Model): 
-    name = models.CharField(max_length=100) 
-    icon_class = models.CharField(max_length=100) 
-    url = models.URLField(max_length=255) 
-    description = models.TextField(blank=True, null=True)
-    is_active = models.BooleanField(default=True) 
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-    def _str_(self): 
-        return self.name
-    
-    
-class Responsibility(models.Model): 
-    title = models.CharField(max_length=255) 
-    desc = models.TextField()
-    image = models.ImageField(upload_to='responsibilities/') 
+    def _str_(self):
+        return f"{self.name} ({self.get_link_type_display()})"
+
+
+class SocialMedia(models.Model):
+    name = models.CharField(max_length=100)
     icon_class = models.CharField(max_length=100)
-    is_active = models.BooleanField(default=True) 
+    url = models.URLField(max_length=255)
+    description = models.TextField(blank=True, null=True)
+    is_active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    def _str_(self): 
+
+    def _str_(self):
+        return self.name
+
+
+class Responsibility(models.Model):
+    title = models.CharField(max_length=255)
+    desc = models.TextField()
+    image = models.ImageField(upload_to='responsibilities/')
+    icon_class = models.CharField(max_length=100)
+    is_active = models.BooleanField(default=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    def _str_(self):
         return self.title
 
 
@@ -313,6 +330,8 @@ class Slider(models.Model):
 
     class Meta:
         ordering = ['-created_at']
+
+
 class Subscriber(models.Model):
     email = models.EmailField(unique=True)
     is_active = models.BooleanField(default=True)
