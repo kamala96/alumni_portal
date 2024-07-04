@@ -33,20 +33,22 @@
                  <div class="col-lg-8">
                      <div class="blog-page-contant-start">
                          <div class="row">
+                            {% if news %}
+                            {% for new in news %}
                              <!--== Single Blog Post start ==-->
                              <div class="col-lg-6 col-md-6">
                                  <article class="single-blog-post">
                                      <figure class="blog-thumb">
                                          <div class="blog-thumbnail">
-                                             <img src="{% static 'images/blog/blog-1.jpg' %}" alt="Blog" class="img-fluid" />
+                                             <img src="{% if new.image.url != '' %} {{ new.image.url }} {% else %} {% static 'images/default.jpg' %} {% endif %}" alt="Blog" class="img-fluid" />
                                          </div>
                                          <figcaption class="blog-meta clearfix">
                                              <a href="single-blog.html" class="author">
                                                  <div class="author-pic">
-                                                     <img src="{% static 'images/blog/author.jpg' %}" alt="Author">
+                                                     <img src="{% if new.author.profile_picture.url != '' %} {{new.author.profile_picture.url}} {% else %} {% static 'images/blog/author.jpg' %} {% endif %}" alt="Author">
                                                  </div>
                                                  <div class="author-info">
-                                                     <h5>Daney williams</h5>
+                                                     <h5>{{new.author.user.first_name}} {{new.author.user.last_name}}</h5>
                                                      <p>2 hours Ago</p>
                                                  </div>
                                              </a>
@@ -58,105 +60,20 @@
                                      </figure>
 
                                      <div class="blog-content">
-                                         <h3><a href="single-blog.html">
-                                                 Recently we create a maassive project that will
-                                                 be a.....
-                                             </a>
+                                         <h3><a href="{% url 'handle_news_click' new.id %}">{{ new.title }}</a>
                                          </h3>
-                                         <p>
-                                             This is a big project of our company, we are happy to completed this type
-                                             projec which are
-                                             get world famous award
-                                         </p>
-                                         <a href="single-blog.html" class="btn btn-brand">More</a>
+                                         <p>{{ new.description }}</p>
+                                         <a href="{% url 'handle_news_click' new.id %}" class="btn btn-brand">More</a>
                                      </div>
                                  </article>
                              </div>
                              <!--== Single Blog Post End ==-->
-
-                             <!--== Single Blog Post start ==-->
-                             <div class="col-lg-6 col-md-6">
-                                 <article class="single-blog-post">
-                                     <figure class="blog-thumb">
-                                         <div class="blog-thumbnail">
-                                             <img src="{% static 'images/blog/blog-5.jpg' %}" alt="Blog" class="img-fluid" />
-                                         </div>
-                                         <figcaption class="blog-meta clearfix">
-                                             <a href="single-blog.html" class="author">
-                                                 <div class="author-pic">
-                                                     <img src="{% static 'images/blog/author.jpg' %}" alt="Author">
-                                                 </div>
-                                                 <div class="author-info">
-                                                     <h5>Daney williams</h5>
-                                                     <p>2 hours Ago</p>
-                                                 </div>
-                                             </a>
-                                             <div class="like-comm pull-right">
-                                                 <a href="#"><i class="fa fa-comment-o"></i>77</a>
-                                                 <a href="#"><i class="fa fa-heart-o"></i>12</a>
-                                             </div>
-                                         </figcaption>
-                                     </figure>
-
-                                     <div class="blog-content">
-                                         <h3>
-                                             <a href="single-blog.html">
-                                                 Recently we create a maassive project that will
-                                                 be a.....
-                                             </a>
-                                         </h3>
-                                         <p>
-                                             This is a big project of our company, we are happy to completed this type
-                                             projec which are
-                                             get world famous award
-                                         </p>
-                                         <a href="single-blog.html" class="btn btn-brand">More</a>
-                                     </div>
-                                 </article>
+                             {% endfor %}
+                             {% else %}
+                             <div class="up-event-text">
+                               <h3>No News Available</h3>
                              </div>
-                             <!--== Single Blog Post End ==-->
-
-                             <!--== Single Blog Post start ==-->
-                             <div class="col-lg-6 col-md-6">
-                                 <article class="single-blog-post">
-                                     <figure class="blog-thumb">
-                                         <div class="blog-thumbnail">
-                                             <img src="{% static 'images/blog/blog-6.jpg' %}" alt="Blog" class="img-fluid" />
-                                         </div>
-                                         <figcaption class="blog-meta clearfix">
-                                             <a href="single-blog.html" class="author">
-                                                 <div class="author-pic">
-                                                     <img src="{% static 'images/blog/author.jpg' %}" alt="Author">
-                                                 </div>
-                                                 <div class="author-info">
-                                                     <h5>Daney williams</h5>
-                                                     <p>2 hours Ago</p>
-                                                 </div>
-                                             </a>
-                                             <div class="like-comm pull-right">
-                                                 <a href="#"><i class="fa fa-comment-o"></i>77</a>
-                                                 <a href="#"><i class="fa fa-heart-o"></i>12</a>
-                                             </div>
-                                         </figcaption>
-                                     </figure>
-
-                                     <div class="blog-content">
-                                         <h3>
-                                             <a href="single-blog.html">
-                                                 Recently we create a maassive project that will
-                                                 be a.....
-                                             </a>
-                                         </h3>
-                                         <p>
-                                             This is a big project of our company, we are happy to completed this type
-                                             projec which are
-                                             get world famous award
-                                         </p>
-                                         <a href="single-blog.html" class="btn btn-brand">More</a>
-                                     </div>
-                                 </article>
-                             </div>
-                             <!--== Single Blog Post End ==-->
+                             {% endif %}
                          </div>
 
                          <!-- Pagination Start -->

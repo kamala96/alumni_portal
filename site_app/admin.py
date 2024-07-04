@@ -1,6 +1,19 @@
 from django.contrib import admin
-
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.contrib.auth.models import User
 from .models import * #TopHeader, Navigationmenu, ASiteSettings, EventsPost, NewsPost, JobPosting
+
+
+
+class AlumniProfileInline(admin.StackedInline):
+    model = AlumniProfile
+    can_delete = False
+
+class UserAdmin(BaseUserAdmin):
+    inlines = (AlumniProfileInline,)
+
+admin.site.unregister(User)
+admin.site.register(User, UserAdmin)
 
 
 
@@ -78,8 +91,41 @@ class SubscriberAdmin(admin.ModelAdmin):
     search_fields = ('email',)
 
 
-
 @admin.register(Responsibility)
 class ResponsibilityAdmin(admin.ModelAdmin):
     list_display = ('title', 'desc', 'image', 'created')
     # prepopulated_fields = {"slug": ("title",)}
+
+
+
+@admin.register(AboutUs)
+class AboutUsAdmin(admin.ModelAdmin):
+    list_display = ('welcome_note', 'is_active', 'created_at')
+    # prepopulated_fields = {"slug": ("title",)}
+
+
+@admin.register(AlumniCommittee)
+class AlumniCommitteeAdmin(admin.ModelAdmin):
+    list_display = ('alumni_position', 'is_active', 'created_at')
+    
+
+
+@admin.register(AlumniSpeech)
+class AlumniSpeechAdmin(admin.ModelAdmin):
+    list_display = ('speech', 'is_published', 'created_at')
+
+
+@admin.register(SocialMedia)
+class SocialMediaAdmin(admin.ModelAdmin):
+    list_display = ('name','text_to_display','url')
+
+
+
+class AlbumPhotoInline(admin.TabularInline):
+    model = AlbumPhoto
+    extra = 1
+
+@admin.register(AlumniAlbum)
+class AlumniAlbumAdmin(admin.ModelAdmin):
+    inlines = [AlbumPhotoInline]
+    list_display = ('title', 'description', 'created_at')

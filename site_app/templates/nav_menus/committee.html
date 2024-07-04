@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load tz %}
+{% load static %}
+{% load custom_tags %}
+{% block title %} {{ nav_menu.menu_name.upper }} {% endblock title %}
+
+{% block content %}
+
+<section id="page-title-area">
+     <div class="container">
+         <div class="row">
+             <div class="col-lg-8 m-auto text-center">
+                 <div class="page-title-content">
+                     <h1 class="h2">Committee Gallary</h1>
+                     <p>
+                         Alumni Needs enables you to harness the power of your alumni network. Whatever may be the need
+                     </p>
+                     <a href="#page-content-wrap" class="btn btn-brand smooth-scroll">Let's See</a>
+                 </div>
+             </div>
+         </div>
+     </div>
+ </section>
+
+ {% if all_committees %}
+ <section id="page-content-wrap">
+     <div class="committee-content-wrap section-padding">
+         <div class="committee-member-list">
+             <div class="container">
+               {% for committee in all_committees %}
+                 {% if committee.alumni_position == 'president' %}
+                 <div class="row">
+                     <div class="col-lg-4 col-sm-10 col-md-7 m-auto">
+                         <div class="single-committee-member">
+                             <img src="{% if committee.committee_profile_picture.url != '' %} {{ committee.committee_profile_picture.url }} {% else %} {% static 'images/committee/commitee-1.jpg' %} {% endif %}" class="img-fluid" alt="Committee" />
+                             <h3>{{committee.fullname.user.first_name}} {{committee.fullname.user.last_name}} <span class="committee-deg">{{committee.alumni_position}}</span></h3>
+                         </div>
+                     </div>
+                 </div>
+
+                 {% elif committee.alumni_position == 'vice-president' or committee.alumni_position == 'asistance-secretary' or committee.alumni_position == 'secretary'  %}
+                 <div class="row">
+                     <div class="col-lg-4 col-sm-6">
+                         <div class="single-committee-member">
+                             <img src="{% if committee.committee_profile_picture.url != '' %} {{ committee.committee_profile_picture.url }} {% else %} {% static 'images/committee/commitee-1.jpg' %} {% endif %}" class="img-fluid" alt="Committee" />
+                             <h3>{{committee.fullname.user.first_name}} {{committee.fullname.user.last_name}} <span class="committee-deg">{{committee.alumni_position}}</span></h3>
+                         </div>
+                     </div>
+                 </div>
+
+                 {% else %}
+                 <div class="row">
+                     <div class="col-lg-3 col-sm-6">
+                         <div class="single-committee-member">
+                             <img src="{% if committee.committee_profile_picture.url != '' %} {{ committee.committee_profile_picture.url }} {% else %} {% static 'images/committee/commitee-1.jpg' %} {% endif %}" class="img-fluid" alt="Committee" />
+                             <h3>{{committee.fullname.user.first_name}} {{committee.fullname.user.last_name}} <span class="committee-deg">{{committee.alumni_position}}</span></h3>
+                         </div>
+                     </div>
+                 </div>
+                 {% endif %}
+               {% endfor %}
+             </div>
+         </div>
+     </div>
+ </section>
+ {% else %}
+   <div class="up-event-text">
+     <h3>No Gallary Committee Available</h3>
+   </div>
+ {% endif %}
+
+ {% endblock content %}

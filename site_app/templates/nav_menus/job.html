@@ -86,7 +86,7 @@
                                        <div class="job-oppor-logo">
                                            <div class="display-table">
                                                <div class="display-table-cell">
-                                                   <img src="{% static 'images/job/compnay-logo-1.png' %}" alt="Job">
+                                                   <img src="{% if job.company_logo.url != '' %} {{job.company_logo.url}} {% else %} {% static 'images/job/compnay-logo-1.png' %} {% endif %}" alt="Job">
                                                </div>
                                            </div>
                                        </div>

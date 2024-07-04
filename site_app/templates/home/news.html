@@ -23,19 +23,15 @@
                       <article class="single-blog-post">
                           <figure class="blog-thumb">
                               <div class="blog-thumbnail">
-                                {% if new.image.url != '' %}
-                                  <img src="{{ new.image.url }}" alt="Blog" class="img-fluid" />
-                                {% else %}
-                                <img src="{% static 'images/default.jpg' %}" alt="Blog" class="img-fluid" />
-                                {% endif %}
+                                  <img src="{% if new.image.url != '' %} {{ new.image.url }} {% else %} {% static 'images/default.jpg' %} {% endif %}" alt="Blog" class="img-fluid" />
                               </div>
                               <figcaption class="blog-meta clearfix">
                                   <a href="single-blog.html" class="author">
                                       <div class="author-pic">
-                                          <img src="{% static 'images/blog/author.jpg' %}" alt="Author">
+                                          <img src="{% if new.author.profile_picture.url != '' %} {{new.author.profile_picture.url}} {% else %} {% static 'images/blog/author.jpg' %} {% endif %}" alt="Author">
                                       </div>
                                       <div class="author-info">
-                                          <h5>Daney williams</h5>
+                                          <h5>{{new.author.user.first_name}} {{new.author.user.last_name}}</h5>
                                           <p>2 hours Ago</p>
                                       </div>
                                   </a>
