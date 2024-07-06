@@ -119,3 +119,13 @@ class AlumniSpeechAdmin(admin.ModelAdmin):
 class SocialMediaAdmin(admin.ModelAdmin):
     list_display = ('name','text_to_display','url')
 
+
+
+class AlbumPhotoInline(admin.TabularInline):
+    model = AlbumPhoto
+    extra = 1
+
+@admin.register(AlumniAlbum)
+class AlumniAlbumAdmin(admin.ModelAdmin):
+    inlines = [AlbumPhotoInline]
+    list_display = ('title', 'description', 'created_at')

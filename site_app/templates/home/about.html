@@ -12,7 +12,7 @@
                               </div>
 
                               <div class="about-thumb">
-                                  <img src="{% static 'images/misc/about-bg.jpg' %}" alt="" class="img-fluid">
+                                  <img src="{% if about_us.welcome_note_image.url != '' %} {{ about_us.welcome_note_image.url }} {% else %} {% static 'images/misc/about-bg.jpg' %} {% endif %}" alt="" class="img-fluid">
                               </div>
 
                               <p>{{ about_us.welcome_note }}</p>

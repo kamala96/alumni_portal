@@ -36,7 +36,7 @@
                         {% if about_us.description != '' %}
                         <div class="single-about-text">
                             <span class="year">1834</span>
-                            <img src="{% static 'images/about-page/about-img-1.jpg' %}" alt="About" class="img-fluid img-left">
+                            <img src="{% if about_us.description_image.url != '' %} {{about_us.description_image.url}} {% else %} {% static 'images/about-page/about-img-2.jpg' %} {% endif %}" alt="About" class="img-fluid img-left">
                             <h2 class="h3">About The National Institute Of Transport Alumni</h2>
                             <p>{{about_us.description}}</p>
                         </div>
@@ -45,7 +45,7 @@
                         {% if about_us.achivements != '' %}
                         <div class="single-about-text">
                             <span class="year">1920</span>
-                            <img src="{% static 'images/about-page/about-img-2.jpg' %}" alt="About" class="img-fluid img-right">
+                            <img src="{% if about_us.achivements_image.url != '' %} {{about_us.achivements_image.url}} {% else %} {% static 'images/about-page/about-img-2.jpg' %} {% endif %}" alt="About" class="img-fluid img-right">
                             <h2 class="h3">Our Achivement in History</h2>
                             <p>{{about_us.achivements}}</p>
                         </div>
@@ -54,7 +54,7 @@
                         {% if about_us.mission != '' %}
                         <div class="single-about-text">
                             <span class="year">2006</span>
-                            <img src="{% static 'images/about-page/about-img-3.jpg' %}" alt="About" class="img-fluid img-left">
+                            <img src="{% if about_us.mission_image.url != '' %} {{about_us.mission_image.url}} {% else %} {% static 'images/about-page/about-img-2.jpg' %} {% endif %}" alt="About" class="img-fluid img-left">
                             <h2 class="h3">Our New Mission</h2>
                             <p>{{about_us.mission}}</p>
                         </div>
@@ -63,7 +63,7 @@
                         {% if about_us.vision != '' %}
                         <div class="single-about-text">
                             <span class="year">1920</span>
-                            <img src="{% static 'images/about-page/about-img-2.jpg' %}" alt="About" class="img-fluid img-right">
+                            <img src="{% if about_us.vision_image.url != '' %} {{about_us.vision_image.url}} {% else %} {% static 'images/about-page/about-img-2.jpg' %} {% endif %}" alt="About" class="img-fluid img-right">
                             <h2 class="h3">Our New Vission</h2>
                             <p>{{about_us.vision}}</p>
                         </div>
@@ -97,9 +97,10 @@
                     <div class="col-lg-3 col-sm-6">
                         <div class="single-committee-member">
                             <div class="commitee-thumb">
-                                <img src="{% static 'images/committee/commitee-1.jpg' %}" class="img-fluid" alt="Committee" />
+                                <img src="{% if committee.committee_profile_picture.url != '' %} {{committee.committee_profile_picture.url}} {% else %} {% static 'images/committee/commitee-1.jpg' %} {% endif %}
+                                " class="img-fluid" alt="Committee" />
                             </div>
-                            <h3>{{committee.fullname}}<span class="committee-deg">{{committee.alumni_position}}</span></h3>
+                            <h3>{{committee.fullname.user.first_name}} {{committee.fullname.user.last_name}}<span class="committee-deg">{{committee.alumni_position}}</span></h3>
                         </div>
                     </div>
                     {% endfor %}
@@ -127,11 +128,11 @@
                     {% for alumni_speech in alumni_speechs %}
                     <div class="single-testimonial-wrap">
                         <div class="people-thumb">
-                            <img src="{% static 'images/testimonial/testi-3.png' %}" alt="Alumni" class="img-fluid" />
+                            <img src="{% if alumni_speech.publisher.profile_picture != '' %} {{alumni_speech.publisher.profile_picture.url}} {% else %} {% static 'images/testimonial/testi-3.png' %} {% endif %}" alt="Alumni" class="img-fluid" />
                         </div>
                         <i class="quote-icon"></i>
                         <p> {{alumni_speech.speech}} </p>
-                        <h4>{{alumni_speech.publisher.first_name}} <span class="people-deg">Founder at Boxr</span></h4>
+                        <h4>{{alumni_speech.publisher.user.first_name}} {{alumni_speech.publisher.user.last_name}} <span class="people-deg">Founder at {{alumni_speech.publisher.location}}</span></h4>
                     </div>
                     {% endfor %}
                 </div>
