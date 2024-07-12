@@ -2,6 +2,60 @@ from itertools import chain
 from django.http import Http404, HttpResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from site_app.models import *
+from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.urls import reverse
+from rest_framework.authtoken.models import Token
+from datetime import datetime, timedelta, timezone
+from django.contrib.auth import update_session_auth_hash
+from PIL import Image
+from django.core.files.base import ContentFile
+from io import BytesIO
+
+
+
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        try:
+            if User.objects.filter(username=username).exists():
+                user = authenticate(request, username=username, password=password)
+                user_username = User.objects.get(username=username)
+                user_profile = User.objects.get(username=username).alumniprofile
+
+                if user is not None and user.is_authenticated and (user_profile.lockout_until is None or user_profile.lockout_until <= timezone.now()):
+                    login(request, user)
+                    token, created = Token.objects.get_or_create(user=user)
+                    reset_failed_login_attempts(user)
+                    return redirect(reverse('handle_nav_menu_click', args=['profile']))
+                
+                elif user is not None and user_profile.lockout_until is not None and user_profile.lockout_until > timezone.now() and user.alumniprofile.failed_login_attempts >= 3:
+                    remaining_time = user_profile.lockout_until - timezone.now()
+                    remaining_minutes = remaining_time.total_seconds() // 60
+                    messages.error(request, f"Your Account Has Been Temporarily Locked. Please Try Again Later!.")  #  Remaining Time: {remaining_minutes} Minutes
+                    return redirect(reverse('handle_nav_menu_click', args=['login']))
+                
+                else:
+                    increment_failed_login_attempts(user_username)
+                    messages.warning(request, f"Invalid Password. Please Try Again.")
+                    return redirect(reverse('handle_nav_menu_click', args=['login']))
+        except:
+            messages.error(request, 'Username account do not exists. Please register an account!.')
+            return redirect(reverse('handle_nav_menu_click', args=['login']))
+    else:
+        return redirect(reverse('handle_nav_menu_click', args=['login']))
+
+
+
+
+@login_required
+def logout_view(request):
+    request.session.flush()
+    logout(request)
+    messages.success(request, "Logout Successfully..")
+    return redirect(reverse('handle_nav_menu_click', args=['login']))
 
 
 def index(request):
@@ -52,7 +106,14 @@ def handle_nav_menu_click(request, menu_slug):
     except Navigationmenu.DoesNotExist:
         return redirect('default_error_page')
     
-    # about_us = []
+    # member_profile = []
+    
+
+    if not request.user.is_authenticated:
+        member_profile = None
+    else:
+        member_profile = AlumniProfile.objects.get(user=request.user)
+
 
     try:
         about_us = AboutUs.objects.get(is_active=True)
@@ -65,11 +126,15 @@ def handle_nav_menu_click(request, menu_slug):
     committees = AlumniCommittee.objects.all()
     alumni_speechs = AlumniSpeech.objects.all()
     alumni_members = AlumniProfile.objects.all()
+   
     
     template_name = '_default.html'
     
     if nav_menu.slug in ['home']: 
         return redirect('index')
+    
+    elif nav_menu.slug in ['logout']:
+        return redirect('user_logout')
 
     elif nav_menu.slug in ['about']:
         template_name = 'about.html'
@@ -92,11 +157,17 @@ def handle_nav_menu_click(request, menu_slug):
     elif nav_menu.slug in ['committee']:
         template_name = 'committee.html'
 
+    elif nav_menu.slug in ['transcripts']:
+        template_name = 'transcripts.html'
+
     elif nav_menu.slug in ['directory']:
         template_name = 'directory.html'
 
     elif nav_menu.slug in ['register', 'login']:
         template_name = 'register.html'
+
+    elif nav_menu.slug in ['profile']:
+        template_name = 'user_account.html'
         
         
     context = {
@@ -110,7 +181,14 @@ def handle_nav_menu_click(request, menu_slug):
         'alumni_speechs': alumni_speechs.filter(is_published=True).order_by('-order_id'), #[:5],
         'alumni_members': alumni_members.filter(user__is_active=True).order_by('-graduation_year'),
         'total_alumni_member': alumni_members.filter(user__is_active=True).count,
-        'albums': AlumniAlbum.objects.all().order_by('-created_at')[:4]
+        'albums': AlumniAlbum.objects.all().order_by('-created_at')[:4],
+        'AFFILIATION_CHOICES': AlumniProfile.AFFILIATION_CHOICES,
+        'COURSE_CHOICES': AlumniProfile.COUSE_CHOICES,
+        'DEPT_CHOICES': AlumniProfile.DEPARTIMENT_CHOICES,
+        'GENDER_CHOICES': AlumniProfile.GENDER_CHOICES,
+        'COMPAS': AlumniProfile.COMPAS_CHOICES,
+        'SONIT_LEADER': AlumniProfile.SONIT_LEADER_CHOICES,
+        'member_profile': member_profile,
     }
 
     return render(request, f'nav_menus/{template_name}', context)
@@ -126,19 +204,232 @@ def handle_event_click(request, event_id):
 
 def handle_news_click(request, news_id):
     news = get_object_or_404(NewsPost, pk=news_id)
+    comments = news.comment.filter(parent__isnull=True)
+    new_comment = None
+    total_comments = news.comment.count()
+
+    if request.method == 'POST':
+        content = request.POST.get('content')
+        parent_id = request.POST.get('parent_id')
+        new_comment = Comment.objects.create(
+            news=news,
+            author=AlumniProfile.objects.get(id=request.user.id), 
+            content=content,
+            parent=Comment.objects.get(id=parent_id) if parent_id else None
+        )
+        return redirect('handle_news_click', news_id=news.id)
 
     context = {
         'news': news,
+        'comments': comments,
+        'total_comments': total_comments,
     }
 
     return render(request, 'pages/news_details.html', context)
 
 
 def handle_album_click(request, album_id):
+    albums = AlumniAlbum.objects.all()
     # albums = get_object_or_404(NewsPost, pk=album_id)
 
     context = {
-        # 'albums': albums,
+        'albums': albums.filter(pk=album_id).order_by('-created_at'),
     }
 
     return render(request, 'pages/single_album.html', context)
+
+@login_required
+def handle_user_profile_click(request, user_id):
+    single_member = get_object_or_404(AlumniProfile, pk=user_id)
+
+    context = {
+        'single_member': single_member,
+    }
+
+    return render(request, 'pages/user_profile.html', context)
+
+
+
+
+
+def user_create_account(request):
+    if request.method == 'POST':
+        # Retrieve data from the form
+        first_name = request.POST.get('f_name')
+        last_name = request.POST.get('l_name')
+        email = request.POST.get('email')
+        gender = request.POST.get('register_gender')
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm_password')
+        passing_year = request.POST.get('passing_year')
+        phone_number = request.POST.get('phone')
+        current_location = request.POST.get('location')
+        
+        if password != confirm_password:
+            messages.error(request, "User password does't match")
+            return redirect(reverse('handle_nav_menu_click', args=['register']))
+        
+        if User.objects.filter(username=username).exists():
+            messages.error(request, 'Username already exists. Please choose a different username.')
+            return redirect(reverse('handle_nav_menu_click', args=['register']))
+
+        user = User.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name)
+        alumni_profile = AlumniProfile.objects.create(
+            user=user,
+            graduation_year=passing_year,
+            gender=gender,
+            location=current_location,
+            phone=phone_number,
+        )
+
+        login(request, user)
+        messages.success(request, "User account registered successfully!")
+        return redirect(reverse('handle_nav_menu_click', args=['login']))
+    
+    else:
+        return redirect('index')
+
+
+
+@login_required
+def alumni_update_profile(request):
+    user = request.user
+    try:
+        profile = user.alumniprofile
+    except AlumniProfile.DoesNotExist:
+        profile = AlumniProfile(user=user)
+
+    if request.method == 'POST':
+        user.first_name = request.POST.get('f_name')
+        user.last_name = request.POST.get('l_name')
+        user.username = request.POST.get('username')
+        user.email = request.POST.get('email')
+        user.save()
+
+        profile.birthday = request.POST.get('birthday')
+        profile.country = request.POST.get('country')
+        profile.location = request.POST.get('location')
+        profile.phone = request.POST.get('phone')
+        profile.gender = request.POST.get('gender')
+        profile.affiliation_type = request.POST.get('affiliation_type')
+
+        if request.POST.get('affiliation_type') != 'Staff':
+            profile.graduated_course = request.POST.get('graduated_course')
+            profile.department = request.POST.get('dept')
+            profile.batch_year = request.POST.get('batch_year')
+            profile.compass = request.POST.get('compass')
+            profile.graduation_year = request.POST.get('passing_year')
+
+        profile.is_sonit_leader = 'is_sonit_leader' in request.POST
+        if profile.is_sonit_leader:
+            profile.sonit_leader_position = request.POST.get('sonit_leader_position')
+        else:
+            profile.sonit_leader_position = None
+
+        profile.save()
+        messages.success(request, "User account updated successfully!")
+        return redirect(reverse('handle_nav_menu_click', args=['profile']))
+
+    return redirect(reverse('handle_nav_menu_click', args=['profile']))
+
+
+
+@login_required
+def alumni_update_password(request):
+    if request.method == 'POST':
+        old_password = request.POST.get('oldpassword')
+        new_password = request.POST.get('newpassword')
+        confirm_new_password = request.POST.get('confirmpassword')
+        user = request.user
+
+        # Check if the old password matches
+        from django.contrib.auth.hashers import check_password
+        if check_password(old_password, user.password):
+            # Check if new password and confirm password match
+            if new_password == confirm_new_password:
+                # Set the new password
+                user.set_password(new_password)
+                user.save()
+
+                # Update the session authentication hash to prevent logout
+                update_session_auth_hash(request, user)
+
+                messages.success(request, 'Your password has been updated successfully.')
+                redirect(reverse('handle_nav_menu_click', args=['profile']))
+            else:
+                messages.error(request, 'New password and confirm password do not match.')
+        else:
+            messages.error(request, 'Invalid old password. Password not updated.')
+
+    return redirect(reverse('handle_nav_menu_click', args=['profile']))
+
+
+
+
+
+
+@login_required
+def usre_profile_image(request):
+    user = request.user
+    try:
+        alumni_profile = user.alumniprofile
+    except AlumniProfile.DoesNotExist:
+        alumni_profile = AlumniProfile(user=user)
+
+    if request.method == 'POST':
+        profile_image = request.FILES.get('profile_image')
+        cover_image = request.FILES.get('cover_image')
+        # alumni_profile, created = AlumniProfile.objects.get_or_create(user=user)
+
+        if profile_image:
+            # Open the uploaded image using Pillow
+            image = Image.open(profile_image)
+
+            # Resize the image to 128x128 pixels
+            image = image.resize((128, 128), Image.ANTIALIAS)
+
+            # Save the resized image back to the ImageField
+            temp_file = BytesIO()
+            image.save(temp_file, format='PNG')
+            alumni_profile.profile_picture.save(profile_image.name, ContentFile(temp_file.getvalue()), save=False)
+            alumni_profile.save()
+        elif cover_image:
+                        # Open the uploaded image using Pillow
+            image = Image.open(cover_image)
+
+            # Resize the image to 128x128 pixels
+            image = image.resize((800, 800), Image.ANTIALIAS)
+
+            # Save the resized image back to the ImageField
+            temp_file = BytesIO()
+            image.save(temp_file, format='PNG')
+            alumni_profile.cover_profile.save(cover_image.name, ContentFile(temp_file.getvalue()), save=False)
+            alumni_profile.save()
+
+    return redirect(reverse('handle_nav_menu_click', args=['profile']))
+
+
+
+
+
+
+
+
+
+
+
+
+def reset_failed_login_attempts(user):
+    user_profile = get_object_or_404(AlumniProfile, user_id=user)
+    user_profile.failed_login_attempts = 0
+    user_profile.lockout_until = None
+    user_profile.save()
+
+def increment_failed_login_attempts(id):
+    user_profile = get_object_or_404(AlumniProfile, user_id=id)
+    user_profile.failed_login_attempts += 1
+    if user_profile.failed_login_attempts == 3:
+        user_profile.lockout_until = timezone.now() + timedelta(hours=24)
+
+    user_profile.save()

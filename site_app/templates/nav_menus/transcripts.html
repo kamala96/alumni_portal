@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load tz %}
+{% load static %}
+{% load custom_tags %}
+{% block title %} {{ nav_menu.menu_name.upper }} {% endblock title %}
+
+{% block content %}
+
+{% include 'nav_menus/welcome_page.html' with welcome_page_content="Request Transcripts" %}
+
+
+{% endblock content %}

@@ -7,21 +7,8 @@
 {% block content %}
 
 
- <section id="page-title-area">
-     <div class="container">
-         <div class="row">
-             <div class="col-lg-8 m-auto text-center">
-                 <div class="page-title-content">
-                     <h1 class="h2">Directory</h1>
-                     <p>
-                         Alumni Needs enables you to harness the power of your alumni network. Whatever may be the need
-                     </p>
-                     <a href="#page-content-wrap" class="btn btn-brand smooth-scroll">Let's See</a>
-                 </div>
-             </div>
-         </div>
-     </div>
- </section>
+ {% include 'nav_menus/welcome_page.html' with welcome_page_content="Members Directory" %}
+
 
 
   {% if alumni_members %}
@@ -32,13 +19,12 @@
                  <div class="col-lg-12 text-center">
                      <div class="directory-text-wrap">
                          <h2>Now we have <strong class="funfact-count">{{total_alumni_member}}</strong> member </h2>
+                         {% if user.is_authenticated %}
                          <div class="table-search-area">
                              <form action="https://codeboxr.net/themedemo/unialumni/html/index.html">
                                  <input type="search" placeholder="Type Your Keyword">
                                  <select name="dept">
                                      <option selected>Dept</option>
-                                     <option value="cmt">Computer</option>
-                                     <option value="cmt">Computer</option>
                                      <option value="cmt">Computer</option>
                                      <option value="cmt">Computer</option>
                                      <option value="cmt">Computer</option>
@@ -56,7 +42,9 @@
                                          <th scope="col">Batch</th>
                                          <th scope="col">Campus</th>
                                          <th scope="col">Location</th>
+                                         {% if user.is_authenticated %}
                                          <th scope="col">Action</th>
+                                         {% endif %}
                                      </tr>
                                  </thead>
                                  <tbody>
@@ -64,11 +52,13 @@
                                      <tr>
                                          <td><img src="{% if alumni_member.profile_picture != '' %} {{alumni_member.profile_picture.url}} {% else %} {% static 'images/testimonial/testi-1.png' %} {% endif %}" alt="table">{{alumni_member.user.first_name}} {{alumni_member.user.last_name}}</td>
                                          <td>{{alumni_member.department}}</td>
-                                         <td>{{alumni_member.batch_year}}</td>
+                                         <td>{{alumni_member.user.id}}</td>
                                          <td>{{alumni_member.compass}}</td>
                                          <td>{{alumni_member.location}}</td>
-                                         <td><a href="#" class="btn btn-job">View</a></td>
-                                     </tr>
+                                         {% if user.is_authenticated %}
+                                         <td><a href="{% url 'handle_user_profile_click' alumni_member.id %}" class="btn btn-job">View</a></td>
+                                         {% endif %}
+                                        </tr>
                                    {% endfor %}
 
                                  </tbody>
@@ -77,10 +67,13 @@
                          <p class="show-memeber text-end">
                              Show <span>30</span> of <span>12487 Member</span>
                          </p>
+                         {% else %}
+                         <h4> Login To View Member List <strong> <a href="{% url 'handle_nav_menu_click' 'login' %}">Login</a> </strong></h4>
+                         {% endif %}
                      </div>
                  </div>
              </div>
-
+             {% if user.is_authenticated %}
              <div class="row">
                  <div class="col-lg-12">
                      <div class="pagination-wrap text-center">
@@ -99,6 +92,7 @@
                      </div>
                  </div>
              </div>
+             {% endif %}
          </div>
      </div>
  </section>

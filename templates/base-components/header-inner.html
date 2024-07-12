@@ -36,6 +36,7 @@
                     {% get_navigation_menu as main_menu %}
                     
                     {% for menu in main_menu %}
+                    {% if menu|display_menu:user %}
                         <li class="{% if menu.submenus.count > 0 %}has-submenu{% endif %} menu-item-depth-{{ menu.indentation }}">
                             <a href="{% if menu.link_type == 'internal' %} {% url 'handle_nav_menu_click' menu.slug %} {% else %}{{ menu.link }}{% endif %}">
                                 {{ menu.menu_name|upper }}
@@ -43,6 +44,7 @@
                             {% if menu|submenus %}
                                 <ul class="sub-menu">
                                     {% for submenu in menu|submenus %}
+                                    {% if submenu|display_menu:user %}
                                         <li class="{% if submenu.submenus.count > 0 %}has-submenu{% endif %} menu-item-depth-{{ submenu.indentation }}">
                                             <a href="{% if submenu.link_type == 'internal' %} {% url 'handle_nav_menu_click' submenu.slug %}  {% else %}{{ submenu.link }}{% endif %}">
                                                 {{ submenu.menu_name|upper }}
@@ -59,10 +61,12 @@
                                                 </ul>
                                             {% endif %}
                                         </li>
+                                    {% endif %}
                                     {% endfor %}
                                 </ul>
                             {% endif %}
                         </li>
+                    {% endif %}
                     {% endfor %}
                 </ul>
 

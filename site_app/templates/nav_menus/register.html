@@ -6,21 +6,7 @@
 
 {% block content %}
 
-<section id="page-title-area">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 m-auto text-center">
-                <div class="page-title-content">
-                    <h1 class="h2">Membership Form</h1>
-                    <p>
-                        Alumni Needs enables you to harness the power of your alumni network. Whatever may be the need
-                    </p>
-                    <a href="#page-content-wrap" class="btn btn-brand smooth-scroll">Let's See</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+{% include 'nav_menus/welcome_page.html' with welcome_page_content="Membership Form" %}
 
 <!--===========================-->
 <!--=         Register        =-->
@@ -38,15 +24,18 @@
                                     {% if nav_menu.slug == 'login' %}
 
                                     <!-- Signin Area Content Start -->
-                                    <div class="col-lg-4 col-md-6 text-center">
+                                    <div class="col-lg-4 col-md-6">
                                         <div class="display-table">
                                             <div class="display-table-cell">
                                                 <div class="signin-area-wrap">
                                                     <h4>Already a Member?</h4>
                                                     <div class="sign-form">
-                                                        <form action="https://codeboxr.net/themedemo/unialumni/html/index.html">
-                                                            <input type="text" placeholder="Enter your ID">
-                                                            <input type="password" placeholder="Password">
+                                                        <form action="{% url 'user_create_login' %}" method="post">
+                                                            {% csrf_token %}
+                                                            <label for="username">Username</label>
+                                                            <input type="text" id="username" name="username" placeholder="Enter Username" required>
+                                                            <label for="password">Password</label>
+                                                            <input type="password" id="password" name="password" placeholder="Enter Password" required>
                                                             <button type="submit" class="btn btn-reg">Login</button>
                                                         </form>
                                                     </div>
@@ -88,68 +77,96 @@
                                         <div class="register-form-wrap">
                                             <h3>registration Form</h3>
                                             <div class="register-form">
-                                                <form action="" method="post">
+                                                <form action="{% url 'user_create_account' %}" method="post">
+                                                    {% csrf_token %}
                                                     <div class="row">
+                                                    <div class="row">
+                                                        <div class="col-12 col-sm-6">
+                                                            <div class="form-group">
+                                                                <label for="f_name">First Name</label>
+                                                                <input type="text" class="form-control" id="f_name" name="f_name" required autocomplete="off" />
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-12 col-sm-6">
+                                                            <div class="form-group">
+                                                                <label for="l_name">Last Name</label>
+                                                                <input type="text" class="form-control" id="l_name" required name="l_name" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12 col-sm-6">
+                                                            <div class="form-group">
+                                                                <label for="username">Username</label>
+                                                                <input type="text" class="form-control" id="username" required name="username" />
+                                                            </div>
+                                                        </div>
                                                         <div class="col-12 col-sm-6">
                                                             <div class="form-group">
                                                                 <label for="register_email">Email</label>
-                                                                <input type="email" class="form-control" id="register_email" name="register_email" />
+                                                                <input type="email" class="form-control" id="email" required name="email" autocomplete="none" />
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="gender form-group">
+                                                            <label class="g-name d-block">Gender</label>
+                                                            <div class="custom-control custom-radio custom-control-inline">
+                                                                <input type="radio" id="register_gender_male" name="register_gender" value="Male" class="custom-control-input" />
+                                                                <label class="custom-control-label" for="register_gender_male">Male</label>
+                                                            </div>
+                                                            <div class="custom-control custom-radio custom-control-inline">
+                                                                <input type="radio" id="register_gender_female" name="register_gender" value="Female" class="custom-control-input">
+                                                                <label class="custom-control-label" for="register_gender_female">Female</label>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row">
+                                                            <div class="col-12 col-sm-6">
+                                                                <div class="form-group">
+                                                                    <label for="passing_year">Passing Year</label>
+                                                                    <input type="number" class="form-control" id="passing_year" min="1880" maxlength="4" required name="passing_year" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-12 col-sm-6">
+                                                                <div class="form-group">
+                                                                    <label for="location">Current Location</label>
+                                                                    <input type="text" class="form-control" id="location" required name="location" />
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-12 col-sm-6">
+                                                                <div class="form-group">
+                                                                    <label for="phone">Whatsapp Number</label>
+                                                                    <input type="number" class="form-control" value="255" min="0" required  maxlength="12" id="phone" name="phone" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div class="row">
+                                                        <div class="col-12 col-sm-6">
+                                                            <div class="form-group">
+                                                                <label for="password">Password</label>
+                                                                <input type="password" class="form-control" id="password" required name="password" />
                                                             </div>
                                                         </div>
 
                                                         <div class="col-12 col-sm-6">
                                                             <div class="form-group">
-                                                                <label for="register_password">Password</label>
-                                                                <input type="password" class="form-control" id="register_password" name="register_password" />
+                                                                <label for="confirm_password"> Confirm Password</label>
+                                                                <input type="password" class="form-control" id="confirm_password" required name="confirm_password" />
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="row">
-                                                        <div class="col-12 col-sm-6">
-                                                            <div class="form-group">
-                                                                <label for="register_name">Name</label>
-                                                                <input type="text" class="form-control" id="register_name" name="register_name" />
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-12 col-sm-6">
-                                                            <div class="form-group">
-                                                                <label for="register_stuid">Student Id</label>
-                                                                <input type="text" class="form-control" id="register_stuid" name="register_stuid" />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-12 col-sm-6">
-                                                            <div class="form-group">
-                                                                <label for="register_year">Passing Year</label>
-                                                                <input type="text" class="form-control" id="register_year" name="register_year" />
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-12 col-sm-6">
-                                                            <div class="form-group">
-                                                                <label for="register_deptno">Depertment No</label>
-                                                                <input type="text" class="form-control" id="register_deptno" name="register_deptno" />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group file-input">
-                                                        <input type="file" name="register_file" id="customfile" class="d-none" />
-                                                        <label class="custom-file" for="customfile"><i class="fa fa-upload"></i>Upload Your Photo</label>
                                                     </div>
 
-                                                    <div class="gender form-group">
-                                                        <label class="g-name d-block">Gender</label>
-                                                        <div class="custom-control custom-radio custom-control-inline">
-                                                            <input type="radio" id="register_gender_male" name="register_gender" value="mail" class="custom-control-input" />
-                                                            <label class="custom-control-label" for="register_gender_male">Male</label>
+                                                    <!-- <div class="row">
+                                                        <div class="col-12 col-sm-6">
+                                                            <div class="form-group">
+                                                                <label for="affiliation">Affiliation</label>
+                                                                <select class="form-control" id="affiliation" name="affiliation">
+                                                                </select>
+                                                            </div>
                                                         </div>
-                                                        <div class="custom-control custom-radio custom-control-inline">
-                                                            <input type="radio" id="register_gender_female" name="register_gender" value="female" class="custom-control-input">
-                                                            <label class="custom-control-label" for="register_gender_female">Female</label>
-                                                        </div>
-                                                    </div>
+                                                    </div> -->
 
                                                     <div class="form-group">
                                                         <div class="custom-control custom-checkbox float-lg-right">
@@ -158,9 +175,18 @@
                                                                 have read and agree to the <a href="#">Alumni</a> Terms
                                                                 of Service</label>
                                                         </div>
-                                                        <input type="submit" class="btn btn-reg" value="Registration">
+                                                        <input type="submit" class="btn btn-reg" value="Register">
                                                     </div>
                                                 </form>
+
+                                                {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+                                    
                                             </div>
                                         </div>
                                     </div>
@@ -180,5 +206,6 @@
         </div>
     </div>
 </section>
+
 
 {% endblock content %}

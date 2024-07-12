@@ -34,13 +34,13 @@
                             {% if gallary.media_type == 'photo' %}
                               <!-- Single Gallery Start -->
                               <div class="col-lg-3  col-sm-6 {{gallary.visibility_option}}">
-                                  <div class="single-gallery-item gallery-bg-1">
+                                  <div class="single-gallery-item gallery-bg-1" style="background-image: url('{{ gallary.photo.url }}');">
                                       <div class="gallery-hvr-wrap">
                                           <div class="gallery-hvr-text">
                                               <h4>{{gallary.title}}</h4>
                                               <p class="gallery-event-date">{{ gallary.event_date|date:'d m, Y' }}</p>
                                           </div>
-                                          <a href="{% if gallary.photo.url != '' %}{{gallary.photo.url}}{% else %}{% static 'images/gallery/gellary-img-1.jpg' %}{% endif %}" class="btn-zoom image-popup">
+                                          <a href="{% if gallary.photo.url != '' %}{{gallary.photo.url}}{% else %} {% endif %}" class="btn-zoom image-popup">
                                               <img src="{% static 'images/zoom-icon.png' %}" alt="a">
                                           </a>
                                       </div>
@@ -51,7 +51,7 @@
                             {% else %}
                               <!-- Single Gallery Start -->
                               <div class="col-lg-3  col-sm-6 {{gallary.visibility_option}}">
-                                  <div class="single-gallery-item video gallery-bg-2">
+                                  <div class="single-gallery-item video gallery-bg-2" style="background-image: url('{{ gallary.photo.url }}');">
                                       <a href="{{gallary.video_url.url}}" class="btn btn-video-play video-popup"><i class="fa fa-play"></i></a>
                                   </div>
                               </div>

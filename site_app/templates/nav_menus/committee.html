@@ -6,21 +6,7 @@
 
 {% block content %}
 
-<section id="page-title-area">
-     <div class="container">
-         <div class="row">
-             <div class="col-lg-8 m-auto text-center">
-                 <div class="page-title-content">
-                     <h1 class="h2">Committee Gallary</h1>
-                     <p>
-                         Alumni Needs enables you to harness the power of your alumni network. Whatever may be the need
-                     </p>
-                     <a href="#page-content-wrap" class="btn btn-brand smooth-scroll">Let's See</a>
-                 </div>
-             </div>
-         </div>
-     </div>
- </section>
+ {% include 'nav_menus/welcome_page.html' with welcome_page_content="Committee Gallary" %}
 
  {% if all_committees %}
  <section id="page-content-wrap">

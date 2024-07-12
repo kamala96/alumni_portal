@@ -129,3 +129,4 @@ class AlbumPhotoInline(admin.TabularInline):
 class AlumniAlbumAdmin(admin.ModelAdmin):
     inlines = [AlbumPhotoInline]
     list_display = ('title', 'description', 'created_at')
+

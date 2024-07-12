@@ -47,3 +47,18 @@ def get_sliders():
 def get_social_media_slider():
     return SocialMedia.objects.filter(is_on_slider=True, is_active=True)
 
+
+
+@register.filter
+def display_menu(menu, user):
+    if menu.slug in ['profile', 'logout', 'transcripts']:
+        return user.is_authenticated
+    elif menu.slug in ['login', 'register']:
+        return not user.is_authenticated
+    return True
+
+
+
+@register.filter
+def multiply(value, arg):
+    return value * arg

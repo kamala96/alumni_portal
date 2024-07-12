@@ -21,9 +21,11 @@
                     <!-- For top header right items -->
                     {% get_top_header_items as right_items %}
                     {% for item in right_items %}
+                    {% if item|display_menu:user %}
                         <a class="btn-auth{% if forloop.first %} btn-auth-rev{% endif %}" 
                            href="{% if item.link_type == 'external' %}{{ item.link }} {% else %} {% url 'handle_nav_menu_click' item.slug %} {% endif %}">
                            <i class="{{ item.icon_class }}"></i>  <strong> {{ item.title }} </strong></a>
+                    {% endif %}
                     {% endfor %}
                 </div>
             </div>

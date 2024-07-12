@@ -24,16 +24,31 @@ class AlumniProfile(models.Model):
         ('vice-president', 'Vice President'),
     )
 
-    # GENDER_CHOICES = (
-    #     ('Male', 'Male'),
-    #     ('Female', 'Female'),
-    #     ('Prefer not to say', 'Prefer not to say'),
-    # )
+    GENDER_CHOICES = (
+        ('Male', 'Male'),
+        ('Female', 'Female')
+    )
+
+    COUSE_CHOICES = (
+        ('Short Course', 'Short Course'),
+        ('Certificate', 'Certificate'),
+        ('Diploma', 'Diploma'),
+        ('Bachelor', 'Bachelor'),
+        ("Master's", "Master's"),
+        ('Exchange Program', 'Exchange Program'),
+    )
+
+    AFFILIATION_CHOICES = (
+        ('Staff', 'Staff'),
+        ('Student', 'Student'),
+        ('Both', 'Staff and Former Student'),
+    )
+
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    year_from = models.PositiveIntegerField(default=2024)
-    graduation_year = models.PositiveIntegerField(default=2024)
+    year_from = models.PositiveIntegerField(default=2024) # = batch year
+    graduation_year = models.PositiveIntegerField(default=2024) # = passing year
     birthday = models.DateField(blank=True, null=True)
-    gender = models.CharField(max_length=20, blank=True, null=True)
+    gender = models.CharField(max_length=20, blank=True, null=True, choices=GENDER_CHOICES)
     compass = models.CharField(max_length=255, null=False, choices=COMPAS_CHOICES, help_text='Which Compass Belong ?')
     department = models.CharField(max_length=255, null=False, choices=DEPARTIMENT_CHOICES, help_text='Which Departments Belong ?')
     batch_year = models.PositiveIntegerField(default=2024)
@@ -41,7 +56,15 @@ class AlumniProfile(models.Model):
     sonit_leader_position = models.CharField(max_length=255, choices=SONIT_LEADER_CHOICES, blank=True, null=True)
     phone = PhoneNumberField(region="TZ", unique=True, null=True, blank=True)
     profile_picture = models.ImageField(upload_to='images/testimonial/', blank=True, null=True)
-    location = models.CharField(max_length=255, null=True, blank=True)
+    cover_profile = models.ImageField(upload_to='images/cover/', blank=True, null=True)
+    region = models.CharField(max_length=255, null=True, blank=True)
+    country = models.CharField(max_length=255, null=True, blank=True) 
+    affiliation_type = models.CharField(max_length=255, null=True, blank=True, choices=AFFILIATION_CHOICES)
+    location = models.CharField(max_length=255, null=True, blank=True) # current location
+    graduated_course = models.CharField(max_length=255, null=True, blank=True, choices=COUSE_CHOICES)
+    complete_profile_status = models.PositiveIntegerField(default=0)
+    failed_login_attempts = models.IntegerField(default=0)
+    lockout_until = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return f'{self.user.first_name} - {self.user.last_name}' #{self.user.username}
@@ -236,6 +259,7 @@ class NewsPost(models.Model):
     category = models.ForeignKey(NewsCategory, on_delete=models.CASCADE, related_name='news_posts')
     is_published = models.BooleanField(default=False, help_text='Whether it is publishable or not')
     is_published_on_slider = models.BooleanField(default=False, help_text='Whether it is publishable or not on the Slider')
+    posted_by = models.ForeignKey(AlumniProfile, on_delete=models.CASCADE, related_name='posted_by') # if error migrate with default admin id after remove default
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -477,3 +501,29 @@ class AlbumPhoto(models.Model):
     
     def _str_(self): 
         return f'{self.media_type} - {self.title}'
+
+
+
+
+class Comment(models.Model):
+    news = models.ForeignKey(NewsPost, on_delete=models.CASCADE, related_name='comment')
+    author = models.ForeignKey(AlumniProfile, on_delete=models.CASCADE, related_name='author_comment')
+    content = models.TextField()
+    parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name='replies')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'Comment by {self.author.user} on {self.news}'
+    
+
+# class GeneralDiscussion(models.Model):
+#     topic = models.CharField(max_length=255)
+#     content = models.TextField()
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     author = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='discussions')
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     updated_at = models.DateTimeField(auto_now=True)
+
+#     def __str__(self):
+#         return self.topic
