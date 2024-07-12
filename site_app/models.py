@@ -43,14 +43,12 @@ class AlumniProfile(models.Model):
     )
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-<<<<<<< HEAD
     year_from = models.PositiveIntegerField(default=2024) # = batch year
     graduation_year = models.PositiveIntegerField(default=2024) # = passing year
     birthday = models.DateField(blank=True, null=True)
     gender = models.CharField(max_length=20, blank=True, null=True, choices=GENDER_CHOICES)
     compass = models.CharField(max_length=255, null=False, choices=COMPAS_CHOICES, help_text='Which Compass Belong ?')
     department = models.CharField(max_length=255, null=False, choices=DEPARTIMENT_CHOICES, help_text='Which Departments Belong ?')
-=======
     Entry_year = models.PositiveIntegerField(default=2024)
     graduation_year = models.PositiveIntegerField(default=2024)
     birthday = models.DateField(blank=True, null=True)
@@ -59,13 +57,11 @@ class AlumniProfile(models.Model):
         max_length=255, null=False, choices=COMPAS_CHOICES, help_text='Which Compass Belong ?')
     department = models.CharField(
         max_length=255, null=False, choices=DEPARTIMENT_CHOICES, help_text='Which Departments Belong ?')
->>>>>>> 06daf9102418faf79ec7b6d27b6f21d6d6c570ff
     batch_year = models.PositiveIntegerField(default=2024)
     is_sonit_leader = models.BooleanField(default=False)
     sonit_leader_position = models.CharField(
         max_length=255, choices=SONIT_LEADER_CHOICES, blank=True, null=True)
     phone = PhoneNumberField(region="TZ", unique=True, null=True, blank=True)
-<<<<<<< HEAD
     profile_picture = models.ImageField(upload_to='images/testimonial/', blank=True, null=True)
     cover_profile = models.ImageField(upload_to='images/cover/', blank=True, null=True)
     region = models.CharField(max_length=255, null=True, blank=True)
@@ -76,11 +72,9 @@ class AlumniProfile(models.Model):
     complete_profile_status = models.PositiveIntegerField(default=0)
     failed_login_attempts = models.IntegerField(default=0)
     lockout_until = models.DateTimeField(null=True, blank=True)
-=======
     profile_picture = models.ImageField(
         upload_to='images/testimonial/', blank=True, null=True)
     location = models.CharField(max_length=255, null=True, blank=True)
->>>>>>> 06daf9102418faf79ec7b6d27b6f21d6d6c570ff
 
     def __str__(self):
         # {self.user.username}
@@ -277,19 +271,16 @@ class NewsPost(models.Model):
     slug = models.SlugField(unique=True, max_length=200)
     description = models.TextField()
     image = models.ImageField(upload_to='images/blog/', blank=True, null=True)
-<<<<<<< HEAD
     category = models.ForeignKey(NewsCategory, on_delete=models.CASCADE, related_name='news_posts')
     is_published = models.BooleanField(default=False, help_text='Whether it is publishable or not')
     is_published_on_slider = models.BooleanField(default=False, help_text='Whether it is publishable or not on the Slider')
     posted_by = models.ForeignKey(AlumniProfile, on_delete=models.CASCADE, related_name='posted_by') # if error migrate with default admin id after remove default
-=======
     category = models.ForeignKey(
         NewsCategory, on_delete=models.CASCADE, related_name='news_posts')
     is_published = models.BooleanField(
         default=False, help_text='Whether it is publishable or not')
     is_published_on_slider = models.BooleanField(
         default=False, help_text='Whether it is publishable or not on the Slider')
->>>>>>> 06daf9102418faf79ec7b6d27b6f21d6d6c570ff
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -310,7 +301,7 @@ class JobCategory(models.Model):
     name = models.CharField(max_length=100, unique=True,
                             choices=JOB_CATEGORY_NAME_CHOICES)
     description = models.TextField(blank=True, null=True)
-    # created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
 
     def _str_(self):
         return self.name.upper()
@@ -393,7 +384,7 @@ class Responsibility(models.Model):
     description = models.TextField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+    updated = models.DateTimeField(auto_now=True, null=True)
 
     def _str_(self):
         return self.title
