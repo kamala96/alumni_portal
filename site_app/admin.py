@@ -84,6 +84,7 @@ class FooterLinkAdmin(admin.ModelAdmin):
     list_display = ('name', 'link_type', 'url', 'is_active', 'is_for_newtab', 'created', 'updated')
     list_filter = ('link_type', 'is_active', 'created', 'updated')
     search_fields = ('name', 'url')
+
 @admin.register(Subscriber)
 class SubscriberAdmin(admin.ModelAdmin):
     list_display = ('email', 'is_active', 'created_at', 'updated_at')
