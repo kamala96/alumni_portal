@@ -131,3 +131,24 @@ class AlumniAlbumAdmin(admin.ModelAdmin):
     inlines = [AlbumPhotoInline]
     list_display = ('title', 'description', 'created_at')
 
+
+@admin.register(AlumniFAQ)
+class AlumniFAQAdmin(admin.ModelAdmin):
+    list_display = ('question', 'is_active', 'created_at', 'updated_at')
+    list_filter = ('is_active', 'created_at', 'updated_at')
+    search_fields = ('question', 'answer')
+    readonly_fields = ('created_at', 'updated_at')
+
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+        return queryset.order_by('-created_at')
+
+    fieldsets = (
+        (None, {
+            'fields': ('question', 'answer', 'is_active')
+        }),
+        ('Timestamps', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',),
+        }),
+    )

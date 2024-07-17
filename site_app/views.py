@@ -191,7 +191,7 @@ def handle_nav_menu_click(request, menu_slug):
         'COMPAS': AlumniProfile.COMPAS_CHOICES,
         'SONIT_LEADER': AlumniProfile.SONIT_LEADER_CHOICES,
         'member_profile': member_profile,
-        # 'faqs': AlumniFAQ.objects.filter(is_active=True).order_by('-order_id'),
+        'faqs': AlumniFAQ.objects.filter(is_active=True).order_by('id'),
     }
 
     return render(request, f'nav_menus/{template_name}', context)

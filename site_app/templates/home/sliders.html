@@ -1,28 +1,6 @@
-<!-- sliders.html -->
+<!-- sliders -->
 {% load static %}
 {% load custom_tags %}
-
-<style>
-    .social-networks-icon {
-        position: absolute;
-        top: 10px;
-        left: 10px;
-    }
-    .social-networks-icon ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-    .social-networks-icon li {
-        margin-bottom: 10px;
-    }
-    .social-networks-icon i {
-        font-size: 16px; /* Reduce icon size */
-    }
-    .social-networks-icon span {
-        font-size: 14px; /* Adjust text size */
-    }
-</style>
 
 <section id="slider-area">
     <div class="slider-active-wrap owl-carousel text-center text-md-start">
@@ -55,7 +33,6 @@
             {% endif %}
         {% endfor %}
     </div>
-
     <!-- Include the social media slider here -->
     <div class="social-networks-icon">
         <ul>
@@ -73,6 +50,10 @@
 </section>
 
 
+<!-- sliders End-->
+
+
+<!-- Eventic Section -->
 {% if events %}
 <section id="upcoming-area">
     <div class="container">
@@ -122,6 +103,8 @@
 </section>
 {% else %}
 {% endif %}
+
+<!-- End Eventic Section -->
 
 
 

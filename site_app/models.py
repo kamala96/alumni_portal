@@ -565,3 +565,18 @@ class Comment(models.Model):
     def __str__(self):
         return f'Comment by {self.author.user} on {self.news}'
     
+class AlumniFAQ(models.Model):
+    question = models.TextField()
+    answer = models.TextField()
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.question[:50] 
+
+    class Meta:
+        verbose_name = "Alumni FAQ"
+        verbose_name_plural = "Alumni FAQs"
+        ordering = ['-created_at']
+
