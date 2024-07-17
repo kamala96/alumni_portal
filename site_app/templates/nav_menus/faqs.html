@@ -26,15 +26,17 @@
 
                                              <h2 class="accordion-header" id="headingOne">
                                                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                                     <span class="event-time">{{forloop.count}}</span> {{faq.question}}
+                                                     <span class="event-time">{{forloop.counter}}</span> {{faq.question}}
                                                  </button>
                                              </h2>
                                              <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#cbx-event-accordion">
                                                  <div class="accordion-body">
-                                                  {{quation.answer}}
+                                                  {{faq.answer}}
                                                  </div>
                                              </div>
                                          </div>
+                                         
+                                         <br>
                                           {% endfor %}
                                         </div>
                                  </div>
