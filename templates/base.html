@@ -70,28 +70,6 @@
     <link id="cbx-style" rel="stylesheet" href="{% static 'css/style-default.css' %}" type="text/css" />
     <!-- Google Web Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&amp;display=swap" rel="stylesheet" />
-
-    <style type="stylesheet" >
-        .social-networks-icon {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-        }
-        .social-networks-icon ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .social-networks-icon li {
-            margin-bottom: 10px;
-        }
-        .social-networks-icon i {
-            font-size: 16px; /* Reduce icon size */
-        }
-        .social-networks-icon span {
-            font-size: 14px; /* Adjust text size */
-        }
-    </style>
     
 </head>
 
@@ -143,26 +121,13 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
 
-    <script>
-        
-    $(document).ready(function(){
-        $(".slider-active-wrap").owlCarousel({
-            items: 1,
-            loop: true,
-            autoplay: true,
-            autoplayTimeout: 5000,
-            dots: true,
-            nav: false,
-        });
-    });
+    <script> 
 
     document.getElementById("year").textContent = new Date().getFullYear();
 
     </script>
 
-
 </body>
-
 
 </html>
             
