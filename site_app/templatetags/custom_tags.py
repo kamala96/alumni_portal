@@ -62,3 +62,25 @@ def display_menu(menu, user):
 @register.filter
 def multiply(value, arg):
     return value * arg
+
+
+
+@register.simple_tag
+def get_footer_items(university=False):
+    if university:
+        return FooterLink.objects.filter(link_type='university', is_active=True)
+    else:
+        return FooterLink.objects.filter(link_type='useful', is_active=True)
+    
+
+
+@register.filter
+def truncate_chars(value, max_length):
+    if len(value) <= max_length:
+        return value
+    else:
+        truncated_value = value[:max_length]
+        words = truncated_value.split(' ')
+        words.pop() 
+        return ' '.join(words) + '...'
+    

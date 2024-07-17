@@ -126,7 +126,6 @@ def handle_nav_menu_click(request, menu_slug):
     committees = AlumniCommittee.objects.all()
     alumni_speechs = AlumniSpeech.objects.all()
     alumni_members = AlumniProfile.objects.all()
-   
     
     template_name = '_default.html'
     
@@ -168,6 +167,9 @@ def handle_nav_menu_click(request, menu_slug):
 
     elif nav_menu.slug in ['profile']:
         template_name = 'user_account.html'
+
+    elif nav_menu.slug in ['faqs']:
+        template_name = 'faqs.html'
         
         
     context = {
@@ -189,6 +191,7 @@ def handle_nav_menu_click(request, menu_slug):
         'COMPAS': AlumniProfile.COMPAS_CHOICES,
         'SONIT_LEADER': AlumniProfile.SONIT_LEADER_CHOICES,
         'member_profile': member_profile,
+        # 'faqs': AlumniFAQ.objects.filter(is_active=True).order_by('-order_id'),
     }
 
     return render(request, f'nav_menus/{template_name}', context)
@@ -395,7 +398,7 @@ def usre_profile_image(request):
             alumni_profile.profile_picture.save(profile_image.name, ContentFile(temp_file.getvalue()), save=False)
             alumni_profile.save()
         elif cover_image:
-                        # Open the uploaded image using Pillow
+            # Open the uploaded image using Pillow
             image = Image.open(cover_image)
 
             # Resize the image to 128x128 pixels

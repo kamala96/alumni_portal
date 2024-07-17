@@ -48,13 +48,7 @@ class AlumniProfile(models.Model):
     birthday = models.DateField(blank=True, null=True)
     gender = models.CharField(max_length=20, blank=True, null=True, choices=GENDER_CHOICES)
     compass = models.CharField(max_length=255, null=False, choices=COMPAS_CHOICES, help_text='Which Compass Belong ?')
-    department = models.CharField(max_length=255, null=False, choices=DEPARTIMENT_CHOICES, help_text='Which Departments Belong ?')
     Entry_year = models.PositiveIntegerField(default=2024)
-    graduation_year = models.PositiveIntegerField(default=2024)
-    birthday = models.DateField(blank=True, null=True)
-    gender = models.CharField(max_length=20, blank=True, null=True)
-    compass = models.CharField(
-        max_length=255, null=False, choices=COMPAS_CHOICES, help_text='Which Compass Belong ?')
     department = models.CharField(
         max_length=255, null=False, choices=DEPARTIMENT_CHOICES, help_text='Which Departments Belong ?')
     batch_year = models.PositiveIntegerField(default=2024)
@@ -72,9 +66,6 @@ class AlumniProfile(models.Model):
     complete_profile_status = models.PositiveIntegerField(default=0)
     failed_login_attempts = models.IntegerField(default=0)
     lockout_until = models.DateTimeField(null=True, blank=True)
-    profile_picture = models.ImageField(
-        upload_to='images/testimonial/', blank=True, null=True)
-    location = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self):
         # {self.user.username}
@@ -574,14 +565,3 @@ class Comment(models.Model):
     def __str__(self):
         return f'Comment by {self.author.user} on {self.news}'
     
-
-# class GeneralDiscussion(models.Model):
-#     topic = models.CharField(max_length=255)
-#     content = models.TextField()
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     author = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='discussions')
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     updated_at = models.DateTimeField(auto_now=True)
-
-#     def __str__(self):
-#         return self.topic

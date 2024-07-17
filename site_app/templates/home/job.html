@@ -32,7 +32,7 @@
                                       </div>
                                   </div>
                                   <h3><a href="#">{{job.job_title}}</a></h3>
-                                  <p>{{job.job_description}}<a href="#">[...]</a></p>
+                                  <p>{{job.job_description|truncate_chars:130}}</p>
                               </div>
                               <a href="#" class="btn btn-job">Apply now</a>
                               <!-- <a href="#" class="btn btn-job btn-expired disabled">Expired</a> -->
