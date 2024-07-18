@@ -373,6 +373,13 @@ class SocialMedia(models.Model):
 
     def _str_(self):
         return self.name.upper()
+    # ICONS
+    # fab fa-facebook-f
+    # fab fa-instagram
+    # fab fa-twitter
+    # fab fa-youtube
+    # fab fa-linkedin-in
+    
 
 
 class Responsibility(models.Model):
