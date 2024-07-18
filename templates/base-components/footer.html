@@ -7,19 +7,22 @@
         <div class="container">
             <div class="row">
                 <!-- Single Widget Start -->
-                <div class="col-lg-4 col-sm-6">
+                <div class="col-lg-3 col-sm-6">
                     <div class="single-widget-wrap">
                         <div class="widgei-body">
                             <div class="footer-about">
                                 <img src="{% static 'images/logo/logo.png' %}" alt="Logo" class="img-fluid" />
                                 <p>
-                                    We are legend Lorem ipsum dolor sitmet,
-                                    nsecte ipisicing eit, sed do eiusmod tempor
-                                    incidunt ut et do maga aliqua enim ad minim.
+                                    {% if about_us %}
+                                    {{ about_us.welcome_note|truncate_chars:200 }}
+                                    {% endif %}
                                 </p>
-                                <a href="#">Phone: +8745 44 5444</a>
-                                <a href="#">Fax: +88474 156 362</a> <br />
-                                <a href="#">Email: demoemail@demo.com</a>
+                                {% get_top_header_items left=True as left_items %}
+                                 {% for item in left_items %}
+                                 <a href="{% if item.link_type == 'external' %}{{ item.link }}{% else %}/{{ item.slug }}{% endif %}">
+                                    <i class="{{ item.icon_class }}"></i>  <strong> {{ item.title }} </strong> 
+                                </a>
+                                 {% endfor %}
                             </div>
                         </div>
                     </div>
@@ -60,21 +63,15 @@
                 <!-- Single Widget End -->
 
                 <!-- Single Widget Start -->
-                <div class="col-lg-3 col-sm-6">
+                <div class="col-lg-2 col-sm-6">
                     <div class="single-widget-wrap">
                         <h4 class="widget-title">Usefull Link</h4>
                         <div class="widgei-body">
                             <ul class="double-list footer-list clearfix">
-                                <li><a href="#">Pricing Plan</a></li>
-                                <li><a href="#">Categories</a></li>
-                                <li><a href="#">Populer Deal</a></li>
-                                <li><a href="#">FAQ</a></li>
-                                <li><a href="#">Support</a></li>
-                                <li><a href="#">Pricing Plan</a></li>
-                                <li><a href="#">Categories</a></li>
-                                <li><a href="#">Populer Deal</a></li>
-                                <li><a href="#">FAQ</a></li>
-                                <li><a href="#">Support</a></li>
+                                {% get_footer_items as usefull %}
+                                 {% for usefull in usefull %}
+                                <li><a href="{{ usefull.url }}">{{usefull.name}}</a></li>
+                                {% endfor %}
                             </ul>
                         </div>
                     </div>
@@ -87,16 +84,35 @@
                         <h4 class="widget-title">University</h4>
                         <div class="widgei-body">
                             <ul class="footer-list clearfix">
-                                <li><a href="#">Pricing Plan</a></li>
-                                <li><a href="#">Categories</a></li>
-                                <li><a href="#">Populer Deal</a></li>
-                                <li><a href="#">FAQ</a></li>
-                                <li><a href="#">Support</a></li>
+                                {% get_footer_items university=True as university_items %}
+                                 {% for univesity in university_items %}
+                                <li><a href="{{ university.url }}">{{univesity.name}}</a></li>
+                                 {% endfor %}
                             </ul>
                         </div>
                     </div>
                 </div>
                 <!-- Single Widget End -->
+
+                   <!-- Single Widget Start -->
+                   <div class="col-lg-2 col-sm-6">
+                    <div class="single-widget-wrap">
+                        <h4 class="widget-title">Alumni Traffic</h4>
+                        <div class="widgei-body">
+                            <ul class="footer-list clearfix">
+                                <li><a>Online Visitor : None</a></li>
+                                <li><a>Today Visitor : None</a></li>
+                                <li><a>Week Visitor : None</a></li>
+                                <li><a>Mounth Visitor : None</a></li>
+                                <li><a>Desktop Visitor : None</a></li>
+                                <li><a>Mobile Visitor : None</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- Single Widget End -->
+
+
             </div>
         </div>
     </div>

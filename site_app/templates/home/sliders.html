@@ -84,7 +84,7 @@
                                                     <p>Remaining</p>
                                                 </div>
                                                 <h3><a href="{% url 'handle_event_click' event.id %}">{{ event.title }}</a></h3>
-                                                <p>{{ event.description }}</p>
+                                                <p>{{ event.description|truncate_chars:350 }}</p>
                                                 <a href="{% url 'handle_event_click' event.id %}" class="btn btn-brand btn-brand-dark">join
                                                     with us</a>
                                             </div>

@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load tz %}
+{% load static %}
+{% load custom_tags %}
+{% block title %} {{ nav_menu.menu_name.upper }} {% endblock title %}
+
+{% block content %}
+
+
+{% if faqs %}
+<section id="page-content-wrap">
+     <div class="single-event-page-content">
+         <div class="container">
+             <div class="row">
+                 <div class="col-lg-12">
+                     <div class="single-event-details">
+
+                         <div class="event-schedul">
+                             <h3>FREQUENTLY ASKED QUATIONS (FAQs)</h3>
+
+                             <div class="row justify-content-center">
+                                 <div class="col-md-10">
+                                     <div class="accordion cbx-acacordion" id="cbx-event-accordion">
+                                         {% for faq in faqs %}
+                                        <div class="accordion-item">
+
+                                             <h2 class="accordion-header" id="headingOne">
+                                                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                     <span class="event-time">{{forloop.counter}}</span> {{faq.question}}
+                                                 </button>
+                                             </h2>
+                                             <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#cbx-event-accordion">
+                                                 <div class="accordion-body">
+                                                  {{faq.answer}}
+                                                 </div>
+                                             </div>
+                                         </div>
+                                         
+                                         <br>
+                                          {% endfor %}
+                                        </div>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </div>
+     </div>
+ </section>
+ {% else %}
+ {% endif %}
+
+{% endblock content %}

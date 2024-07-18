@@ -201,11 +201,69 @@
                         <hr>
                         <p class="gallery-event-date name-content">{{single_member.user.first_name}}</p>
                     </div>
+
                     <div class="gallery-hvr-text">
                          <h6 class="name-title">Last Name</h6>
                          <hr>
                          <p class="gallery-event-date name-content">{{single_member.user.last_name}}</p>
                      </div>
+
+                    {% if single_member.birthday %}
+                    <div class="gallery-hvr-text">
+                        <h6 class="name-title">BirthDay</h6>
+                        <hr>
+                        <p class="gallery-event-date name-content">{{single_member.birthday}}</p>
+                    </div>
+                    {% endif %}
+                    {% if single_member.gender %}
+                    <div class="gallery-hvr-text">
+                         <h6 class="name-title">Gender</h6>
+                         <hr>
+                         <p class="gallery-event-date name-content">{{single_member.gender}}</p>
+                     </div>
+                     {% endif %}
+                     {% if single_member.compass %}
+                     <div class="gallery-hvr-text">
+                         <h6 class="name-title">Compass</h6>
+                         <hr>
+                         <p class="gallery-event-date name-content">{{single_member.compass}}</p>
+                     </div>
+                     {% endif %}
+                     {% if single_member.department %}
+                     <div class="gallery-hvr-text">
+                          <h6 class="name-title">Department</h6>
+                          <hr>
+                          <p class="gallery-event-date name-content">{{single_member.department}}</p>
+                      </div>
+                      {% endif %}
+                      {% if single_member.phone %}
+                      <div class="gallery-hvr-text">
+                          <h6 class="name-title">Phone</h6>
+                          <hr>
+                          <p class="gallery-event-date name-content">{{single_member.phone}}</p>
+                      </div>
+                      {% endif %}
+                      {% if single_member.region %}
+                      <div class="gallery-hvr-text">
+                           <h6 class="name-title">Region</h6>
+                           <hr>
+                           <p class="gallery-event-date name-content">{{single_member.region}}</p>
+                       </div>
+                       {% endif %}
+                       {% if single_member.country %}
+                       <div class="gallery-hvr-text">
+                           <h6 class="name-title">Country</h6>
+                           <hr>
+                           <p class="gallery-event-date name-content">{{single_member.country}}</p>
+                       </div>
+                       {% endif %}
+                       {% if single_member.affiliation_type %}
+                       <div class="gallery-hvr-text">
+                            <h6 class="name-title">Affiliation Type</h6>
+                            <hr>
+                            <p class="gallery-event-date name-content">{{single_member.affiliation_type}}</p>
+                        </div>
+                        {% endif %}
                 </div>
                 </div>
 
