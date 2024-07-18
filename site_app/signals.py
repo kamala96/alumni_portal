@@ -4,9 +4,11 @@ from django.contrib.auth.models import User
 from .models import AlumniProfile, AlumniCommittee, Slider, AlbumPhoto, AboutUs, NewsPost, EventsPost, JobPosting, Responsibility
 from django.conf import settings
 from PIL import Image
-# from .validators import *
+from .views import notify_subscribers
 
 
+
+        
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
@@ -191,3 +193,9 @@ def resize_alumni_gallery_image(sender, instance, created, **kwargs):
         if img.width != accepted_width or img.height != accepted_height:
             img = img.resize((accepted_width, accepted_height))
             img.save(instance.photo.path)
+
+
+@receiver(post_save, sender=NewsPost)
+def send_news_notification(sender, instance, created, **kwargs):
+    if instance.is_published:
+        notify_subscribers(instance)

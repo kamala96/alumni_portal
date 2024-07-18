@@ -13,6 +13,11 @@ from PIL import Image
 from django.core.files.base import ContentFile
 from io import BytesIO
 
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+
+
 
 
 def login_view(request):
@@ -20,30 +25,30 @@ def login_view(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         try:
-            if User.objects.filter(username=username).exists():
-                user = authenticate(request, username=username, password=password)
-                user_username = User.objects.get(username=username)
-                user_profile = User.objects.get(username=username).alumniprofile
+            user = authenticate(request, username=username, password=password)
+            user_username = User.objects.get(username=username)
+            user_profile = User.objects.get(username=username).alumniprofile
 
-                if user is not None and user.is_authenticated and (user_profile.lockout_until is None or user_profile.lockout_until <= timezone.now()):
-                    login(request, user)
-                    token, created = Token.objects.get_or_create(user=user)
-                    reset_failed_login_attempts(user)
-                    return redirect(reverse('handle_nav_menu_click', args=['profile']))
-                
-                elif user is not None and user_profile.lockout_until is not None and user_profile.lockout_until > timezone.now() and user.alumniprofile.failed_login_attempts >= 3:
-                    remaining_time = user_profile.lockout_until - timezone.now()
-                    remaining_minutes = remaining_time.total_seconds() // 60
-                    messages.error(request, f"Your Account Has Been Temporarily Locked. Please Try Again Later!.")  #  Remaining Time: {remaining_minutes} Minutes
-                    return redirect(reverse('handle_nav_menu_click', args=['login']))
-                
-                else:
-                    increment_failed_login_attempts(user_username)
-                    messages.warning(request, f"Invalid Password. Please Try Again.")
-                    return redirect(reverse('handle_nav_menu_click', args=['login']))
+            if user is not None and user.is_authenticated and (user_profile.lockout_until is None or user_profile.lockout_until <= timezone.now()):
+                login(request, user)
+                token, created = Token.objects.get_or_create(user=user)
+                reset_failed_login_attempts(user)
+                return redirect(reverse('handle_nav_menu_click', args=['profile']))
+
+            elif user is not None and user_profile.lockout_until is not None and user_profile.lockout_until > timezone.now() and user.alumniprofile.failed_login_attempts >= 3:
+                remaining_time = user_profile.lockout_until - timezone.now()
+                remaining_minutes = remaining_time.total_seconds() // 60
+                messages.error(request, f"Your Account Has Been Temporarily Locked. Please Try Again Later!.")  #  Remaining Time: {remaining_minutes} Minutes
+                return redirect(reverse('handle_nav_menu_click', args=['login']))
+            else:
+                increment_failed_login_attempts(user_username)
+                messages.warning(request, f"Invalid Username Or Password. Please Try Again.")
+                return redirect(reverse('handle_nav_menu_click', args=['login']))
+
         except:
-            messages.error(request, 'Username account do not exists. Please register an account!.')
+            messages.warning(request, f"User Not Existing Or Invalid Account. Please Contact Admin.")
             return redirect(reverse('handle_nav_menu_click', args=['login']))
+
     else:
         return redirect(reverse('handle_nav_menu_click', args=['login']))
 
@@ -411,6 +416,35 @@ def usre_profile_image(request):
             alumni_profile.save()
 
     return redirect(reverse('handle_nav_menu_click', args=['profile']))
+
+
+
+
+
+def add_subscribe(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+
+        if Subscriber.objects.filter(email=email).exists():
+            messages.error(request, 'Email already subscribed.')
+        else:
+            subscribed_user = Subscriber(email=email)
+            subscribed_user.save()
+            messages.success(request, 'You have successfully subscribed to news notifications.')
+
+    return redirect(reverse('handle_nav_menu_click', args=['home']))
+
+
+def notify_subscribers(news):
+    if not news.is_published: # or news.created_at > timezone.now():
+        return 
+    
+    subscribers = Subscriber.objects.filter(is_active=True)
+    for subscriber in subscribers:
+        subject = f"New News: {news.title}"
+        html_message = render_to_string('email/email_main.html', {'news': news})
+        plain_message = strip_tags(html_message)
+        send_mail(subject, plain_message, 'example@gmail.com', [subscriber.email], html_message=html_message)
 
 
 

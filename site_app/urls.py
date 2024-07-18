@@ -16,5 +16,6 @@ urlpatterns = [
     path('news/<int:news_id>/', views.handle_news_click, name='handle_news_click'),
     path('gallery/<int:album_id>/', views.handle_album_click, name='handle_album_click'),
     path('user/<int:user_id>/', views.handle_user_profile_click, name='handle_user_profile_click'),
+    path('add_subscribe/', views.add_subscribe, name='add_subscribe'),
     
 ]

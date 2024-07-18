@@ -263,8 +263,6 @@ class NewsPost(models.Model):
     description = models.TextField()
     image = models.ImageField(upload_to='images/blog/', blank=True, null=True)
     category = models.ForeignKey(NewsCategory, on_delete=models.CASCADE, related_name='news_posts')
-    is_published = models.BooleanField(default=False, help_text='Whether it is publishable or not')
-    is_published_on_slider = models.BooleanField(default=False, help_text='Whether it is publishable or not on the Slider')
     posted_by = models.ForeignKey(AlumniProfile, on_delete=models.CASCADE, related_name='posted_by') # if error migrate with default admin id after remove default
     category = models.ForeignKey(
         NewsCategory, on_delete=models.CASCADE, related_name='news_posts')

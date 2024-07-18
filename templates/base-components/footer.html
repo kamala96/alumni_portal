@@ -35,10 +35,11 @@
                         <h4 class="widget-title">Get In Touch</h4>
                         <div class="widgei-body">
                             <p>
-                                Do not Miss Our News Letter by subscribing
+                                Do not Miss Our News Letter by subscribing hhhh
                             </p>
                             <div class="newsletter-form">
-                                <form id="cbx-subscribe-form">
+                                <form method="post" action="{% url 'add_subscribe' %}">
+                                    {% csrf_token %}
                                     <input name="email" type="email" placeholder="Enter Your Email" id="subscribe" required />
                                     <button type="submit">
                                         <i class="far fa-paper-plane"></i>

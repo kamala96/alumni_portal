@@ -73,6 +73,22 @@
     
 </head>
 
+
+{% if messages %}
+<div id="message-container">
+  {% for message in messages %}
+    <div class="message {% if message.tags %}{{ message.tags }}{% endif %}" data-message-id="{{ forloop.counter }}">
+      <span class="btn {% if message.tags == 'success' %}btn-success{% elif message.tags == 'error' %}btn-danger{% elif message.tags == 'warning' %}btn-warning{% endif %}">
+        {{ message }}
+        <span class="close-btn" onclick="removeMessage(this.parentElement);"><span class="btn btn-danger">x</span></span>
+      </span>
+    </div>
+  {% endfor %}
+</div>
+    {% endif %}
+
+
+
 <body id="home-v1" class="home-page-one" data-style="default">
     <a href="#" class="scroll-top">
         <i class="fa fa-angle-up"></i>
@@ -126,6 +142,21 @@
     document.getElementById("year").textContent = new Date().getFullYear();
 
     </script>
+    
+    <script>
+        function removeMessage(messageElement) {
+          messageElement.style.display = 'none';
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+          const messageElements = document.querySelectorAll('.message');
+          messageElements.forEach((messageElement) => {
+            setTimeout(() => {
+              removeMessage(messageElement);
+            }, 5000); // Adjust the time interval as needed.
+          });
+        });
+        </script>
 
 </body>
 
