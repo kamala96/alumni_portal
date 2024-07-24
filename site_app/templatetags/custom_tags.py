@@ -43,10 +43,15 @@ def submenus(menu):
 def get_sliders():
     return Slider.objects.filter(is_slider_active=True)
 
-@register.simple_tag
-def get_social_media_slider():
-    return SocialMedia.objects.filter(is_on_slider=True, is_active=True)
 
+@register.simple_tag
+def get_social_media_slider(footer=False):
+    if footer:
+        return SocialMedia.objects.filter(is_on_footer=True, is_active=True)
+    else:
+        return SocialMedia.objects.filter(is_on_slider=True, is_active=True)
+
+    
 
 
 @register.filter

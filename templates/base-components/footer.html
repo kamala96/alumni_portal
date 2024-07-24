@@ -50,7 +50,7 @@
                             </div>
 
                             <div class="footer-social-icons">
-                                {% get_social_media_slider as social_medias %}
+                                {% get_social_media_slider footer=True as social_medias %}
                                 {% for social_media in social_medias %}
 
                                 <a href="{{ social_media.url }}" target="_blank">
