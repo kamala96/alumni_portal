@@ -447,9 +447,9 @@ def notify_subscribers(news):
         send_mail(subject, plain_message, 'example@gmail.com', [subscriber.email], html_message=html_message)
 
 
-
-
-
+def footer_social(request):
+    social_medias = SocialMedia.objects.filter(is_on_footer=True)
+    return render(request, 'footer.html', {'social_medias': social_medias})
 
 
 
