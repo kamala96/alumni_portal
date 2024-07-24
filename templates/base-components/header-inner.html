@@ -38,9 +38,14 @@
                     {% for menu in main_menu %}
                     {% if menu|display_menu:user %}
                         <li class="{% if menu.submenus.count > 0 %}has-submenu{% endif %} menu-item-depth-{{ menu.indentation }}">
+                            {% if menu.submenus.count > 0 %}
+                            <a>{{ menu.menu_name|upper }}</a>
+                            {% else %}
                             <a href="{% if menu.link_type == 'internal' %} {% url 'handle_nav_menu_click' menu.slug %} {% else %}{{ menu.link }}{% endif %}">
                                 {{ menu.menu_name|upper }}
                             </a>
+                            {% endif %}
+
                             {% if menu|submenus %}
                                 <ul class="sub-menu">
                                     {% for submenu in menu|submenus %}
