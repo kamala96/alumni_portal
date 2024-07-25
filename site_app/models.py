@@ -376,7 +376,7 @@ class Responsibility(models.Model):
     desc = models.TextField()
     image = models.ImageField(upload_to='images/responsibilities/')
     icon_class = models.CharField(max_length=100)
-    url = models.URLField(max_length=255)
+    url = models.URLField(max_length=255, null=True)
     description = models.TextField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
