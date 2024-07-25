@@ -386,17 +386,6 @@ class Responsibility(models.Model):
         return self.title
 
 
-class Responsibility(models.Model):
-    title = models.CharField(max_length=255)
-    desc = models.TextField()
-    image = models.ImageField(upload_to='responsibilities/')
-    icon_class = models.CharField(max_length=100)
-    is_active = models.BooleanField(default=True)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-
-    def _str_(self):
-        return self.title
 
 
 class Slider(models.Model):
