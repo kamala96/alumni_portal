@@ -1,4 +1,5 @@
 {% load static %}
+{% load custom_tags %}
 
     {% if about_us %}
      <section id="about-area" class="section-padding">
@@ -15,7 +16,7 @@
                                   <img src="{% if about_us.welcome_note_image.url != '' %} {{ about_us.welcome_note_image.url }} {% else %} {% static 'images/misc/about-bg.jpg' %} {% endif %}" alt="" class="img-fluid">
                               </div>
 
-                               <p>{{ about_us.welcome_note }}</p>
+                               <p>{{ about_us.welcome_note|truncate_chars:370  }}</p>
                               <a href="{% url 'handle_nav_menu_click' about_us.slug %}" class="btn btn-brand about-btn">know more</a>
                           </div>
                       </div>

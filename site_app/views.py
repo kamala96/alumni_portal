@@ -446,7 +446,7 @@ def notify_subscribers(news):
         subject = f"New News: {news.title}"
         html_message = render_to_string('email/email_main.html', {'news': news})
         plain_message = strip_tags(html_message)
-        send_mail(subject, plain_message, 'example@gmail.com', [subscriber.email], html_message=html_message)
+        #send_mail(subject, plain_message, 'example@gmail.com', [subscriber.email], html_message=html_message)
 
 
 def footer_social(request):

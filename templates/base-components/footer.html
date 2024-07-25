@@ -19,7 +19,7 @@
                                 </p>
                                 {% get_top_header_items left=True as left_items %}
                                  {% for item in left_items %}
-                                 <a href="{% if item.link_type == 'external' %}{{ item.link }}{% else %}/{{ item.slug }}{% endif %}">
+                                 <a href="{% if item.link_type == 'external' %}{{ item.link }}{% else %}{{ item.MenuFor }}{% endif %}"  target="_blank">
                                     <i class="{{ item.icon_class }}"></i>  <strong> {{ item.title }} </strong> 
                                 </a>
                                  {% endfor %}
@@ -68,7 +68,7 @@
                     <div class="single-widget-wrap">
                         <h4 class="widget-title">Usefull Link</h4>
                         <div class="widgei-body">
-                            <ul class="double-list footer-list clearfix">
+                            <ul class="double-lis footer-list clearfix">
                                 {% get_footer_items as usefull %}
                                  {% for usefull in usefull %}
                                 <li><a href="{{ usefull.url }}">{{usefull.name}}</a></li>
