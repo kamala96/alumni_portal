@@ -64,7 +64,7 @@ def logout_view(request):
 
 
 def index(request):
-    events = EventsPost.objects.filter(is_published=True, is_published_on_slider=True).order_by('-created_at') #[:6]
+    events = EventsPost.objects.all()
     news = NewsPost.objects.all() 
     responsibilitys = Responsibility.objects.all()
     jobs = JobPosting.objects.all()
@@ -88,13 +88,15 @@ def index(request):
 
     context = {
         'combined_posts': combined_posts,
-        'events': events,
+        'events': events.filter(is_published=True, is_published_on_slider=True).order_by('-created_at'), #[:6]
         'news': news.filter(is_published=True, is_published_on_slider=True).order_by('-created_at'), #[:6]
         'all_news': news.filter(is_published=True).order_by('-created_at'), #[:6]
         'responsibilitys': responsibilitys.filter(is_active=True).order_by('-created'), #[:6]
         'jobs': jobs.filter(is_active=True).order_by('-created_at'), #[:6]
         'about_us': about_us,
         'total_alumni_member': alumni_members.filter(user__is_active=True).count(),
+        'total_alumni_image': gallarys.filter(is_published=True).count(),
+        'total_alumni_events': events.filter(is_published=True).count(),
         'gallarys': gallarys.filter(is_published=True).order_by('-uploaded_at')[:8]
     }
     return render(request, 'index.html', context)
