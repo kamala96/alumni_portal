@@ -235,8 +235,10 @@
                                                 {% endif %}
                                                 <span> • {{comment.created_at|date:"F d, Y \a\\t g:i a"}}</span>
                                                 <p style="margin-left: 9%;">- {{comment.content}}</p>
+                                                {% if user.is_authenticated %}
                                                 <p style="margin-left: 90%;"><a href="#reply-{{ comment.id }}" onclick="document.getElementById('reply-{{ comment.id }}').style.display='block';"><i class="far fa-thumbs-">Reply</i></a></p>                                    
-                                            
+                                                {% endif %}
+
                                                 {% for reply in comment.replies.all %}
                                                   <img style="margin-left: 15%;" src="{% if reply.author.profile_picture != '' %} {{reply.author.profile_picture.url}} {% else %}{% static 'images/profile.png' %}{% endif %}" alt="table">
                                                   {% if user.is_authenticated %}
@@ -281,13 +283,17 @@
                         <div class="single-blog-meta">
                       <div class="col-12 col-sm-12">
                         <div class="form-group">
-                            <label for="register_year"><p>Leave a Reply {% if user.is_authenticated %} Logged in as {{user.first_name}} {{user.last_name}} {% else %} {% endif %}. Required fields are marked * </p>
+                            <label for="register_year"><p>Leave a Reply {% if user.is_authenticated %} Logged in as <b>{{user.first_name}} {{user.last_name}}</b> {% else %} {% endif %}. Required fields are marked * </p>
                                <p>Comment*</p> </label>
                             <textarea name="content" class="form-control" placeholder="Write your comment here..." required></textarea>
                         </div>
                       </div>
                       <div class="form-group">
+                        {% if user.is_authenticated %}
                         <input type="submit" class="btn btn-warning" value="Post comment">
+                        {% else %} 
+                        <a href="{% url 'handle_nav_menu_click' 'login' %}" class="btn btn-info">Login to comment</a>
+                        {% endif %}
                       </div>
                     </form>
 

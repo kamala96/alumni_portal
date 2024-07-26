@@ -89,10 +89,10 @@ def index(request):
     context = {
         'combined_posts': combined_posts,
         'events': events.filter(is_published=True, is_published_on_slider=True).order_by('-created_at'), #[:6]
-        'news': news.filter(is_published=True, is_published_on_slider=True).order_by('-created_at'), #[:6]
-        'all_news': news.filter(is_published=True).order_by('-created_at'), #[:6]
-        'responsibilitys': responsibilitys.filter(is_active=True).order_by('-created'), #[:6]
-        'jobs': jobs.filter(is_active=True).order_by('-created_at'), #[:6]
+        'news': news.filter(is_published=True, is_published_on_slider=True).order_by('-created_at'),
+        'all_news': news.filter(is_published=True).order_by('-created_at')[:3],
+        'responsibilitys': responsibilitys.filter(is_active=True).order_by('-created')[:4],
+        'jobs': jobs.filter(is_active=True).order_by('-created_at')[:6],
         'about_us': about_us,
         'total_alumni_member': alumni_members.filter(user__is_active=True).count(),
         'total_alumni_image': gallarys.filter(is_published=True).count(),
@@ -106,6 +106,7 @@ def index(request):
 def default_error_page(request):
     return render(request, 'errors/error404.html', status=404)
 
+from django.core.paginator import Paginator
 
 def handle_nav_menu_click(request, menu_slug):
     try:
@@ -127,12 +128,15 @@ def handle_nav_menu_click(request, menu_slug):
     except AboutUs.DoesNotExist:
         pass
     
-    events = EventsPost.objects.all() 
-    news = NewsPost.objects.all()
-    jobs = JobPosting.objects.all()
+    events = Paginator(EventsPost.objects.filter(is_published=True).order_by('-created_at'), 10)
+    news = Paginator(NewsPost.objects.filter(is_published=True).order_by('-created_at'), 10)
+    jobs = Paginator(JobPosting.objects.filter(is_active=True).order_by('-created_at'), 9)
     committees = AlumniCommittee.objects.all()
     alumni_speechs = AlumniSpeech.objects.all()
-    alumni_members = AlumniProfile.objects.all()
+    alumni_members = Paginator(AlumniProfile.objects.filter(user__is_active=True).order_by('-graduation_year'), 15)
+    alumni_album = Paginator(AlumniAlbum.objects.all().order_by('-created_at'), 3)
+
+    page_number = request.GET.get('page')
     
     template_name = '_default.html'
     
@@ -181,16 +185,16 @@ def handle_nav_menu_click(request, menu_slug):
         
     context = {
         'nav_menu': nav_menu,
-        'events': events.filter(is_published=True).order_by('-created_at'), #[:6]
-        'news': news.filter(is_published=True).order_by('-created_at'), #[:6]
-        'jobs': jobs.filter(is_active=True).order_by('-created_at'), #[:6]
+        'events': events.get_page(page_number),
+        'news': news.get_page(page_number),
+        'jobs': jobs.get_page(page_number),
         'about_us': about_us,
         'committees': committees.filter(is_active=True).order_by('-order_id'), #[:5], about
         'all_committees': committees.filter(is_active=True).order_by('-order_id'), #[:5], committee garally
         'alumni_speechs': alumni_speechs.filter(is_published=True).order_by('-order_id'), #[:5],
-        'alumni_members': alumni_members.filter(user__is_active=True).order_by('-graduation_year'),
-        'total_alumni_member': alumni_members.filter(user__is_active=True).count,
-        'albums': AlumniAlbum.objects.all().order_by('-created_at')[:4],
+        'alumni_members': alumni_members.get_page(page_number),
+        'total_alumni_member': alumni_members.count,
+        'albums': alumni_album.get_page(page_number),
         'AFFILIATION_CHOICES': AlumniProfile.AFFILIATION_CHOICES,
         'COURSE_CHOICES': AlumniProfile.COUSE_CHOICES,
         'DEPT_CHOICES': AlumniProfile.DEPARTIMENT_CHOICES,

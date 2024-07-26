@@ -8,9 +8,8 @@
 
 {% include 'nav_menus/welcome_page.html' with welcome_page_content="All Event Archive" %}
 
-      <!--=========================-->
-      <!--=          Event        =-->
-      <!--=========================-->
+
+{% if events %}
       <section id="page-content-wrap">
           <div class="event-page-content-wrap section-padding">
               <div class="container">
@@ -53,10 +52,8 @@
                   <div class="row">
                       <div class="col-lg-12">
                           <div class="all-event-list">
-
-                              {% if events %}
+                              
                               {% for event in events %}
-
                               <!-- Single Event Start -->
                               <div class="single-upcoming-event">
                                   <div class="row">
@@ -76,7 +73,7 @@
                                                           <p>Remaining</p>
                                                       </div>
                                                       <h3><a href="{% url 'handle_event_click' event.id %}">{{ event.title }}</a></h3>
-                                                      <p>{{ event.description }}</p>
+                                                      <p>{{ event.description|truncate_chars:250 }}</p>
                                                       <a href="{% url 'handle_event_click' event.id %}" class="btn btn-brand btn-brand-dark">join
                                                           with us</a>
                                                   </div>
@@ -87,12 +84,7 @@
                               </div>
 
                               {% endfor %}
-                  {% else %}
-                  <div class="up-event-text">
-                    <h3>No Event Archive Available</h3>
-                  </div>
-                  {% endif %}
-
+                
                           </div>
                       </div>
                   </div>
@@ -105,30 +97,54 @@
                           <div class="pagination-wrap text-center">
                               <nav>
                                   <ul class="pagination">
+                                    {% if events.has_previous %}
                                       <li class="page-item">
-                                          <a class="page-link" href="#">
+                                          <a class="page-link" href="?page={{ events.previous_page_number }}">
                                               <i class="fa fa-angle-left"></i>
                                           </a>
                                       </li>
-                                      <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                      <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                      <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                      <li class="page-item"><a class="page-link" href="#">...</a></li>
-                                      <li class="page-item"><a class="page-link" href="#">50</a></li>
+                                    {% else %}
+                                        <li class="page-item disabled">
+                                            <a class="page-link" href="#">
+                                                <i class="fa fa-angle-left"></i>
+                                            </a>
+                                        </li>
+                                    {% endif %}
+                                    {% for num in events.paginator.page_range %}
+                                      {% if events.number == num %}
+                                      <li class="page-item active"><a class="page-link" href="#">{{ num }}</a></li>
+                                      {% elif num > events.number|add:'-3' and num < events.number|add:'3' %}
+                                      <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                                      {% endif %}
+                                    {% endfor %}
+                                    {% if events.has_next %}
                                       <li class="page-item">
-                                          <a class="page-link" href="#">
+                                          <a class="page-link" href="?page={{ events.next_page_number }}">
                                               <i class="fa fa-angle-right"></i>
                                           </a>
                                       </li>
+                                      {% else %}
+                                      <li class="page-item disabled">
+                                          <a class="page-link" href="#">
+                                             <i class="fa fa-angle-right"></i>
+                                          </a>
+                                      </li>
+                                    {% endif %}
                                   </ul>
                               </nav>
                           </div>
                       </div>
                   </div>
                   <!-- Pagination End -->
+
               </div>
           </div>
       </section>
+{% else %}
+<div class="up-event-text">
+<h3>No Event Archive Available</h3>
+</div>
+{% endif %}
 
 
 {% endblock content %}

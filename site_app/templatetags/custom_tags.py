@@ -78,6 +78,13 @@ def get_footer_items(university=False):
         return FooterLink.objects.filter(link_type='useful', is_active=True)
     
 
+@register.simple_tag
+def get_filtered_news():
+    return NewsPost.objects.filter(is_published=True).order_by('-created_at')[:2]
+
+
+    
+
 
 @register.filter
 def truncate_chars(value, max_length):
@@ -89,3 +96,8 @@ def truncate_chars(value, max_length):
         words.pop() 
         return ' '.join(words) + '...'
     
+
+
+@register.filter
+def sort_by(queryset, order):
+    return queryset.order_by(order)
