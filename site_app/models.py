@@ -66,6 +66,7 @@ class AlumniProfile(models.Model):
     complete_profile_status = models.PositiveIntegerField(default=0)
     failed_login_attempts = models.IntegerField(default=0)
     lockout_until = models.DateTimeField(null=True, blank=True)
+    comments = models.TextField(max_length=255, blank=True, null=False, default='Where Professionals Meet')
 
     def __str__(self):
         # {self.user.username}
@@ -574,3 +575,29 @@ class AlumniFAQ(models.Model):
         verbose_name_plural = "Alumni FAQs"
         ordering = ['-created_at']
 
+
+
+
+class AlumniOfTheMonth(models.Model):
+    alumni_name = models.ForeignKey(
+        AlumniProfile, on_delete=models.CASCADE, unique=True, related_name='alumni_name', null=False)
+    descriptions = models.TextField(max_length=255, null=False)
+    alumni_profile_picture = models.ImageField(
+        upload_to='images/alumnimonth/', blank=True, null=True)
+    is_active = models.BooleanField(default=False)
+    optionone = models.TextField(max_length=255, null=True, blank=True)
+    optiontwo = models.TextField(max_length=255, null=True, blank=True)
+    optionthree = models.TextField(max_length=255, null=True, blank=True)
+    optionfour = models.TextField(max_length=255, null=True, blank=True)
+    optionfive = models.TextField(max_length=255, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def _str_(self):
+        return f'{self.fullname.user.first_name.upper()} - {self.fullname.user.last_name.upper()}'
+    
+    def save(self, *args, **kwargs):
+        if self.is_active:
+            # Deactivate other entries
+            AlumniOfTheMonth.objects.filter(is_active=True).update(is_active=False)
+        super(AlumniOfTheMonth, self).save(*args, **kwargs)

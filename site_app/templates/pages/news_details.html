@@ -312,9 +312,9 @@
                           <h4 class="sidebar-title">Categories</h4>
                           <div class="sidebar-body">
                               <ul class="brand-unorderlist">
-                                  <li><a href="#">Scholership</a></li>
-                                  <li><a href="#">Alumni</a></li>
-                                  <li><a href="#">Events</a></li>
+                                  <li><a href="{% url 'handle_nav_menu_click' 'home' %}#alumni_of_the_month">Alumni Of The Month</a></li>
+                                  <li><a href="{% url 'handle_nav_menu_click' 'event' %}">Events</a></li>
+                                  <li><a href="{% url 'handle_nav_menu_click' 'job' %}">Jobs</a></li>
 
                               </ul>
                           </div>

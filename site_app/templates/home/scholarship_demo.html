@@ -1,19 +1,47 @@
-      <!--=================================-->
-      <!--=         Call To Action        =-->
-      <!--=================================-->
-      <section id="scholership-promo">
-          <div class="container">
-              <div class="row">
-                  <div class="col-lg-12 text-center">
-                      <div class="scholership-promo-text">
-                          <h2>Demo University Provide <span>Scholarship</span> For Talented Student!</h2>
-                          <p>Alumni Needs enables you to harness the power of your alumni network. Whatever may be the need
-                              academic, relocation, career, projects, mentorship, etc you can ask the community and get </p>
-                          <a href="#" class="btn btn-brand">Apply Now</a>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </section>
-      <div id="promo"></div>
-      <!--== Scholership Promo Area End ==-->
+{% load static %}
+{% load custom_tags %}
+
+<section id="scholership-promo">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-sm-12">
+                <div class="scholership-promo-text">
+                    <h2 class="text-center">ALUMNI <span>OF THE </span> MONTH</h2>
+                    <div class="row">
+                        <div class="col-lg-3 col-sm-12">
+                            <div class="single-committee-member">
+                                <img src="{% if alumni_month.alumni_profile_picture.url != none %} {{alumni_month.alumni_profile_picture.url}} {% else %}{% static 'images/committee/commitee-1.jpg' %} {% endif %}" class="img-fluid" alt="Committee" />
+                                <h3>{% if alumni_month %} {{ alumni_month.alumni_name.user.first_name }} {{ alumni_month.alumni_name.user.last_name }} <span class="committee-deg">{{alumni_month.alumni_name.affiliation_type}}</span>{% else %} Comming Soon {% endif %}</h3>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-9 col-sm-12" style="margin-top: 6%;">
+                            <div class="">
+                                <p><b> NIT ALUMNI OF THE MONTH </b></p>
+                                <p><b>Alumni About Yourself Description:</b></p>
+                                <p>{% if alumni_month %}{{alumni_month.alumni_name.comments|truncate_chars:150}}{% else %} Comming Soon {% endif %}</p>
+
+                                <p><b>General Alumni Description:</b></p>
+                                <p>{% if alumni_month %}{{alumni_month.descriptions|truncate_chars:195}}{% else %} Comming Soon {% endif %}</p>
+                                
+                                <p><b>Participation, <span> Challenge, </span> Success/Achievement <span>(Serving The Community)</span>:</b></p>
+                                <p>
+                                    {% if alumni_month %}
+                                    {% if alumni_month.optionone != '' %} 1. {{alumni_month.optionone|truncate_chars:140}} <br> {% endif %}
+                                    {% if alumni_month.optiontwo != '' %} 2. {{alumni_month.optiontwo|truncate_chars:140}}<br> {% endif %}
+                                    {% if alumni_month.optionthree != '' %} 3. {{alumni_month.optionthree|truncate_chars:140}} <br> {% endif %}
+                                    {% if alumni_month.optionfour != '' %} 4. {{alumni_month.optionfour|truncate_chars:140}} <br>{% endif %}
+                                    {% if alumni_month.optionfive != '' %} 5. {{alumni_month.optionfive|truncate_chars:140}} <br> {% endif %}
+                                    {% else %}
+                                    1. Comming Soon; <br>
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div id="alumni_of_the_month"></div>

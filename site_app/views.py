@@ -72,6 +72,7 @@ def index(request):
     gallarys = AlbumPhoto.objects.all()
 
     about_us = []
+    alumni_month = AlumniOfTheMonth.objects.filter(is_active=True).first()
 
     try:
         about_us = AboutUs.objects.get(is_active=True)
@@ -97,7 +98,8 @@ def index(request):
         'total_alumni_member': alumni_members.filter(user__is_active=True).count(),
         'total_alumni_image': gallarys.filter(is_published=True).count(),
         'total_alumni_events': events.filter(is_published=True).count(),
-        'gallarys': gallarys.filter(is_published=True).order_by('-uploaded_at')[:8]
+        'gallarys': gallarys.filter(is_published=True).order_by('-uploaded_at')[:8],
+        'alumni_month': alumni_month,
     }
     return render(request, 'index.html', context)
 
@@ -327,6 +329,7 @@ def alumni_update_profile(request):
         profile.phone = request.POST.get('phone')
         profile.gender = request.POST.get('gender')
         profile.affiliation_type = request.POST.get('affiliation_type')
+        profile.comments = request.POST.get('comments')
 
         if request.POST.get('affiliation_type') != 'Staff':
             profile.graduated_course = request.POST.get('graduated_course')

@@ -152,3 +152,16 @@ class AlumniFAQAdmin(admin.ModelAdmin):
             'classes': ('collapse',),
         }),
     )
+
+
+@admin.register(AlumniOfTheMonth)
+class AlumniOfTheMonthAdmin(admin.ModelAdmin):
+    list_display = ('alumni_name', 'descriptions', 'is_active', 'created_at', 'updated_at')
+    list_filter = ('is_active', 'created_at')
+    search_fields = ('alumni_name__user__first_name', 'alumni_name__user__last_name')
+
+    def save_model(self, request, obj, form, change):
+        if obj.is_active:
+            AlumniOfTheMonth.objects.filter(is_active=True).update(is_active=False)
+        super().save_model(request, obj, form, change)
+
