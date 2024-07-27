@@ -9,15 +9,10 @@ from .views import notify_subscribers
 
 
         
-@receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        AlumniProfile.objects.create(user=instance)
-
-
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    instance.alumniprofile.save()
+        if not AlumniProfile.objects.filter(user=instance).exists():
+            AlumniProfile.objects.create(user=instance)
 
 
 # Resize Images Start

@@ -12,10 +12,11 @@ from django.contrib.auth import update_session_auth_hash
 from PIL import Image
 from django.core.files.base import ContentFile
 from io import BytesIO
-
+from django.core.paginator import Paginator
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+from django.db import transaction
 
 
 
@@ -109,7 +110,7 @@ def index(request):
 def default_error_page(request):
     return render(request, 'errors/error404.html', status=404)
 
-from django.core.paginator import Paginator
+
 
 def handle_nav_menu_click(request, menu_slug):
     try:
@@ -268,7 +269,6 @@ def handle_user_profile_click(request, user_id):
 
 
 
-
 def user_create_account(request):
     if request.method == 'POST':
         # Retrieve data from the form
@@ -284,25 +284,37 @@ def user_create_account(request):
         current_location = request.POST.get('location')
         
         if password != confirm_password:
-            messages.error(request, "User password does't match")
+            messages.error(request, "Passwords do not match.")
             return redirect(reverse('handle_nav_menu_click', args=['register']))
         
         if User.objects.filter(username=username).exists():
             messages.error(request, 'Username already exists. Please choose a different username.')
             return redirect(reverse('handle_nav_menu_click', args=['register']))
 
-        user = User.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name)
-        alumni_profile = AlumniProfile.objects.create(
-            user=user,
-            graduation_year=passing_year,
-            gender=gender,
-            location=current_location,
-            phone=phone_number,
-        )
+        if User.objects.filter(email=email).exists():
+            messages.error(request, 'Email already registered. Please use a different email.')
+            return redirect(reverse('handle_nav_menu_click', args=['register']))
 
-        login(request, user)
-        messages.success(request, "User account registered successfully!")
-        return redirect(reverse('handle_nav_menu_click', args=['login']))
+        if AlumniProfile.objects.filter(phone=phone_number).exists():
+            messages.error(request, 'Phone number already registered. Please use a different phone number.')
+            return redirect(reverse('handle_nav_menu_click', args=['register']))
+
+        try:
+            with transaction.atomic():
+                user = User.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name)
+                AlumniProfile.objects.create(
+                    user=user,
+                    graduation_year=passing_year,
+                    gender=gender,
+                    location=current_location,
+                    phone=phone_number,
+                )
+                login(request, user)
+                messages.success(request, "User account registered successfully!")
+                return redirect(reverse('handle_nav_menu_click', args=['profile']))
+        except Exception as e:
+            messages.error(request, f"An error occurred: {str(e)}")
+            return redirect(reverse('handle_nav_menu_click', args=['register']))
     
     else:
         return redirect('index')

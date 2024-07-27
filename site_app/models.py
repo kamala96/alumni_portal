@@ -42,7 +42,7 @@ class AlumniProfile(models.Model):
         ('Both', 'Staff and Former Student'),
     )
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True)
     year_from = models.PositiveIntegerField(default=2024) # = batch year
     graduation_year = models.PositiveIntegerField(default=2024) # = passing year
     birthday = models.DateField(blank=True, null=True)
