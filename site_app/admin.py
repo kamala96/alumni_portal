@@ -120,10 +120,6 @@ class AlumniSpeechAdmin(admin.ModelAdmin):
 class SocialMediaAdmin(admin.ModelAdmin):
     list_display = ('name','text_to_display','url')
 
-@admin.register(AlumniProfile)
-class AlumniProfileAdmin(admin.ModelAdmin):
-    list_display = ('user','compass')
-
 
 
 class AlbumPhotoInline(admin.TabularInline):
