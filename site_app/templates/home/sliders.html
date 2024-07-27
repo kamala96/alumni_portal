@@ -83,7 +83,7 @@
                                                     <div class="event-countdown-counter" data-date="{{ event.start_date|date:'Y/m/d' }}"></div>
                                                     <p>Remaining</p>
                                                 </div>
-                                                <h3><a href="{% url 'handle_event_click' event.id %}">{{ event.title }}</a></h3>
+                                                <h3><a href="{% url 'handle_event_click' event.id %}">{{ event.title|truncate_chars:50 }}</a></h3>
                                                 <p>{{ event.description|truncate_chars:250 }}</p>
                                                 <a href="{% url 'handle_event_click' event.id %}" class="btn btn-brand btn-brand-dark">join
                                                     with us</a>
