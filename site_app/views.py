@@ -100,6 +100,7 @@ def index(request):
         'total_alumni_events': events.filter(is_published=True).count(),
         'gallarys': gallarys.filter(is_published=True).order_by('-uploaded_at')[:8],
         'alumni_month': alumni_month,
+        'total_alumni_album': AlumniAlbum.objects.all().count()
     }
     return render(request, 'index.html', context)
 

@@ -47,7 +47,7 @@
                                      <div class="blog-content">
                                          <h3><a href="{% url 'handle_news_click' new.id %}">{{ new.title }}</a>
                                          </h3>
-                                         <p>{{ new.description }}</p>
+                                         <p>{{ new.description|truncate_chars:130 }}</p>
                                          <a href="{% url 'handle_news_click' new.id %}" class="btn btn-brand">More</a>
                                      </div>
                                  </article>

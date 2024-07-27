@@ -1,7 +1,7 @@
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from django.contrib.auth.models import User
-from .models import AlumniProfile, AlumniCommittee, Slider, AlbumPhoto, AboutUs, NewsPost, EventsPost, JobPosting, Responsibility
+from .models import AlumniProfile, AlumniCommittee, Slider, AlbumPhoto, AboutUs, NewsPost, EventsPost, JobPosting, Responsibility, AlumniOfTheMonth
 from django.conf import settings
 from PIL import Image
 from .views import notify_subscribers
@@ -193,6 +193,23 @@ def resize_alumni_gallery_image(sender, instance, created, **kwargs):
         if img.width != accepted_width or img.height != accepted_height:
             img = img.resize((accepted_width, accepted_height))
             img.save(instance.photo.path)
+
+
+@receiver(post_save, sender=AlumniOfTheMonth)
+def resize_alumni_of_the_Month_image(sender, instance, created, **kwargs):
+    if instance.alumni_profile_picture:  # Check if image exists
+        # Get the accepted dimensions from settings
+        required_image_size_settings = settings.IMAGE_SIZES['alumni_committee']
+
+        accepted_width = required_image_size_settings['max_width']
+        accepted_height = required_image_size_settings['max_height']
+        # Open the uploaded image
+        img = Image.open(instance.alumni_profile_picture.path)
+        # Check if the image dimensions match the accepted dimensions
+        if img.width != accepted_width or img.height != accepted_height:
+            img = img.resize((accepted_width, accepted_height))
+            img.save(instance.alumni_profile_picture.path)
+
 
 
 @receiver(post_save, sender=NewsPost)

@@ -601,3 +601,16 @@ class AlumniOfTheMonth(models.Model):
             # Deactivate other entries
             AlumniOfTheMonth.objects.filter(is_active=True).update(is_active=False)
         super(AlumniOfTheMonth, self).save(*args, **kwargs)
+
+
+
+class TrafficLog(models.Model):
+    DEVICE_CHOICES = [
+        ('desktop', 'Desktop'),
+        ('mobile', 'Mobile'),
+        ('tablet', 'Tablet'),
+        ('other', 'Other'),
+    ]
+
+    timestamp = models.DateTimeField(auto_now_add=True)
+    device_type = models.CharField(max_length=10, choices=DEVICE_CHOICES)

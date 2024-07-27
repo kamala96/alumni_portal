@@ -1,9 +1,9 @@
 from django import template
-
 from site_app.models import *
-
-
 register = template.Library()
+from site_app.models import TrafficLog
+from django.utils import timezone
+from datetime import timedelta
 
 
 
@@ -101,3 +101,38 @@ def truncate_chars(value, max_length):
 @register.filter
 def sort_by(queryset, order):
     return queryset.order_by(order)
+
+
+
+@register.simple_tag
+def get_alumni_traffic_statistics():
+    now = timezone.now()
+    today_start = now.replace(hour=0, minute=0, second=0, microsecond=0)
+    week_start = today_start - timedelta(days=today_start.weekday())
+    month_start = now.replace(day=1)
+    year_start = now.replace(month=1, day=1)
+
+    online_visits = TrafficLog.objects.filter(timestamp__gte=now - timedelta(minutes=5)).count()
+    today_visits = TrafficLog.objects.filter(timestamp__gte=today_start).count()
+    week_visits = TrafficLog.objects.filter(timestamp__gte=week_start).count()
+    month_visits = TrafficLog.objects.filter(timestamp__gte=month_start).count()
+    year_visits = TrafficLog.objects.filter(timestamp__gte=year_start).count()
+    all_time_visits = TrafficLog.objects.all().count()
+
+    desktop_visits = TrafficLog.objects.filter(device_type='desktop').count()
+    mobile_visits = TrafficLog.objects.filter(device_type='mobile').count()
+    tablet_visits = TrafficLog.objects.filter(device_type='tablet').count()
+    other_visits = TrafficLog.objects.filter(device_type='other').count()
+
+    return {
+        'online_visits': online_visits,
+        'today_visits': today_visits,
+        'week_visits': week_visits,
+        'month_visits': month_visits,
+        'year_visits': year_visits,
+        'all_time_visits': all_time_visits,
+        'desktop_visits': desktop_visits,
+        'mobile_visits': mobile_visits,
+        'tablet_visits': tablet_visits,
+        'other_visits': other_visits,
+    }
