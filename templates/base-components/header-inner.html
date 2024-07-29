@@ -1,13 +1,13 @@
 {% load static %}
 {% load custom_tags %}
 
-<div class="container">
+<div class="container" style="max-width: 100%;">
     <div class="header-inner">
         <nav id="site-navigation" class="main-nav">
             <div class="site-logo">
-                <a href="index-2.html" class="logo">
-                    <img src="{% static 'images/logo/logo.svg' %}" alt="site logo" class="main-logo" />
-                    <img src="{% static 'images/logo/logo.svg' %}" alt="site logo" class="logo-sticky" />
+                <a href="{% url 'handle_nav_menu_click' 'home' %}" class="logo">
+                    <img src="{% static 'images/logo/logo.png' %}" alt="site logo" class="main-logo" />
+                    <img src="{% static 'images/logo/logo.png' %}" alt="site logo" class="logo-sticky" />
                 </a>
 
                 <div class="burger-menu">
@@ -21,8 +21,8 @@
             <div class="menu-wrapper main-nav-container canvas-menu-wrapper" id="mega-menu-wrap">
                 <div class="canvas-header">
                     <div class="mobile-offcanvas-logo">
-                        <a href="index-2.html">
-                            <img src="{% static 'images/logo/logo.svg' %}" alt="site logo" class="logo-sticky" />
+                        <a href="{% url 'handle_nav_menu_click' 'home'  %}">
+                            <img src="{% static 'images/logo/logo.png' %}" alt="site logo" class="logo-sticky" />
                         </a>
                     </div>
 
@@ -36,13 +36,20 @@
                     {% get_navigation_menu as main_menu %}
                     
                     {% for menu in main_menu %}
+                    {% if menu|display_menu:user %}
                         <li class="{% if menu.submenus.count > 0 %}has-submenu{% endif %} menu-item-depth-{{ menu.indentation }}">
+                            {% if menu.submenus.count > 0 %}
+                            <a>{{ menu.menu_name|upper }}</a>
+                            {% else %}
                             <a href="{% if menu.link_type == 'internal' %} {% url 'handle_nav_menu_click' menu.slug %} {% else %}{{ menu.link }}{% endif %}">
                                 {{ menu.menu_name|upper }}
                             </a>
+                            {% endif %}
+
                             {% if menu|submenus %}
                                 <ul class="sub-menu">
                                     {% for submenu in menu|submenus %}
+                                    {% if submenu|display_menu:user %}
                                         <li class="{% if submenu.submenus.count > 0 %}has-submenu{% endif %} menu-item-depth-{{ submenu.indentation }}">
                                             <a href="{% if submenu.link_type == 'internal' %} {% url 'handle_nav_menu_click' submenu.slug %}  {% else %}{{ submenu.link }}{% endif %}">
                                                 {{ submenu.menu_name|upper }}
@@ -59,10 +66,12 @@
                                                 </ul>
                                             {% endif %}
                                         </li>
+                                    {% endif %}
                                     {% endfor %}
                                 </ul>
                             {% endif %}
                         </li>
+                    {% endif %}
                     {% endfor %}
                 </ul>
 
@@ -123,6 +132,13 @@
 
 
                 
+            </div>
+            <div class="brand-search-form">
+                <form action="">
+                    <button type="button"><i class="fa fa-search"></i></button>
+                    {% comment %} <input type="search" placeholder="Type and hit here"> {% endcomment %}
+
+                </form>
             </div>
             <!-- /.menu-wrapper -->
         </nav>

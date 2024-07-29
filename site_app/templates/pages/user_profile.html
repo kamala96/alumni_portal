@@ -1,0 +1,324 @@
+{% extends 'base.html' %}
+{% load tz %}
+{% load static %}
+{% load custom_tags %}
+{% block title %} {{ nav_menu.menu_name.upper }} {% endblock title %}
+
+{% block content %}
+
+<style>
+     /* Profile Header */
+.profile-header {
+    position: relative;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-cover img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+
+
+.profile-pic {
+    position: absolute;
+    bottom: 40px;
+    left: 15%;
+    transform: translateX(-50%);
+    border: 5px solid white;
+    border-radius: 50%;
+    overflow: hidden;
+    width: 120px;
+    height: 120px;
+}
+
+.profile-pic img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-header h2 {
+    margin-top: 10px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.profile-header p {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #777;
+}
+
+.settings-icon {
+    position: absolute;
+    bottom: 50px;
+    right: 30px;
+    color: #555;
+    font-size: 30px;
+}
+
+/* Profile Navigation */
+.profile-navigation {
+    margin-top: 20px;
+    border-bottom: 1px solid #ddd;
+}
+
+.profile-navigation .nav-tabs .nav-item .nav-link {
+    color: #555;
+    border: none;
+    padding: 10px 15px;
+}
+
+.profile-navigation .nav-tabs .nav-item .nav-link.active {
+    color: #007bff;
+    border-bottom: 2px solid #007bff;
+}
+
+/* Profile Content */
+.tab-content {
+    padding: 20px 0;
+}
+
+.tab-content h3 {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.tab-content p {
+    font-size: 14px;
+    color: #555;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+    .profile-pic {
+        width: 80px;
+        height: 80px;
+        bottom: 40px;
+    }
+
+    .profile-header h2 {
+        margin-top: 50px;
+        font-size: 20px;
+    }
+
+    .profile-header p {
+        font-size: 12px;
+    }
+
+    .profile-navigation .nav-tabs .nav-item .nav-link {
+        padding: 8px 10px;
+    }
+
+    .tab-content h3 {
+        font-size: 16px;
+    }
+
+    .tab-content p {
+        font-size: 12px;
+    }
+
+}
+
+@media (max-width: 576px) {
+    .profile-pic {
+        width: 60px;
+        height: 60px;
+        bottom: 95px;
+    }
+
+    .profile-header h2 {
+        margin-top: 40px;
+        font-size: 18px;
+    }
+
+    .profile-header p {
+        font-size: 10px;
+    }
+
+    .profile-navigation .nav-tabs .nav-item .nav-link {
+        padding: 6px 8px;
+    }
+
+    .tab-content h3 {
+        font-size: 14px;
+    }
+
+    .tab-content p {
+        font-size: 10px;
+    }
+
+}
+
+.name-title {
+    margin-bottom: 10px; /* Adjust as needed */
+    border-bottom: 2px solid #645e5e; /* Line color and thickness */
+}
+
+.name-content {
+    margin-top: -15px; /* Adjust as needed */
+}
+
+
+</style>
+
+{% include 'nav_menus/welcome_page.html' with welcome_page_content="User Profile" %}
+
+
+{% if single_member %}
+<section id="gallery-area" class="section-padding">
+     <div class="container">
+         <!--== Section Title Start ==-->
+         <div class="row">
+          <div class="col-lg-8">
+               <div class="profile-header">
+                   <div class="profile-cover">
+                       <img src="{% if single_member.cover_profile.url != '' %} {{ single_member.cover_profile.url}} {% else %} {% static 'images/cover.png' %} {% endif %}" alt="Cover Image">
+                       <div class="profile-pic">
+                           <img src="{% if single_member.profile_picture.url != '' %} {{ single_member.profile_picture.url}} {% else %} {% static 'images/profile.png' %} {% endif %}" alt="Profile Picture">
+                       </div>
+                       <h2>{{single_member.user.first_name}} {{single_member.user.last_name}}</h2>
+                       <p>{{single_member.affiliation_type}} • {{single_member.country}} • {{single_member.gender}} <br>
+                         <a href="#">{{single_member.user.email}}</a> • <a href="#">{{single_member.phone}}</a> • {{single_member.region}}</p>
+                       <a href="#" class="settings-icon"><i class="fa fa-cog"></i></a>
+                   </div>
+               </div>
+
+               <div class="gallery-menu">
+                    <span class="active" data-filter="*">About</span>
+                    <span data-filter=".old">Posts</span>
+                    <span data-filter=".event">Comments</span>
+                    <span class="d-none d-sm-inline-block" data-filter=".recent">.</span>
+                </div>
+
+                <div class="row gallery-gird">
+                <div class="col-lg-6 col-sm-6 recent event">
+                    <div class="gallery-hvr-text">
+                        <h6 class="name-title">First Name</h6>
+                        <hr>
+                        <p class="gallery-event-date name-content">{{single_member.user.first_name}}</p>
+                    </div>
+
+                    <div class="gallery-hvr-text">
+                         <h6 class="name-title">Last Name</h6>
+                         <hr>
+                         <p class="gallery-event-date name-content">{{single_member.user.last_name}}</p>
+                     </div>
+
+                    {% if single_member.birthday %}
+                    <div class="gallery-hvr-text">
+                        <h6 class="name-title">BirthDay</h6>
+                        <hr>
+                        <p class="gallery-event-date name-content">{{single_member.birthday}}</p>
+                    </div>
+                    {% endif %}
+                    {% if single_member.gender %}
+                    <div class="gallery-hvr-text">
+                         <h6 class="name-title">Gender</h6>
+                         <hr>
+                         <p class="gallery-event-date name-content">{{single_member.gender}}</p>
+                     </div>
+                     {% endif %}
+                     {% if single_member.compass %}
+                     <div class="gallery-hvr-text">
+                         <h6 class="name-title">Compass</h6>
+                         <hr>
+                         <p class="gallery-event-date name-content">{{single_member.compass}}</p>
+                     </div>
+                     {% endif %}
+                     {% if single_member.department %}
+                     <div class="gallery-hvr-text">
+                          <h6 class="name-title">Department</h6>
+                          <hr>
+                          <p class="gallery-event-date name-content">{{single_member.department}}</p>
+                      </div>
+                      {% endif %}
+                      {% if single_member.phone %}
+                      <div class="gallery-hvr-text">
+                          <h6 class="name-title">Phone</h6>
+                          <hr>
+                          <p class="gallery-event-date name-content">{{single_member.phone}}</p>
+                      </div>
+                      {% endif %}
+                      {% if single_member.region %}
+                      <div class="gallery-hvr-text">
+                           <h6 class="name-title">Region</h6>
+                           <hr>
+                           <p class="gallery-event-date name-content">{{single_member.region}}</p>
+                       </div>
+                       {% endif %}
+                       {% if single_member.country %}
+                       <div class="gallery-hvr-text">
+                           <h6 class="name-title">Country</h6>
+                           <hr>
+                           <p class="gallery-event-date name-content">{{single_member.country}}</p>
+                       </div>
+                       {% endif %}
+                       {% if single_member.affiliation_type %}
+                       <div class="gallery-hvr-text">
+                            <h6 class="name-title">Affiliation Type</h6>
+                            <hr>
+                            <p class="gallery-event-date name-content">{{single_member.affiliation_type}}</p>
+                        </div>
+                        {% endif %}
+                </div>
+                </div>
+
+
+           </div>
+
+          <div class="col-lg-4 text-center">
+               <div class="section-title">
+                   <h2>Latest News</h2>
+               </div>
+              
+               {% get_filtered_news as news %}
+               {% if news %}
+               {% for new in news %}
+               <article class="single-blog-post">
+                <figure class="blog-thumb">
+                    <div class="blog-thumbnail">
+                        <img src="{% if new.image.url != '' %} {{ new.image.url }} {% else %} {% static 'images/default.jpg' %} {% endif %}" alt="Blog" class="img-fluid" />
+                    </div>
+                    <figcaption class="blog-meta clearfix">
+                        <a href="single-blog.html" class="author">
+                            <div class="author-pic">
+                                <img src="{% if new.author.profile_picture.url != '' %} {{new.author.profile_picture.url}} {% else %} {% static 'images/blog/author.jpg' %} {% endif %}" alt="Author">
+                            </div>
+                            <div class="author-info">
+                                <h5>{{new.author.user.first_name}} {{new.author.user.last_name}}</h5>
+                                <p>2 hours Ago</p>
+                            </div>
+                        </a>
+                        <div class="like-comm pull-right">
+                            <a href="#"><i class="fa fa-comment-o"></i>{{new.comment.count}}</a>
+                            <!-- <a href="#"><i class="fa fa-heart-o"></i>12</a> -->
+                        </div>
+                    </figcaption>
+                </figure>
+
+                <div class="blog-content">
+                    <h3><a href="{% url 'handle_news_click' new.id %}">{{ new.title }}</a>
+                    </h3>
+                    <p>{{ new.description }}</p>
+                    <a href="{% url 'handle_news_click' new.id %}" class="btn btn-brand">More</a>
+                </div>
+            </article>
+            <br>
+                {% endfor %}
+                {% endif %}
+
+           </div>
+
+         </div>
+         <!--== Section Title End ==-->
+
+     </div>
+ </section>
+{% endif %}
+
+
+ {% endblock content %}

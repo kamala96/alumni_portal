@@ -7,21 +7,8 @@
 {% block content %}
 
 
- <section id="page-title-area">
-     <div class="container">
-         <div class="row">
-             <div class="col-lg-8 m-auto text-center">
-                 <div class="page-title-content">
-                     <h1 class="h2">Directory</h1>
-                     <p>
-                         Alumni Needs enables you to harness the power of your alumni network. Whatever may be the need
-                     </p>
-                     <a href="#page-content-wrap" class="btn btn-brand smooth-scroll">Let's See</a>
-                 </div>
-             </div>
-         </div>
-     </div>
- </section>
+ {% include 'nav_menus/welcome_page.html' with welcome_page_content="Members Directory" %}
+
 
 
   {% if alumni_members %}
@@ -32,13 +19,12 @@
                  <div class="col-lg-12 text-center">
                      <div class="directory-text-wrap">
                          <h2>Now we have <strong class="funfact-count">{{total_alumni_member}}</strong> member </h2>
+                         {% if user.is_authenticated %}
                          <div class="table-search-area">
                              <form action="https://codeboxr.net/themedemo/unialumni/html/index.html">
                                  <input type="search" placeholder="Type Your Keyword">
                                  <select name="dept">
                                      <option selected>Dept</option>
-                                     <option value="cmt">Computer</option>
-                                     <option value="cmt">Computer</option>
                                      <option value="cmt">Computer</option>
                                      <option value="cmt">Computer</option>
                                      <option value="cmt">Computer</option>
@@ -56,49 +42,82 @@
                                          <th scope="col">Batch</th>
                                          <th scope="col">Campus</th>
                                          <th scope="col">Location</th>
+                                         {% if user.is_authenticated %}
                                          <th scope="col">Action</th>
+                                         {% endif %}
                                      </tr>
                                  </thead>
                                  <tbody>
                                    {% for alumni_member in alumni_members %}
                                      <tr>
-                                         <td><img src="{% if alumni_member.profile_picture != '' %} {{alumni_member.profile_picture.url}} {% else %} {% static 'images/testimonial/testi-1.png' %} {% endif %}" alt="table">{{alumni_member.user.first_name}} {{alumni_member.user.last_name}}</td>
+                                         <td><img src="{% if alumni_member.profile_picture != '' %} {{alumni_member.profile_picture.url}} {% else %} {% static 'images/testimonial/testi-1.jpg' %} {% endif %}" alt="table">{{alumni_member.user.first_name}} {{alumni_member.user.last_name}}</td>
                                          <td>{{alumni_member.department}}</td>
-                                         <td>{{alumni_member.batch_year}}</td>
+                                         <td>{{alumni_member.user.id}}</td>
                                          <td>{{alumni_member.compass}}</td>
                                          <td>{{alumni_member.location}}</td>
-                                         <td><a href="#" class="btn btn-job">View</a></td>
-                                     </tr>
+                                         {% if user.is_authenticated %}
+                                         <td><a href="{% url 'handle_user_profile_click' alumni_member.id %}" class="btn btn-job">View</a></td>
+                                         {% endif %}
+                                        </tr>
                                    {% endfor %}
 
                                  </tbody>
                              </table>
                          </div>
-                         <p class="show-memeber text-end">
+                         <!-- <p class="show-memeber text-end">
                              Show <span>30</span> of <span>12487 Member</span>
-                         </p>
+                         </p> -->
+                         {% else %}
+                         <h4> Login To View Member List <strong> <a href="{% url 'handle_nav_menu_click' 'login' %}">Login</a> </strong></h4>
+                         {% endif %}
                      </div>
                  </div>
              </div>
-
+             {% if user.is_authenticated %}
              <div class="row">
-                 <div class="col-lg-12">
-                     <div class="pagination-wrap text-center">
-                         <nav>
-                             <ul class="pagination">
-                                 <li class="page-item"><a class="page-link" href="#"><i class="fa fa-angle-left"></i></a>
-                                 </li>
-                                 <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                 <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                 <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                 <li class="page-item"><a class="page-link" href="#">...</a></li>
-                                 <li class="page-item"><a class="page-link" href="#">50</a></li>
-                                 <li class="page-item"><a class="page-link" href="#"><i class="fa fa-angle-right"></i></a></li>
-                             </ul>
-                         </nav>
-                     </div>
-                 </div>
-             </div>
+                <div class="col-lg-12">
+                    <div class="pagination-wrap text-center">
+                        <nav>
+                            <ul class="pagination">
+                              {% if alumni_members.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ alumni_members.previous_page_number }}">
+                                        <i class="fa fa-angle-left"></i>
+                                    </a>
+                                </li>
+                              {% else %}
+                                  <li class="page-item disabled">
+                                      <a class="page-link" href="#">
+                                          <i class="fa fa-angle-left"></i>
+                                      </a>
+                                  </li>
+                              {% endif %}
+                              {% for num in alumni_members.paginator.page_range %}
+                                {% if alumni_members.number == num %}
+                                <li class="page-item active"><a class="page-link" href="#">{{ num }}</a></li>
+                                {% elif num > alumni_members.number|add:'-3' and num < alumni_members.number|add:'3' %}
+                                <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                                {% endif %}
+                              {% endfor %}
+                              {% if alumni_members.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ alumni_members.next_page_number }}">
+                                        <i class="fa fa-angle-right"></i>
+                                    </a>
+                                </li>
+                                {% else %}
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#">
+                                       <i class="fa fa-angle-right"></i>
+                                    </a>
+                                </li>
+                              {% endif %}
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+             {% endif %}
          </div>
      </div>
  </section>

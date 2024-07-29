@@ -141,3 +141,40 @@ class AlbumPhotoInline(admin.TabularInline):
 class AlumniAlbumAdmin(admin.ModelAdmin):
     inlines = [AlbumPhotoInline]
     list_display = ('title', 'description', 'created_at')
+
+
+@admin.register(AlumniFAQ)
+class AlumniFAQAdmin(admin.ModelAdmin):
+    list_display = ('question', 'is_active', 'created_at', 'updated_at')
+    list_filter = ('is_active', 'created_at', 'updated_at')
+    search_fields = ('question', 'answer')
+    readonly_fields = ('created_at', 'updated_at')
+
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+        return queryset.order_by('-created_at')
+
+    fieldsets = (
+        (None, {
+            'fields': ('question', 'answer', 'is_active')
+        }),
+        ('Timestamps', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',),
+        }),
+    )
+
+
+@admin.register(AlumniOfTheMonth)
+class AlumniOfTheMonthAdmin(admin.ModelAdmin):
+    list_display = ('alumni_name', 'descriptions',
+                    'is_active', 'created_at', 'updated_at')
+    list_filter = ('is_active', 'created_at')
+    search_fields = ('alumni_name__user__first_name',
+                     'alumni_name__user__last_name')
+
+    def save_model(self, request, obj, form, change):
+        if obj.is_active:
+            AlumniOfTheMonth.objects.filter(
+                is_active=True).update(is_active=False)
+        super().save_model(request, obj, form, change)

@@ -7,19 +7,22 @@
         <div class="container">
             <div class="row">
                 <!-- Single Widget Start -->
-                <div class="col-lg-4 col-sm-6">
+                <div class="col-lg-3 col-sm-6">
                     <div class="single-widget-wrap">
                         <div class="widgei-body">
                             <div class="footer-about">
-                                <img src="{% static 'images/logo/footer-logo.svg' %}" alt="Logo" class="img-fluid" />
+                                <img src="{% static 'images/logo/logo.png' %}" alt="Logo" class="img-fluid" />
                                 <p>
-                                    We are legend Lorem ipsum dolor sitmet,
-                                    nsecte ipisicing eit, sed do eiusmod tempor
-                                    incidunt ut et do maga aliqua enim ad minim.
+                                    {% if about_us %}
+                                    {{ about_us.welcome_note|truncate_chars:200 }}
+                                    {% endif %}
                                 </p>
-                                <a href="#">Phone: +8745 44 5444</a>
-                                <a href="#">Fax: +88474 156 362</a> <br />
-                                <a href="#">Email: demoemail@demo.com</a>
+                                {% get_top_header_items left=True as left_items %}
+                                 {% for item in left_items %}
+                                 <a href="{% if item.link_type == 'external' %}{{ item.link }}{% else %}{{ item.MenuFor }}{% endif %}"  target="_blank">
+                                    <i class="{{ item.icon_class }}"></i>  <strong> {{ item.title }} </strong> 
+                                </a>
+                                 {% endfor %}
                             </div>
                         </div>
                     </div>
@@ -32,10 +35,11 @@
                         <h4 class="widget-title">Get In Touch</h4>
                         <div class="widgei-body">
                             <p>
-                                Do not Miss Our News Letter by subscribing
+                                Do not Miss Our News Letter by subscribing hhhh
                             </p>
                             <div class="newsletter-form">
-                                <form id="cbx-subscribe-form">
+                                <form method="post" action="{% url 'add_subscribe' %}">
+                                    {% csrf_token %}
                                     <input name="email" type="email" placeholder="Enter Your Email" id="subscribe" required />
                                     <button type="submit">
                                         <i class="far fa-paper-plane"></i>
@@ -46,7 +50,7 @@
                             </div>
 
                             <div class="footer-social-icons">
-                                {% get_social_media_slider as social_medias %}
+                                {% get_social_media_slider footer=True as social_medias %}
                                 {% for social_media in social_medias %}
 
                                 <a href="{{ social_media.url }}" target="_blank">
@@ -60,21 +64,15 @@
                 <!-- Single Widget End -->
 
                 <!-- Single Widget Start -->
-                <div class="col-lg-3 col-sm-6">
+                <div class="col-lg-2 col-sm-6">
                     <div class="single-widget-wrap">
                         <h4 class="widget-title">Usefull Link</h4>
                         <div class="widgei-body">
-                            <ul class="double-list footer-list clearfix">
-                                <li><a href="#">Pricing Plan</a></li>
-                                <li><a href="#">Categories</a></li>
-                                <li><a href="#">Populer Deal</a></li>
-                                <li><a href="#">FAQ</a></li>
-                                <li><a href="#">Support</a></li>
-                                <li><a href="#">Pricing Plan</a></li>
-                                <li><a href="#">Categories</a></li>
-                                <li><a href="#">Populer Deal</a></li>
-                                <li><a href="#">FAQ</a></li>
-                                <li><a href="#">Support</a></li>
+                            <ul class="double-lis footer-list clearfix">
+                                {% get_footer_items as usefull %}
+                                 {% for usefull in usefull %}
+                                <li><a href="{{ usefull.url }}">{{usefull.name}}</a></li>
+                                {% endfor %}
                             </ul>
                         </div>
                     </div>
@@ -84,19 +82,43 @@
                 <!-- Single Widget Start -->
                 <div class="col-lg-2 col-sm-6">
                     <div class="single-widget-wrap">
-                        <h4 class="widget-title">University</h4>
+                        <h4 class="widget-title">From Institute</h4>
                         <div class="widgei-body">
                             <ul class="footer-list clearfix">
-                                <li><a href="#">Pricing Plan</a></li>
-                                <li><a href="#">Categories</a></li>
-                                <li><a href="#">Populer Deal</a></li>
-                                <li><a href="#">FAQ</a></li>
-                                <li><a href="#">Support</a></li>
+                                {% get_footer_items university=True as university_items %}
+                                 {% for univesity in university_items %}
+                                <li><a href="{{ university.url }}">{{univesity.name}}</a></li>
+                                 {% endfor %}
                             </ul>
                         </div>
                     </div>
                 </div>
                 <!-- Single Widget End -->
+
+                   <!-- Single Widget Start -->
+                   <div class="col-lg-2 col-sm-6">
+                    <div class="single-widget-wrap">
+                        <h4 class="widget-title">Alumni Traffic</h4>
+                        <div class="widgei-body">
+                            <ul class="footer-list clearfix">
+                                {% get_alumni_traffic_statistics as alumni_traffic %}
+                                {% if alumni_traffic %}
+                                <li><a>Online : {{alumni_traffic.online_visits}}</a></li>
+                                <li><a>Today Visits : {{alumni_traffic.today_visits}}</a></li>
+                                <li><a>Week Visits : {{alumni_traffic.week_visits}}</a></li>
+                                <li><a>Month Visits : {{alumni_traffic.month_visits}}</a></li>
+                                <li><a>Mobile Visits : {{alumni_traffic.mobile_visits}}</a></li>
+                                <li><a>Tablet Visits : {{alumni_traffic.tablet_visits}}</a></li>
+                                <li><a>Desktop Visits : {{alumni_traffic.desktop_visits}}</a></li>
+                                <li><a>Other Visits : {{alumni_traffic.other_visits}}</a></li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- Single Widget End -->
+
+
             </div>
         </div>
     </div>

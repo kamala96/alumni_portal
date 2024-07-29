@@ -7,21 +7,8 @@
 {% block content %}
 
 
-<section id="page-title-area">
-     <div class="container">
-         <div class="row">
-             <div class="col-lg-8 m-auto text-center">
-                 <div class="page-title-content">
-                     <h1 class="h2">Gallary</h1>
-                     <p>
-                         Alumni Needs enables you to harness the power of your alumni network. Whatever may be the need
-                     </p>
-                     <a href="#page-content-wrap" class="btn btn-brand smooth-scroll">Let's See</a>
-                 </div>
-             </div>
-         </div>
-     </div>
- </section>
+ {% include 'nav_menus/welcome_page.html' with welcome_page_content="Gallary" %}
+
 
  <!--=========================-->
  <!--=         Gallery       =-->
@@ -56,18 +43,18 @@
 
                              <div class="album-gallery-item">
                                  <div class="row gallery-gird">
-                                   {% for gallary in album.album.all %}
+                                   {% for gallary in album.album.all|sort_by:"-uploaded_at"|slice:":8" %}
                                    {% if gallary.media_type == 'photo' %}
                                      <!-- Single Gallery Start -->
                                      <div class="col-lg-3  col-sm-6 {{gallary.visibility_option}}">
-                                         <div class="single-gallery-item gallery-bg-1">
+                                         <div class="single-gallery-item gallery-bg-1" style="background-image: url('{{ gallary.photo.url }}');">
                                              <div class="gallery-hvr-wrap">
                                                  <div class="gallery-hvr-text">
                                                      <h4>{{gallary.title}}</h4>
                                                      <p class="gallery-event-date">{{ gallary.event_date|date:'d m, Y' }}</p>
                                                  </div>
-                                                 <a href="{% if gallary.photo.url != '' %}{{gallary.photo.url}}{% else %}{% static 'images/gallery/gellary-img-1.jpg' %}{% endif %}" class="btn-zoom image-popup">
-                                                     <img src="assets/images/zoom-icon.png" alt="a">
+                                                 <a href="{% if gallary.photo.url != '' %}{{gallary.photo.url}}{% else %} {% endif %}" class="btn-zoom image-popup">
+                                                     <img src="{% static 'images/zoom-icon.png' %}" alt="a">
                                                  </a>
                                              </div>
                                          </div>
@@ -77,7 +64,7 @@
 
                                      <!-- Single Gallery Start -->
                                      <div class="col-lg-3  col-sm-6 {{gallary.visibility_option}}">
-                                         <div class="single-gallery-item video gallery-bg-2">
+                                         <div class="single-gallery-item video gallery-bg-2" style="background-image: url('{{ gallary.photo.url }}');">
                                              <a href="{{gallary.video_url.url}}" class="btn btn-video-play video-popup" target="_blank"><i class="fa fa-play"></i></a>
                                          </div>
                                      </div>
@@ -92,20 +79,49 @@
                           {% endfor %}
                      </div>
 
-                     <div class="pagination-wrap text-center">
-                         <nav>
-                             <ul class="pagination">
-                                 <li class="page-item"><a class="page-link" href="#"><i class="fa fa-angle-left"></i></a>
-                                 </li>
-                                 <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                 <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                 <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                 <li class="page-item"><a class="page-link" href="#">...</a></li>
-                                 <li class="page-item"><a class="page-link" href="#">50</a></li>
-                                 <li class="page-item"><a class="page-link" href="#"><i class="fa fa-angle-right"></i></a></li>
-                             </ul>
-                         </nav>
-                     </div>
+                     <div class="row">
+                        <div class="col-lg-12">
+                            <div class="pagination-wrap text-center">
+                                <nav>
+                                    <ul class="pagination">
+                                      {% if albums.has_previous %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page={{ albums.previous_page_number }}">
+                                                <i class="fa fa-angle-left"></i>
+                                            </a>
+                                        </li>
+                                      {% else %}
+                                          <li class="page-item disabled">
+                                              <a class="page-link" href="#">
+                                                  <i class="fa fa-angle-left"></i>
+                                              </a>
+                                          </li>
+                                      {% endif %}
+                                      {% for num in albums.paginator.page_range %}
+                                        {% if albums.number == num %}
+                                        <li class="page-item active"><a class="page-link" href="#">{{ num }}</a></li>
+                                        {% elif num > albums.number|add:'-3' and num < albums.number|add:'3' %}
+                                        <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                                        {% endif %}
+                                      {% endfor %}
+                                      {% if albums.has_next %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page={{ albums.next_page_number }}">
+                                                <i class="fa fa-angle-right"></i>
+                                            </a>
+                                        </li>
+                                        {% else %}
+                                        <li class="page-item disabled">
+                                            <a class="page-link" href="#">
+                                               <i class="fa fa-angle-right"></i>
+                                            </a>
+                                        </li>
+                                      {% endif %}
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
 
                  </div>
              </div>

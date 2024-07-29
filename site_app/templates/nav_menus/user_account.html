@@ -1,0 +1,665 @@
+{% extends 'base.html' %}
+{% load tz %}
+{% load static %}
+{% load custom_tags %}
+{% block title %} {{ nav_menu.menu_name.upper }} {% endblock title %}
+
+{% block content %}
+
+<style>
+    /* Profile Header */
+ .profile-header {
+   position: relative;
+   text-align: center;
+   margin-bottom: 20px;
+}
+
+.profile-cover img {
+   width: 100%;
+   height: 200px;
+   object-fit: cover;
+}
+
+
+
+.profile-pic {
+   position: absolute;
+   bottom: 40px;
+   left: 15%;
+   transform: translateX(-50%);
+   border: 5px solid white;
+   border-radius: 50%;
+   overflow: hidden;
+   width: 120px;
+   height: 120px;
+}
+
+.profile-pic img {
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+}
+
+.profile-header h2 {
+   margin-top: 10px;
+   font-size: 24px;
+   font-weight: bold;
+}
+
+.profile-header p {
+   margin-top: 10px;
+   font-size: 14px;
+   color: #777;
+}
+
+.settings-icon {
+   position: absolute;
+   bottom: 50px;
+   right: 30px;
+   color: #555;
+   font-size: 30px;
+}
+
+/* Profile Navigation */
+.profile-navigation {
+   margin-top: 20px;
+   border-bottom: 1px solid #ddd;
+}
+
+.profile-navigation .nav-tabs .nav-item .nav-link {
+   color: #555;
+   border: none;
+   padding: 10px 15px;
+}
+
+.profile-navigation .nav-tabs .nav-item .nav-link.active {
+   color: #007bff;
+   border-bottom: 2px solid #007bff;
+}
+
+/* Profile Content */
+.tab-content {
+   padding: 20px 0;
+}
+
+.tab-content h3 {
+   font-size: 18px;
+   font-weight: bold;
+}
+
+.tab-content p {
+   font-size: 14px;
+   color: #555;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+   .profile-pic {
+       width: 80px;
+       height: 80px;
+       bottom: 40px;
+   }
+
+   .profile-header h2 {
+       margin-top: 50px;
+       font-size: 20px;
+   }
+
+   .profile-header p {
+       font-size: 12px;
+   }
+
+   .profile-navigation .nav-tabs .nav-item .nav-link {
+       padding: 8px 10px;
+   }
+
+   .tab-content h3 {
+       font-size: 16px;
+   }
+
+   .tab-content p {
+       font-size: 12px;
+   }
+
+}
+
+@media (max-width: 576px) {
+   .profile-pic {
+       width: 60px;
+       height: 60px;
+       bottom: 95px;
+   }
+
+   .profile-header h2 {
+       margin-top: 40px;
+       font-size: 18px;
+   }
+
+   .profile-header p {
+       font-size: 10px;
+   }
+
+   .profile-navigation .nav-tabs .nav-item .nav-link {
+       padding: 6px 8px;
+   }
+
+   .tab-content h3 {
+       font-size: 14px;
+   }
+
+   .tab-content p {
+       font-size: 10px;
+   }
+
+}
+
+.name-title {
+   margin-bottom: 10px; /* Adjust as needed */
+   border-bottom: 2px solid #645e5e; /* Line color and thickness */
+}
+
+.name-content {
+   margin-top: -15px; /* Adjust as needed */
+} */
+
+        .file-input {
+            display: none;
+        }
+        .edit-icon {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 5px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+
+        .edit-icon-profile {
+            bottom: 0; 
+            left: 0;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .hidden {
+    display: none;
+}
+
+</style>
+
+{% include 'nav_menus/welcome_page.html' with welcome_page_content="My Profile" %}
+
+{% if member_profile %}
+<section id="page-content-wrap">
+     <div class="single-event-page-content section-padding">
+         <div class="container">
+             <div class="row">
+                 <div class="col-lg-12">
+                     <div class="single-event-details">
+                         <div class="event-thumbnails">
+
+                            <div class="profile-header">
+                                <div class="profile-cover">
+                                    <img src="{% if member_profile.cover_profile.url != '' %} {{ member_profile.cover_profile.url}} {% else %} {% static 'images/cover.png' %} {% endif %}" alt="Cover Image">
+                                    <div class="edit-icon" onclick="openModal('coverModal')">✎</div>
+                                    <div class="profile-pic">
+                                        <img src="{% if member_profile.profile_picture.url != '' %} {{ member_profile.profile_picture.url}} {% else %} {% static 'images/profile.png' %} {% endif %}" alt="Profile Picture">
+                                        <div class="edit-icon edit-icon-profile" onclick="openModal('profileModal')">✎</div>                                    </div>
+                                    <h2>{{user.first_name}} {{user.last_name}}</h2>
+                                    <p>{{member_profile.affiliation_type}} • {{member_profile.country}} • {{member_profile.gender}} <br>
+                                      <a href="#">{{member_profile.user.email}}</a> • <a href="#">{{member_profile.phone}}</a> • {{member_profile.region}}</p>
+                                    
+                                </div>
+                            </div>
+
+
+                        
+                            <div id="coverModal" class="modal">
+                                <div class="modal-content">
+                                    <span class="close" onclick="closeModal('coverModal')">&times;</span>
+                                    <form method="POST" action="{% url 'usre_profile_image' %}" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <div class="row">
+                                            <div class="col-12 col-sm-6">
+                                                <div class="form-group">
+                                                    <label for="f_name">Change Cover Image</label>
+                                                    <input type="file" class="form-control" id="cover_image" name="cover_image" accept="image/*" required onchange="document.getElementById('coverImage').src = window.URL.createObjectURL(this.files[0])">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-info">Update Image</button>
+                                    </form>
+                                </div>
+                            </div>
+                        
+                            <div id="profileModal" class="modal">
+                                <div class="modal-content">
+                                    <span class="close" onclick="closeModal('profileModal')">&times;</span>
+                                    <form method="POST" action="{% url 'usre_profile_image' %}" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <div class="row">
+                                            <div class="col-12 col-sm-6">
+                                                <div class="form-group">
+                                            <label for="profile_image">Change Profile Image</label>
+                                            <input type="file" class="form-control" id="profile_image" name="profile_image" accept="image/*" onchange="document.getElementById('profileImage').src = window.URL.createObjectURL(this.files[0])">
+                                                 </div>
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-success">Update Image</button>
+                                    </form>
+                                </div>
+                            </div>
+                        
+                            <script>
+                                function openModal(modalId) {
+                                    document.getElementById(modalId).style.display = "block";
+                                }
+                        
+                                function closeModal(modalId) {
+                                    document.getElementById(modalId).style.display = "none";
+                                }
+                            </script>
+
+
+
+                         </div>
+                         <h2>Details About Myself</h2>
+                         <p>
+                            {{member_profile.comments}}
+                         </p>
+                         <div class="event-schedul">
+                             <h3>Account Setting</h3>
+
+                             <div class="row justify-content-center">
+                                 <div class="col-md-10">
+                                     <div class="accordion cbx-acacordion" id="cbx-event-accordion">
+                                         
+                                        <div class="accordion-item">
+                                             <h2 class="accordion-header" id="headingOne">
+                                                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                     <span class="event-time">Account</span> Update you account
+                                                 </button>
+                                             </h2>
+                                             <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#cbx-event-accordion">
+                                                 <div class="accordion-body">
+
+
+
+
+
+
+
+                                                    <form action="{% url 'alumni_update_profile' %}" method="post">
+                                                        {% csrf_token %}
+                                                        <div class="row">
+                                                            <!-- First Name -->
+                                                            <div class="col-12 col-sm-3">
+                                                                <div class="form-group">
+                                                                    <label for="f_name">First Name</label>
+                                                                    <input type="text" class="form-control" value="{{ member_profile.user.first_name }}" id="f_name" name="f_name" required autocomplete="off" />
+                                                                </div>
+                                                            </div>
+                                                            <!-- Last Name -->
+                                                            <div class="col-12 col-sm-3">
+                                                                <div class="form-group">
+                                                                    <label for="l_name">Last Name</label>
+                                                                    <input type="text" class="form-control" value="{{ member_profile.user.last_name }}" id="l_name" required name="l_name" />
+                                                                </div>
+                                                            </div>
+                                                            <!-- Username -->
+                                                            <div class="col-12 col-sm-3">
+                                                                <div class="form-group">
+                                                                    <label for="username">Username</label>
+                                                                    <input type="text" class="form-control" value="{{ member_profile.user.username }}" id="username" required name="username" />
+                                                                </div>
+                                                            </div>
+                                                            <!-- Email -->
+                                                            <div class="col-12 col-sm-3">
+                                                                <div class="form-group">
+                                                                    <label for="email">Email</label>
+                                                                    <input type="email" class="form-control" value="{{ member_profile.user.email }}" id="email" required name="email" autocomplete="none" />
+                                                                </div>
+                                                            </div>
+                                                            <!-- Birthday -->
+                                                            <div class="col-12 col-sm-3">
+                                                                <div class="form-group">
+                                                                    <label for="birthday">Birthday Date</label>
+                                                                    <input type="date" class="form-control" value="{{ member_profile.birthday|date:'Y-m-d' }}" id="birthday" required name="birthday" />
+                                                                </div>
+                                                            </div>
+                                                            <!-- Country -->
+                                                            <div class="col-12 col-sm-3">
+                                                                <div class="form-group">
+                                                                    <label for="country">Choose Country</label>
+                                                                    <select class="form-control" id="country" name="country" required>
+                                                                        <option value="">Select a country</option>
+                                                                        <option value="Tanzania" {% if member_profile.country == 'Tanzania' %}selected{% endif %}>Tanzania</option>
+                                                                        <!-- Add other countries as needed -->
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <!-- Current Location -->
+                                                            <div class="col-12 col-sm-3">
+                                                                <div class="form-group">
+                                                                    <label for="location">Current Location</label>
+                                                                    <input type="text" class="form-control" value="{{ member_profile.location }}" id="location" required name="location" />
+                                                                </div>
+                                                            </div>
+                                                            <!-- Whatsapp Number -->
+                                                            <div class="col-12 col-sm-3">
+                                                                <div class="form-group">
+                                                                    <label for="phone">Whatsapp Number</label>
+                                                                    <input type="tel" required class="form-control" value="{{ member_profile.phone }}" id="phone" name="phone" pattern="\+?\d{0,12}" />
+                                                                    <!-- <input type="number" required class="form-control" value="{{ member_profile.phone }}" min="0" maxlength="12" id="phone" name="phone" /> -->
+                                                                </div>
+                                                            </div>
+                                                            <!-- Gender -->
+                                                            <div class="col-12 col-sm-3">
+                                                                <div class="form-group">
+                                                                    <label for="gender">Gender</label>
+                                                                    <select class="form-control" id="gender" name="gender" required>
+                                                                        <option value="">Select a gender</option>
+                                                                        {% for key, value in GENDER_CHOICES %}
+                                                                            <option value="{{ key }}" {% if member_profile.gender == key %}selected{% endif %}>{{ value }}</option>
+                                                                        {% endfor %}
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <!-- Affiliation Type -->
+                                                            <div class="col-12 col-sm-3">
+                                                                <div class="form-group">
+                                                                    <label for="affiliation_type">Affiliation Type</label>
+                                                                    <select class="form-control" id="affiliation_type" name="affiliation_type" required onchange="toggleFields()">
+                                                                        <option value="">Select a affiliation type</option>
+                                                                        {% for key, value in AFFILIATION_CHOICES %}
+                                                                            <option value="{{ key }}" {% if member_profile.affiliation_type == key %}selected{% endif %}>{{ value }}</option>
+                                                                        {% endfor %}
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <!-- Graduated Course (Hidden) -->
+                                                            <div class="col-12 col-sm-3 hidden" id="graduated_course">
+                                                                <div class="form-group">
+                                                                    <label for="graduated_course">Graduated Course</label>
+                                                                    <select class="form-control" name="graduated_course">
+                                                                        <option value="">Select a graduated course</option>
+                                                                        {% for key, value in COURSE_CHOICES %}
+                                                                            <option value="{{ key }}" {% if member_profile.graduated_course == key %}selected{% endif %}>{{ value }}</option>
+                                                                        {% endfor %}
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <!-- Department (Hidden) -->
+                                                            <div class="col-12 col-sm-3 hidden" id="departmentField">
+                                                                <div class="form-group">
+                                                                    <label for="dept">Department</label>
+                                                                    <select class="form-control" name="dept">
+                                                                        <option value="">Select a department</option>
+                                                                        {% for key, value in DEPT_CHOICES %}
+                                                                            <option value="{{ key }}" {% if member_profile.department == key %}selected{% endif %}>{{ value }}</option>
+                                                                        {% endfor %}
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <!-- Batch Year (Hidden) -->
+                                                            <div class="col-12 col-sm-3 hidden" id="batch_year">
+                                                                <div class="form-group">
+                                                                    <label for="batch_year">Batch Year</label>
+                                                                    <input type="number" value="{{ member_profile.batch_year }}" class="form-control" min="1880" maxlength="4" name="batch_year" />
+                                                                </div>
+                                                            </div>
+                                                            <!-- Belonged Compass (Hidden) -->
+                                                            <div class="col-12 col-sm-3 hidden" id="compass">
+                                                                <div class="form-group">
+                                                                    <label for="compass">Belonged Compass</label>
+                                                                    <select class="form-control" name="compass">
+                                                                        <option value="">Select a compass</option>
+                                                                        {% for key, value in COMPAS %}
+                                                                            <option value="{{ key }}" {% if member_profile.compass == key %}selected{% endif %}>{{ value }}</option>
+                                                                        {% endfor %}
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <!-- Passing Year (Hidden) -->
+                                                            <div class="col-12 col-sm-3 hidden" id="passing_year">
+                                                                <div class="form-group">
+                                                                    <label for="passing_year">Passing Year</label>
+                                                                    <input type="number" value="{{ member_profile.passing_year }}" class="form-control" min="1880" maxlength="4" name="passing_year" />
+                                                                </div>
+                                                            </div>
+                                                            <!-- SONIT Fields (Hidden) -->
+                                                            <div id="sonitFields" class="hidden">
+                                                                <div class="col-12 col-sm-4">
+                                                                    <div class="form-group form-check">
+                                                                        <input type="checkbox" class="form-check-input" id="is_sonit_leader" name="is_sonit_leader" {% if member_profile.is_sonit_leader %}checked{% endif %} onchange="toggleSonitPosition()">
+                                                                        <label class="form-check-label" for="is_sonit_leader">Are you a SONIT Leader?</label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-12 col-sm-3 hidden" id="sonit_leader_position_field">
+                                                                    <div class="form-group">
+                                                                        <label for="sonit_leader_position">SONIT Leadership Position</label>
+                                                                        <select class="form-control" id="sonit_leader_position" name="sonit_leader_position">
+                                                                            <option value="">Select a Leadership position</option>
+                                                                            {% for key, value in SONIT_LEADER %}
+                                                                                <option value="{{ key }}" {% if member_profile.sonit_leader_position == key %}selected{% endif %}>{{ value }}</option>
+                                                                            {% endfor %}
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-12 col-sm-12" id="comment">
+                                                                <div class="form-group">
+                                                                    <label for="passing_year">Comment About Yourself(Optional)</label>
+                                                                    <textarea class="form-control" name="comments" rows="3">{{ member_profile.comments }}</textarea>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                        <br>
+                                                        <div class="col-12 col-sm-4">
+                                                            <div class="form-group">
+                                                                <input type="submit" class="btn btn-success" value="Update Account">
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                    
+
+
+
+                                                 </div>
+                                             </div>
+                                         </div>
+
+
+
+                                         <div class="accordion-item">
+                                             <h2 class="accordion-header" id="headingTwo">
+                                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                                     <span class="event-time">Change Password</span> Update your password
+                                                 </button>
+                                             </h2>
+                                             <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#cbx-event-accordion">
+                                                 <div class="accordion-body">
+                                                    <form action="{% url 'alumni_update_password' %}" method="post">
+                                                        {% csrf_token %}
+                                        
+                                                            <div class="row">
+                                                                <div class="col-12 col-sm-6">
+                                                                    <div class="form-group">
+                                                                        <label for="oldpassword">Old Password</label>
+                                                                        <input type="oldpassword" class="form-control" id="oldpassword" required name="oldpassword" />
+                                                                    </div>
+                                                                </div>
+
+                                                            <div class="col-12 col-sm-6">
+                                                                <div class="form-group">
+                                                                    <label for="newpassword">New Password</label>
+                                                                    <input type="newpassword" class="form-control" id="newpassword" required name="newpassword" />
+                                                                </div>
+                                                            </div>
+    
+                                                            <div class="col-12 col-sm-6">
+                                                                <div class="form-group">
+                                                                    <label for="confirmpassword"> Confirm New Password</label>
+                                                                    <input type="confirmpassword" class="form-control" id="confirmpassword" required name="confirmpassword" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+    
+                                                        <div class="form-group">
+                                                            <input type="submit" class="btn btn-success" value="Update Password">
+                                                        </div>
+                                                    </form>
+                                                 </div>
+                                             </div>
+                                         </div>
+
+                                         <div class="accordion-item">
+                                             <h2 class="accordion-header" id="headingThree">
+                                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                                     <span class="event-time">Privacy</span> Update your privacy
+                                                 </button>
+                                             </h2>
+                                             <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#cbx-event-accordion">
+                                                 <div class="accordion-body">
+                                                <form action="{% url 'user_create_account' %}" method="post">
+                                                        {% csrf_token %}
+                                                    <div class="gender form-group">
+                                                        <label class="g-name d-block">Hide my profile from directory</label>
+                                                        <div class="custom-control custom-radio custom-control-inline">
+                                                            <input type="radio" id="register_gender_male" name="register_gender" value="Male" class="custom-control-input" />
+                                                            <label class="custom-control-label" for="register_gender_male">Yes</label>
+                                                        <!-- </div>
+                                                        <div class="custom-control custom-radio custom-control-inline"> -->
+                                                            <input type="radio" id="register_gender_female" name="register_gender" value="Female" class="custom-control-input">
+                                                            <label class="custom-control-label" for="register_gender_female">No</label>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                                 </div>
+                                             </div>
+                                         </div>
+                                    
+                                        </div>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </div>
+     </div>
+ </section>
+ {% else %}
+ {% endif %}
+
+
+ <script>
+        function toggleFields() {
+            var affiliationType = document.getElementById("affiliation_type").value;
+            var sonitFields = document.getElementById("sonitFields");
+            var departmentField = document.getElementById("departmentField");
+            var graduatedCourse = document.getElementById("graduated_course");
+            var compass = document.getElementById("compass");
+            var passingYear = document.getElementById("passing_year");
+            var batchYear = document.getElementById("batch_year");
+    
+            var isSonitLeaderChecked = document.getElementById("is_sonit_leader").checked;
+            var sonitLeaderPositionField = document.getElementById("sonit_leader_position_field");
+
+            if (affiliationType === 'Staff') {
+                sonitFields.classList.add("hidden");
+                departmentField.classList.add("hidden");
+                graduatedCourse.classList.add("hidden");
+                compass.classList.add("hidden");
+                passingYear.classList.add("hidden");
+                batchYear.classList.add("hidden");
+            } else {
+                sonitFields.classList.remove("hidden");
+                departmentField.classList.remove("hidden");
+                graduatedCourse.classList.remove("hidden");
+                compass.classList.remove("hidden");
+                passingYear.classList.remove("hidden");
+                batchYear.classList.remove("hidden");
+            }
+
+            if (isSonitLeaderChecked) {
+                sonitLeaderPositionField.classList.remove("hidden");
+            } else {
+                sonitLeaderPositionField.classList.add("hidden");
+            }
+        }
+
+        function toggleSonitPosition() {
+            var isSonitLeaderChecked = document.getElementById("is_sonit_leader").checked;
+            var sonitLeaderPositionField = document.getElementById("sonit_leader_position_field");
+
+            if (isSonitLeaderChecked) {
+                sonitLeaderPositionField.classList.remove("hidden");
+            } else {
+                sonitLeaderPositionField.classList.add("hidden");
+            }
+        }
+
+    // Initialize the toggle on page load
+    document.addEventListener("DOMContentLoaded", function() {
+        toggleFields();
+    });
+
+    function openModal(modalId) {
+        document.getElementById(modalId).style.display = "block";
+    }
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        var coverModal = document.getElementById('coverModal');
+        var profileModal = document.getElementById('profileModal');
+        if (event.target == coverModal) {
+            coverModal.style.display = "none";
+        }
+        if (event.target == profileModal) {
+            profileModal.style.display = "none";
+        }
+    }
+</script>
+
+ {% endblock content %}

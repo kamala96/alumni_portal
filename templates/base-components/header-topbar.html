@@ -9,7 +9,7 @@
                     <!-- For top header left items -->
                     {% get_top_header_items left=True as left_items %}
                     {% for item in left_items %}
-                        <a href="{% if item.link_type == 'external' %}{{ item.link }}{% else %}/{{ item.slug }}{% endif %}">
+                        <a href="{% if item.link_type == 'external' %}{{ item.link }}{% else %}{{ item.MenuFor }}{% endif %}" target="_blank">
                             <i class="{{ item.icon_class }}"></i>  <strong> {{ item.title }} </strong> 
                         </a>
                     {% endfor %}
@@ -21,9 +21,11 @@
                     <!-- For top header right items -->
                     {% get_top_header_items as right_items %}
                     {% for item in right_items %}
+                    {% if item|display_menu:user %}
                         <a class="btn-auth{% if forloop.first %} btn-auth-rev{% endif %}" 
                            href="{% if item.link_type == 'external' %}{{ item.link }} {% else %} {% url 'handle_nav_menu_click' item.slug %} {% endif %}">
                            <i class="{{ item.icon_class }}"></i>  <strong> {{ item.title }} </strong></a>
+                    {% endif %}
                     {% endfor %}
                 </div>
             </div>
@@ -31,25 +33,4 @@
     </div>
 </div>
 
-
-
-{% comment %} <div class="header-topbar">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-6 col-sm-7 col-7">
-                <div class="preheader-left">
-                    <a href="mailto:info@codeboxr.com"><strong>Email:</strong> info@codeboxr.com</a>
-                    <a href="mailto:info@construc.com"><strong>Hotline:</strong> 880 454 5477</a>
-                </div>
-            </div>
-
-            <div class="col-lg-6 col-sm-5 col-5 text-end">
-                <div class="preheader-right">
-                    <a title="Login" class="btn-auth btn-auth-rev" href="register.html">Login</a>
-                    <a title="Register" class="btn-auth btn-auth" href="register.html">Signup</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> {% endcomment %}
 <!-- /.header-topbar -->

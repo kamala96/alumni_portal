@@ -7,25 +7,9 @@
 {% block content %}
 
 
-        <section id="page-title-area">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-8 m-auto text-center">
-                        <div class="page-title-content">
-                            <h1 class="h2">Gallary</h1>
-                            <p>
-                                Alumni Needs enables you to harness the power of your alumni network. Whatever may be the need
-                            </p>
-                            <a href="#page-content-wrap" class="btn btn-brand smooth-scroll">Let's See</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+        {% include 'nav_menus/welcome_page.html' with welcome_page_content="Gallary" %}
 
-        <!--==========================-->
-        <!--=         Gallery        =-->
-        <!--==========================-->
+
         <section id="gallery-area" class="section-padding">
             <div class="container">
                 <!--== Section Title Start ==-->
@@ -37,7 +21,7 @@
                     </div>
                 </div>
                 <!--== Section Title End ==-->
-
+                {% if albums %}
                 <!--== Gallery Container Warpper ==-->
                 <div class="gallery-content-wrapper">
                     <div class="row">
@@ -45,126 +29,45 @@
                             <!-- Gallery Menu Start -->
                             <div class="gallery-menu text-center">
                                 <span class="active" data-filter="*">All</span>
-                                <span data-filter=".old">Old Memories</span>
-                                <span data-filter=".event">Event</span>
-                                <span data-filter=".pic">Our Picnic</span>
-                                <span class="d-none d-sm-inline-block" data-filter=".recent">Recent</span>
+                                <span data-filter=".A">Old Memories</span>
+                                <span data-filter=".B">Event</span>
+                                <span data-filter=".C">Our Picnic</span>
+                                <span class="d-none d-sm-inline-block" data-filter=".D">Recent</span>
                             </div>
                             <!-- Gallery Menu End -->
 
                             <!-- Gallery Item content Start -->
                             <div class="row gallery-gird">
+                                {% for album in albums %}
+                                {% for gallary in album.album.all %}
+                                {% if gallary.media_type == 'photo' %}
                                 <!-- Single Gallery Start -->
-                                <div class="col-lg-3  col-sm-6 recent event">
-                                    <div class="single-gallery-item gallery-bg-1">
+                                <div class="col-lg-3  col-sm-6 {{gallary.visibility_option}}">
+                                    <div class="single-gallery-item gallery-bg-1" style="background-image: url('{{ gallary.photo.url }}');">
                                         <div class="gallery-hvr-wrap">
                                             <div class="gallery-hvr-text">
-                                                <h4>University Cumpus</h4>
-                                                <p class="gallery-event-date">28 Oct, 2018</p>
+                                                <h4>{{gallary.title}}</h4>
+                                                <p class="gallery-event-date">{{ gallary.event_date|date:'d m, Y' }}</p>
                                             </div>
-                                            <a href="assets/images/gallery/gellary-img-1.jpg" class="btn-zoom image-popup">
-                                                <img src="assets/images/zoom-icon.png" alt="a">
+                                            <a href="{% if gallary.photo.url != '' %} {{gallary.photo.url}} {% else %} {% endif %}" class="btn-zoom image-popup">
+                                                <img src="{% static 'images/zoom-icon.png' %}" alt="a">
                                             </a>
                                         </div>
                                     </div>
+                                    
                                 </div>
                                 <!-- Single Gallery End -->
-
+                                {% else %}
                                 <!-- Single Gallery Start -->
-                                <div class="col-lg-3  col-sm-6 old event pic">
-                                    <div class="single-gallery-item video gallery-bg-2">
-                                        <a href="https://player.vimeo.com/video/140182080?title=0&amp;portrait=0&amp;byline=0&amp;autoplay=1&amp;loop=1" class="btn btn-video-play video-popup"><i class="fa fa-play"></i></a>
+                                <div class="col-lg-3  col-sm-6 {{gallary.visibility_option}}">
+                                    <div class="single-gallery-item video gallery-bg-2" style="background-image: url('{{ gallary.photo.url }}');">
+                                        <a href="{{gallary.video_url.url}}" class="btn btn-video-play video-popup"><i class="fa fa-play"></i></a>
                                     </div>
                                 </div>
                                 <!-- Single Gallery End -->
-
-                                <!-- Single Gallery Start -->
-                                <div class="col-lg-3  col-sm-6 recent pic">
-                                    <div class="single-gallery-item gallery-bg-3">
-                                        <div class="gallery-hvr-wrap">
-                                            <div class="gallery-hvr-text">
-                                                <h4>University Cumpus</h4>
-                                                <p class="gallery-event-date">28 Oct, 2018</p>
-                                            </div>
-                                            <a href="assets/images/gallery/gellary-img-3.jpg" class="btn-zoom image-popup">
-                                                <img src="assets/images/zoom-icon.png" alt="a">
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Single Gallery End -->
-
-                                <!-- Single Gallery Start -->
-                                <div class="col-lg-3  col-sm-6 old">
-                                    <div class="single-gallery-item gallery-bg-4">
-                                        <div class="gallery-hvr-wrap">
-                                            <div class="gallery-hvr-text">
-                                                <h4>University Cumpus</h4>
-                                                <p class="gallery-event-date">28 Oct, 2018</p>
-                                            </div>
-                                            <a href="assets/images/gallery/gellary-img-4.jpg" class="btn-zoom image-popup">
-                                                <img src="assets/images/zoom-icon.png" alt="a">
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Single Gallery End -->
-
-                                <!-- Single Gallery Start -->
-                                <div class="col-lg-3  col-sm-6 pic event">
-                                    <div class="single-gallery-item gallery-bg-5">
-                                        <div class="gallery-hvr-wrap">
-                                            <div class="gallery-hvr-text">
-                                                <h4>University Cumpus</h4>
-                                                <p class="gallery-event-date">28 Oct, 2018</p>
-                                            </div>
-                                            <a href="assets/images/gallery/gellary-img-5.jpg" class="btn-zoom image-popup">
-                                                <img src="assets/images/zoom-icon.png" alt="a">
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Single Gallery End -->
-
-                                <!-- Single Gallery Start -->
-                                <div class="col-lg-3  col-sm-6 old recent">
-                                    <div class="single-gallery-item gallery-bg-6">
-                                        <div class="gallery-hvr-wrap">
-                                            <div class="gallery-hvr-text">
-                                                <h4>University Cumpus</h4>
-                                                <p class="gallery-event-date">28 Oct, 2018</p>
-                                            </div>
-                                            <a href="assets/images/gallery/gellary-img-6.jpg" class="btn-zoom image-popup">
-                                                <img src="assets/images/zoom-icon.png" alt="a">
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Single Gallery End -->
-
-                                <!-- Single Gallery Start -->
-                                <div class="col-lg-3  col-sm-6 pic">
-                                    <div class="single-gallery-item video gallery-bg-7">
-                                        <a href="https://player.vimeo.com/video/181545195?title=0&amp;portrait=0&amp;byline=0&amp;autoplay=1&amp;loop=1" class="btn btn-video-play video-popup"><i class="fa fa-play"></i></a>
-                                    </div>
-                                </div>
-                                <!-- Single Gallery End -->
-
-                                <!-- Single Gallery Start -->
-                                <div class="col-lg-3  col-sm-6 pic recent old">
-                                    <div class="single-gallery-item gallery-bg-8">
-                                        <div class="gallery-hvr-wrap">
-                                            <div class="gallery-hvr-text">
-                                                <h4>University Cumpus</h4>
-                                                <p class="gallery-event-date">28 Oct, 2018</p>
-                                            </div>
-                                            <a href="assets/images/gallery/gellary-img-8.jpg" class="btn-zoom image-popup">
-                                                <img src="assets/images/zoom-icon.png" alt="a">
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Single Gallery End -->
+                                {% endif %}
+                                {% endfor %}
+                                {% endfor %}
                             </div>
                             <!-- Gallery Item content End -->
                         </div>
@@ -177,9 +80,13 @@
                     </div>
                 </div>
                 <!--== Gallery Container Warpper==-->
+                {% else %}
+                <div class="up-event-text">
+                    <h3>No gallary Available</h3>
+                  </div>
+                {% endif %}
             </div>
         </section>
-
 
 
 
