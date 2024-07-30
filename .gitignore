@@ -31,6 +31,7 @@ static_root/
 __pycache__
 
 requirements.txt
+requirement.txt
 .idea
 
 migrations/

@@ -12,10 +12,11 @@ from django.contrib.auth import update_session_auth_hash
 from PIL import Image
 from django.core.files.base import ContentFile
 from io import BytesIO
-
+from django.core.paginator import Paginator
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+from django.db import transaction
 
 
 
@@ -64,7 +65,7 @@ def logout_view(request):
 
 
 def index(request):
-    events = EventsPost.objects.filter(is_published=True, is_published_on_slider=True).order_by('-created_at') #[:6]
+    events = EventsPost.objects.all()
     news = NewsPost.objects.all() 
     responsibilitys = Responsibility.objects.all()
     jobs = JobPosting.objects.all()
@@ -72,6 +73,7 @@ def index(request):
     gallarys = AlbumPhoto.objects.all()
 
     about_us = []
+    alumni_month = AlumniOfTheMonth.objects.filter(is_active=True).first()
 
     try:
         about_us = AboutUs.objects.get(is_active=True)
@@ -88,14 +90,18 @@ def index(request):
 
     context = {
         'combined_posts': combined_posts,
-        'events': events,
-        'news': news.filter(is_published=True, is_published_on_slider=True).order_by('-created_at'), #[:6]
-        'all_news': news.filter(is_published=True).order_by('-created_at'), #[:6]
-        'responsibilitys': responsibilitys.filter(is_active=True).order_by('-created'), #[:6]
-        'jobs': jobs.filter(is_active=True).order_by('-created_at'), #[:6]
+        'events': events.filter(is_published=True, is_published_on_slider=True).order_by('-created_at'), #[:6]
+        'news': news.filter(is_published=True, is_published_on_slider=True).order_by('-created_at'),
+        'all_news': news.filter(is_published=True).order_by('-created_at')[:3],
+        'responsibilitys': responsibilitys.filter(is_active=True).order_by('-created')[:4],
+        'jobs': jobs.filter(is_active=True).order_by('-created_at')[:6],
         'about_us': about_us,
         'total_alumni_member': alumni_members.filter(user__is_active=True).count(),
-        'gallarys': gallarys.filter(is_published=True).order_by('-uploaded_at')[:8]
+        'total_alumni_image': gallarys.filter(is_published=True).count(),
+        'total_alumni_events': events.filter(is_published=True).count(),
+        'gallarys': gallarys.filter(is_published=True).order_by('-uploaded_at')[:8],
+        'alumni_month': alumni_month,
+        'total_alumni_album': AlumniAlbum.objects.all().count()
     }
     return render(request, 'index.html', context)
 
@@ -103,6 +109,7 @@ def index(request):
 
 def default_error_page(request):
     return render(request, 'errors/error404.html', status=404)
+
 
 
 def handle_nav_menu_click(request, menu_slug):
@@ -125,12 +132,15 @@ def handle_nav_menu_click(request, menu_slug):
     except AboutUs.DoesNotExist:
         pass
     
-    events = EventsPost.objects.all() 
-    news = NewsPost.objects.all()
-    jobs = JobPosting.objects.all()
+    events = Paginator(EventsPost.objects.filter(is_published=True).order_by('-created_at'), 10)
+    news = Paginator(NewsPost.objects.filter(is_published=True).order_by('-created_at'), 10)
+    jobs = Paginator(JobPosting.objects.filter(is_active=True).order_by('-created_at'), 9)
     committees = AlumniCommittee.objects.all()
     alumni_speechs = AlumniSpeech.objects.all()
-    alumni_members = AlumniProfile.objects.all()
+    alumni_members = Paginator(AlumniProfile.objects.filter(user__is_active=True).order_by('-graduation_year'), 15)
+    alumni_album = Paginator(AlumniAlbum.objects.all().order_by('-created_at'), 3)
+
+    page_number = request.GET.get('page')
     
     template_name = '_default.html'
     
@@ -179,16 +189,16 @@ def handle_nav_menu_click(request, menu_slug):
         
     context = {
         'nav_menu': nav_menu,
-        'events': events.filter(is_published=True).order_by('-created_at'), #[:6]
-        'news': news.filter(is_published=True).order_by('-created_at'), #[:6]
-        'jobs': jobs.filter(is_active=True).order_by('-created_at'), #[:6]
+        'events': events.get_page(page_number),
+        'news': news.get_page(page_number),
+        'jobs': jobs.get_page(page_number),
         'about_us': about_us,
         'committees': committees.filter(is_active=True).order_by('-order_id'), #[:5], about
         'all_committees': committees.filter(is_active=True).order_by('-order_id'), #[:5], committee garally
         'alumni_speechs': alumni_speechs.filter(is_published=True).order_by('-order_id'), #[:5],
-        'alumni_members': alumni_members.filter(user__is_active=True).order_by('-graduation_year'),
-        'total_alumni_member': alumni_members.filter(user__is_active=True).count,
-        'albums': AlumniAlbum.objects.all().order_by('-created_at')[:4],
+        'alumni_members': alumni_members.get_page(page_number),
+        'total_alumni_member': alumni_members.count,
+        'albums': alumni_album.get_page(page_number),
         'AFFILIATION_CHOICES': AlumniProfile.AFFILIATION_CHOICES,
         'COURSE_CHOICES': AlumniProfile.COUSE_CHOICES,
         'DEPT_CHOICES': AlumniProfile.DEPARTIMENT_CHOICES,
@@ -259,7 +269,6 @@ def handle_user_profile_click(request, user_id):
 
 
 
-
 def user_create_account(request):
     if request.method == 'POST':
         # Retrieve data from the form
@@ -275,25 +284,37 @@ def user_create_account(request):
         current_location = request.POST.get('location')
         
         if password != confirm_password:
-            messages.error(request, "User password does't match")
+            messages.error(request, "Passwords do not match.")
             return redirect(reverse('handle_nav_menu_click', args=['register']))
         
         if User.objects.filter(username=username).exists():
             messages.error(request, 'Username already exists. Please choose a different username.')
             return redirect(reverse('handle_nav_menu_click', args=['register']))
 
-        user = User.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name)
-        alumni_profile = AlumniProfile.objects.create(
-            user=user,
-            graduation_year=passing_year,
-            gender=gender,
-            location=current_location,
-            phone=phone_number,
-        )
+        if User.objects.filter(email=email).exists():
+            messages.error(request, 'Email already registered. Please use a different email.')
+            return redirect(reverse('handle_nav_menu_click', args=['register']))
 
-        login(request, user)
-        messages.success(request, "User account registered successfully!")
-        return redirect(reverse('handle_nav_menu_click', args=['login']))
+        if AlumniProfile.objects.filter(phone=phone_number).exists():
+            messages.error(request, 'Phone number already registered. Please use a different phone number.')
+            return redirect(reverse('handle_nav_menu_click', args=['register']))
+
+        try:
+            with transaction.atomic():
+                user = User.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name)
+                AlumniProfile.objects.create(
+                    user=user,
+                    graduation_year=passing_year,
+                    gender=gender,
+                    location=current_location,
+                    phone=phone_number,
+                )
+                login(request, user)
+                messages.success(request, "User account registered successfully!")
+                return redirect(reverse('handle_nav_menu_click', args=['profile']))
+        except Exception as e:
+            messages.error(request, f"An error occurred: {str(e)}")
+            return redirect(reverse('handle_nav_menu_click', args=['register']))
     
     else:
         return redirect('index')
@@ -321,6 +342,7 @@ def alumni_update_profile(request):
         profile.phone = request.POST.get('phone')
         profile.gender = request.POST.get('gender')
         profile.affiliation_type = request.POST.get('affiliation_type')
+        profile.comments = request.POST.get('comments')
 
         if request.POST.get('affiliation_type') != 'Staff':
             profile.graduated_course = request.POST.get('graduated_course')
@@ -444,7 +466,7 @@ def notify_subscribers(news):
         subject = f"New News: {news.title}"
         html_message = render_to_string('email/email_main.html', {'news': news})
         plain_message = strip_tags(html_message)
-        send_mail(subject, plain_message, 'example@gmail.com', [subscriber.email], html_message=html_message)
+        #send_mail(subject, plain_message, 'example@gmail.com', [subscriber.email], html_message=html_message)
 
 
 def footer_social(request):

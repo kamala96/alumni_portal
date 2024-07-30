@@ -39,14 +39,14 @@
                                       </div>
                                   </a>
                                   <div class="like-comm pull-right">
-                                      <a href="#"><i class="fa fa-comment-o"></i>77</a>
-                                      <a href="#"><i class="fa fa-heart-o"></i>12</a>
+                                      <a><i class="fa fa-comment-o"></i>{{new.comment.count}}</a>
+                                      <!-- <a href="#"><i class="fa fa-heart-o"></i>12</a> -->
                                   </div>
                               </figcaption>
                           </figure>
 
                           <div class="blog-content">
-                              <h3><a href="{% url 'handle_news_click' new.id %}">{{ new.title }}</a></h3>
+                              <h3><a href="{% url 'handle_news_click' new.id %}">{{ new.title|truncate_chars:63 }}</a></h3>
                               <p>{{ new.description|truncate_chars:130 }}</p>
                               <a href="{% url 'handle_news_click' new.id %}" class="btn btn-brand">More</a>
                           </div>

@@ -300,9 +300,7 @@
                          </div>
                          <h2>Details About Myself</h2>
                          <p>
-                             Aenean viverra rhoncus pede. Phasellus leo dolor, tempus non, auctor endrerit quis, nisi.
-                             Fusce neque. Donec vitae orci sed dolor rutrum auctor. Sed ngilla mauris sit amet nibhr,
-                             tempus non, auctor endrerit quis, nisi..
+                            {{member_profile.comments}}
                          </p>
                          <div class="event-schedul">
                              <h3>Account Setting</h3>
@@ -484,6 +482,14 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+
+                                                            <div class="col-12 col-sm-12" id="comment">
+                                                                <div class="form-group">
+                                                                    <label for="passing_year">Comment About Yourself(Optional)</label>
+                                                                    <textarea class="form-control" name="comments" rows="3">{{ member_profile.comments }}</textarea>
+                                                                </div>
+                                                            </div>
+
                                                         </div>
                                                         <br>
                                                         <div class="col-12 col-sm-4">

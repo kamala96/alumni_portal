@@ -1,5 +1,7 @@
 from django.utils import timezone
 from django.contrib.auth import logout
+from site_app.models import TrafficLog
+from django.utils.deprecation import MiddlewareMixin
 
 class InactivityTimeoutMiddleware:
     def __init__(self, get_response):
@@ -32,3 +34,28 @@ class InactivityTimeoutMiddleware:
 
         response = self.get_response(request)
         return response
+
+
+
+
+class TrafficMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        # Process request to log traffic
+        self.process_request(request)
+        response = self.get_response(request)
+        return response
+
+    def process_request(self, request):
+        device_type = 'other'
+        user_agent = request.META.get('HTTP_USER_AGENT', '').lower()
+        if 'mobile' in user_agent:
+            device_type = 'mobile'
+        elif 'tablet' in user_agent:
+            device_type = 'tablet'
+        elif 'desktop' in user_agent:
+            device_type = 'desktop'
+
+        TrafficLog.objects.create(device_type=device_type)

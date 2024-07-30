@@ -9,9 +9,8 @@
 
  {% include 'nav_menus/welcome_page.html' with welcome_page_content="Career" %}
 
- <!--=========================-->
- <!--=         Career        =-->
- <!--=========================-->
+
+ {% if jobs %}
  <section id="page-content-wrap">
      <div class="career-page-wrapper">
          <div class="career-page-topbg">
@@ -64,7 +63,6 @@
 
                  <div class="job-opportunity-wrapper">
                      <div class="row">
-                         {% if jobs %}
                          {% for job in jobs %}
                            <!--== Single Job opportunity Start ==-->
                            <div class="col-lg-4 col-sm-6 text-center">
@@ -77,45 +75,71 @@
                                                </div>
                                            </div>
                                        </div>
-                                       <h3><a href="#">{{job.job_title}}</a></h3>
-                                       <p>{{job.job_description}}<a href="#">[...]</a></p>
+                                       <h3><a href="{% if job.external_link != None %}{{job.external_link}}{% else %}#{% endif %}" target="_blank">{{job.job_title}}</a></h3>
+                                       <p>{{job.job_description|truncate_chars:130}}</p>
                                    </div>
-                                   <a href="#" class="btn btn-job">Apply now</a>
+                                   <a href="{% if job.external_link != None %}{{job.external_link}}{% else %}#{% endif %}" target="_blank" class="btn btn-job">Apply now</a>
                                    <!-- <a href="#" class="btn btn-job btn-expired disabled">Expired</a> -->
                                </div>
                            </div>
                            <!--== Single Job opportunity End ==-->
                            {% endfor %}
-                           {% else %}
-                           <div class="up-event-text">
-                             <h3>No Jobs Available</h3>
-                           </div>
-                           {% endif %}
                      </div>
 
                      <!-- Pagination Start -->
                      <div class="row">
-                         <div class="col-lg-12">
-                             <div class="pagination-wrap text-center">
-                                 <nav>
-                                     <ul class="pagination">
-                                         <li class="page-item"><a class="page-link" href="#"><i class="fa fa-angle-left"></i></a></li>
-                                         <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                         <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                         <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                         <li class="page-item"><a class="page-link" href="#">...</a></li>
-                                         <li class="page-item"><a class="page-link" href="#">50</a></li>
-                                         <li class="page-item"><a class="page-link" href="#"><i class="fa fa-angle-right"></i></a></li>
-                                     </ul>
-                                 </nav>
-                             </div>
-                         </div>
-                     </div>
+                        <div class="col-lg-12">
+                            <div class="pagination-wrap text-center">
+                                <nav>
+                                    <ul class="pagination">
+                                      {% if jobs.has_previous %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page={{ jobs.previous_page_number }}">
+                                                <i class="fa fa-angle-left"></i>
+                                            </a>
+                                        </li>
+                                      {% else %}
+                                          <li class="page-item disabled">
+                                              <a class="page-link" href="#">
+                                                  <i class="fa fa-angle-left"></i>
+                                              </a>
+                                          </li>
+                                      {% endif %}
+                                      {% for num in jobs.paginator.page_range %}
+                                        {% if jobs.number == num %}
+                                        <li class="page-item active"><a class="page-link" href="#">{{ num }}</a></li>
+                                        {% elif num > jobs.number|add:'-3' and num < jobs.number|add:'3' %}
+                                        <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                                        {% endif %}
+                                      {% endfor %}
+                                      {% if jobs.has_next %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page={{ jobs.next_page_number }}">
+                                                <i class="fa fa-angle-right"></i>
+                                            </a>
+                                        </li>
+                                        {% else %}
+                                        <li class="page-item disabled">
+                                            <a class="page-link" href="#">
+                                               <i class="fa fa-angle-right"></i>
+                                            </a>
+                                        </li>
+                                      {% endif %}
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
                      <!-- Pagination End -->
                  </div>
              </div>
          </div>
      </div>
  </section>
+ {% else %}
+ <div class="up-event-text">
+   <h3>No Jobs Available</h3>
+ </div>
+ {% endif %}
 
 {% endblock content %}

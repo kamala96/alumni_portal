@@ -19,7 +19,7 @@
                                 </p>
                                 {% get_top_header_items left=True as left_items %}
                                  {% for item in left_items %}
-                                 <a href="{% if item.link_type == 'external' %}{{ item.link }}{% else %}/{{ item.slug }}{% endif %}">
+                                 <a href="{% if item.link_type == 'external' %}{{ item.link }}{% else %}{{ item.MenuFor }}{% endif %}"  target="_blank">
                                     <i class="{{ item.icon_class }}"></i>  <strong> {{ item.title }} </strong> 
                                 </a>
                                  {% endfor %}
@@ -50,7 +50,7 @@
                             </div>
 
                             <div class="footer-social-icons">
-                                {% get_social_media_slider as social_medias %}
+                                {% get_social_media_slider footer=True as social_medias %}
                                 {% for social_media in social_medias %}
 
                                 <a href="{{ social_media.url }}" target="_blank">
@@ -68,7 +68,7 @@
                     <div class="single-widget-wrap">
                         <h4 class="widget-title">Usefull Link</h4>
                         <div class="widgei-body">
-                            <ul class="double-list footer-list clearfix">
+                            <ul class="double-lis footer-list clearfix">
                                 {% get_footer_items as usefull %}
                                  {% for usefull in usefull %}
                                 <li><a href="{{ usefull.url }}">{{usefull.name}}</a></li>
@@ -101,12 +101,17 @@
                         <h4 class="widget-title">Alumni Traffic</h4>
                         <div class="widgei-body">
                             <ul class="footer-list clearfix">
-                                <li><a>Online Visitor : None</a></li>
-                                <li><a>Today Visitor : None</a></li>
-                                <li><a>Week Visitor : None</a></li>
-                                <li><a>Mounth Visitor : None</a></li>
-                                <li><a>Desktop Visitor : None</a></li>
-                                <li><a>Mobile Visitor : None</a></li>
+                                {% get_alumni_traffic_statistics as alumni_traffic %}
+                                {% if alumni_traffic %}
+                                <li><a>Online : {{alumni_traffic.online_visits}}</a></li>
+                                <li><a>Today Visits : {{alumni_traffic.today_visits}}</a></li>
+                                <li><a>Week Visits : {{alumni_traffic.week_visits}}</a></li>
+                                <li><a>Month Visits : {{alumni_traffic.month_visits}}</a></li>
+                                <li><a>Mobile Visits : {{alumni_traffic.mobile_visits}}</a></li>
+                                <li><a>Tablet Visits : {{alumni_traffic.tablet_visits}}</a></li>
+                                <li><a>Desktop Visits : {{alumni_traffic.desktop_visits}}</a></li>
+                                <li><a>Other Visits : {{alumni_traffic.other_visits}}</a></li>
+                                {% endif %}
                             </ul>
                         </div>
                     </div>

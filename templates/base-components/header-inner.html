@@ -5,7 +5,7 @@
     <div class="header-inner">
         <nav id="site-navigation" class="main-nav">
             <div class="site-logo">
-                <a href="index-2.html" class="logo">
+                <a href="{% url 'handle_nav_menu_click' 'home' %}" class="logo">
                     <img src="{% static 'images/logo/logo.png' %}" alt="site logo" class="main-logo" />
                     <img src="{% static 'images/logo/logo.png' %}" alt="site logo" class="logo-sticky" />
                 </a>
@@ -21,7 +21,7 @@
             <div class="menu-wrapper main-nav-container canvas-menu-wrapper" id="mega-menu-wrap">
                 <div class="canvas-header">
                     <div class="mobile-offcanvas-logo">
-                        <a href="index-2.html">
+                        <a href="{% url 'handle_nav_menu_click' 'home'  %}">
                             <img src="{% static 'images/logo/logo.png' %}" alt="site logo" class="logo-sticky" />
                         </a>
                     </div>
