@@ -43,11 +43,14 @@ class AlumniProfile(models.Model):
     )
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True)
-    year_from = models.PositiveIntegerField(default=2024) # = batch year
-    graduation_year = models.PositiveIntegerField(default=2024) # = passing year
+    year_from = models.PositiveIntegerField(default=2024)  # = batch year
+    graduation_year = models.PositiveIntegerField(
+        default=2024)  # = passing year
     birthday = models.DateField(blank=True, null=True)
-    gender = models.CharField(max_length=20, blank=True, null=True, choices=GENDER_CHOICES)
-    compass = models.CharField(max_length=255, null=False, choices=COMPAS_CHOICES, help_text='Which Compass Belong ?')
+    gender = models.CharField(
+        max_length=20, blank=True, null=True, choices=GENDER_CHOICES)
+    compass = models.CharField(
+        max_length=255, null=False, choices=COMPAS_CHOICES, help_text='Which Compass Belong ?')
     Entry_year = models.PositiveIntegerField(default=2024)
     department = models.CharField(
         max_length=255, null=False, choices=DEPARTIMENT_CHOICES, help_text='Which Departments Belong ?')
@@ -56,17 +59,23 @@ class AlumniProfile(models.Model):
     sonit_leader_position = models.CharField(
         max_length=255, choices=SONIT_LEADER_CHOICES, blank=True, null=True)
     phone = PhoneNumberField(region="TZ", unique=True, null=True, blank=True)
-    profile_picture = models.ImageField(upload_to='images/testimonial/', blank=True, null=True)
-    cover_profile = models.ImageField(upload_to='images/cover/', blank=True, null=True)
+    profile_picture = models.ImageField(
+        upload_to='images/testimonial/', blank=True, null=True)
+    cover_profile = models.ImageField(
+        upload_to='images/cover/', blank=True, null=True)
     region = models.CharField(max_length=255, null=True, blank=True)
-    country = models.CharField(max_length=255, null=True, blank=True) 
-    affiliation_type = models.CharField(max_length=255, null=True, blank=True, choices=AFFILIATION_CHOICES)
-    location = models.CharField(max_length=255, null=True, blank=True) # current location
-    graduated_course = models.CharField(max_length=255, null=True, blank=True, choices=COUSE_CHOICES)
+    country = models.CharField(max_length=255, null=True, blank=True)
+    affiliation_type = models.CharField(
+        max_length=255, null=True, blank=True, choices=AFFILIATION_CHOICES)
+    location = models.CharField(
+        max_length=255, null=True, blank=True)  # current location
+    graduated_course = models.CharField(
+        max_length=255, null=True, blank=True, choices=COUSE_CHOICES)
     complete_profile_status = models.PositiveIntegerField(default=0)
     failed_login_attempts = models.IntegerField(default=0)
     lockout_until = models.DateTimeField(null=True, blank=True)
-    comments = models.TextField(max_length=255, blank=True, null=False, default='Where Professionals Meet')
+    comments = models.TextField(
+        max_length=255, blank=True, null=False, default='Where Professionals Meet')
 
     def __str__(self):
         # {self.user.username}
@@ -263,8 +272,11 @@ class NewsPost(models.Model):
     slug = models.SlugField(unique=True, max_length=200)
     description = models.TextField()
     image = models.ImageField(upload_to='images/blog/', blank=True, null=True)
-    category = models.ForeignKey(NewsCategory, on_delete=models.CASCADE, related_name='news_posts')
-    posted_by = models.ForeignKey(AlumniProfile, on_delete=models.CASCADE, related_name='posted_by') # if error migrate with default admin id after remove default
+    category = models.ForeignKey(
+        NewsCategory, on_delete=models.CASCADE, related_name='news_posts')
+    # if error migrate with default admin id after remove default
+    posted_by = models.ForeignKey(
+        AlumniProfile, on_delete=models.CASCADE, related_name='posted_by')
     category = models.ForeignKey(
         NewsCategory, on_delete=models.CASCADE, related_name='news_posts')
     is_published = models.BooleanField(
@@ -369,7 +381,6 @@ class SocialMedia(models.Model):
     # fab fa-twitter
     # fab fa-youtube
     # fab fa-linkedin-in
-    
 
 
 class Responsibility(models.Model):
@@ -385,8 +396,6 @@ class Responsibility(models.Model):
 
     def _str_(self):
         return self.title
-
-
 
 
 class Slider(models.Model):
@@ -547,19 +556,21 @@ class AlbumPhoto(models.Model):
         return f'{self.media_type} - {self.title}'
 
 
-
-
 class Comment(models.Model):
-    news = models.ForeignKey(NewsPost, on_delete=models.CASCADE, related_name='comment')
-    author = models.ForeignKey(AlumniProfile, on_delete=models.CASCADE, related_name='author_comment')
+    news = models.ForeignKey(
+        NewsPost, on_delete=models.CASCADE, related_name='comment')
+    author = models.ForeignKey(
+        AlumniProfile, on_delete=models.CASCADE, related_name='author_comment')
     content = models.TextField()
-    parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name='replies')
+    parent = models.ForeignKey(
+        'self', null=True, blank=True, on_delete=models.CASCADE, related_name='replies')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f'Comment by {self.author.user} on {self.news}'
-    
+
+
 class AlumniFAQ(models.Model):
     question = models.TextField()
     answer = models.TextField()
@@ -568,7 +579,7 @@ class AlumniFAQ(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.question[:50] 
+        return self.question[:50]
 
     class Meta:
         verbose_name = "Alumni FAQ"
@@ -576,11 +587,11 @@ class AlumniFAQ(models.Model):
         ordering = ['-created_at']
 
 
-
-
 class AlumniOfTheMonth(models.Model):
-    alumni_name = models.ForeignKey(
-        AlumniProfile, on_delete=models.CASCADE, unique=True, related_name='alumni_name', null=False)
+    # alumni_name = models.ForeignKey(
+    #     AlumniProfile, on_delete=models.CASCADE, unique=True, related_name='alumni_name', null=False)
+    alumni_name = models.OneToOneField(
+        AlumniProfile, on_delete=models.CASCADE, related_name='alumni_name')
     descriptions = models.TextField(max_length=255, null=False)
     alumni_profile_picture = models.ImageField(
         upload_to='images/alumnimonth/', blank=True, null=True)
@@ -595,13 +606,13 @@ class AlumniOfTheMonth(models.Model):
 
     def _str_(self):
         return f'{self.fullname.user.first_name.upper()} - {self.fullname.user.last_name.upper()}'
-    
+
     def save(self, *args, **kwargs):
         if self.is_active:
             # Deactivate other entries
-            AlumniOfTheMonth.objects.filter(is_active=True).update(is_active=False)
+            AlumniOfTheMonth.objects.filter(
+                is_active=True).update(is_active=False)
         super(AlumniOfTheMonth, self).save(*args, **kwargs)
-
 
 
 class TrafficLog(models.Model):
