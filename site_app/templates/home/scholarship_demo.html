@@ -1,6 +1,7 @@
 {% load static %}
 {% load custom_tags %}
 
+<div id="alumni_of_the_month"></div>
 <section id="scholership-promo">
     <div class="container">
         <div class="row">
@@ -19,13 +20,13 @@
                             <div class="">
                                 <p><b> NIT ALUMNI OF THE MONTH </b></p>
                                 <p><b>Alumni About Yourself Description:</b></p>
-                                <p>{% if alumni_month %}{{alumni_month.alumni_name.comments|truncate_chars:150}}{% else %} Comming Soon {% endif %}</p>
+                                <p style="text-align: justify;">{% if alumni_month %}{{alumni_month.alumni_name.comments|truncate_chars:150}}{% else %} Comming Soon {% endif %}</p>
 
                                 <p><b>General Alumni Description:</b></p>
-                                <p>{% if alumni_month %}{{alumni_month.descriptions|truncate_chars:195}}{% else %} Comming Soon {% endif %}</p>
+                                <p style="text-align: justify;">{% if alumni_month %}{{alumni_month.descriptions|truncate_chars:195}}{% else %} Comming Soon {% endif %}</p>
                                 
                                 <p><b>Participation, <span> Challenge, </span> Success/Achievement <span>(Serving The Community)</span>:</b></p>
-                                <p>
+                                <p style="text-align: justify;">
                                     {% if alumni_month %}
                                     {% if alumni_month.optionone != '' %} 1. {{alumni_month.optionone|truncate_chars:140}} <br> {% endif %}
                                     {% if alumni_month.optiontwo != '' %} 2. {{alumni_month.optiontwo|truncate_chars:140}}<br> {% endif %}
@@ -44,4 +45,4 @@
         </div>
     </div>
 </section>
-<div id="alumni_of_the_month"></div>
+

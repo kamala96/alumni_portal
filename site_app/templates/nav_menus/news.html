@@ -7,7 +7,7 @@
 {% block content %}
 
 
- {% include 'nav_menus/welcome_page.html' with welcome_page_content="Blog List" %}
+ {% include 'nav_menus/welcome_page.html' with welcome_page_content="News List" %}
 
  {% if news %}
  <div id="page-content-wrap">
@@ -47,7 +47,7 @@
                                      <div class="blog-content">
                                          <h3><a href="{% url 'handle_news_click' new.id %}">{{ new.title|truncate_chars:63 }}</a>
                                          </h3>
-                                         <p>{{ new.description|truncate_chars:130 }}</p>
+                                         <p style="text-align: justify;">{{ new.description|truncate_chars:130 }}</p>
                                          <a href="{% url 'handle_news_click' new.id %}" class="btn btn-brand">More</a>
                                      </div>
                                  </article>

@@ -165,3 +165,8 @@ class AlumniOfTheMonthAdmin(admin.ModelAdmin):
             AlumniOfTheMonth.objects.filter(is_active=True).update(is_active=False)
         super().save_model(request, obj, form, change)
 
+
+
+# @admin.register(TrafficLog)
+# class TrafficLogAdmin(admin.ModelAdmin):
+#     list_display = ('ip_address', 'user_agent', 'device_type', 'timestamp')

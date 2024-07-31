@@ -2,6 +2,7 @@ from django.utils import timezone
 from django.contrib.auth import logout
 from site_app.models import TrafficLog
 from django.utils.deprecation import MiddlewareMixin
+import re
 
 class InactivityTimeoutMiddleware:
     def __init__(self, get_response):
@@ -38,24 +39,45 @@ class InactivityTimeoutMiddleware:
 
 
 
-class TrafficMiddleware:
-    def __init__(self, get_response):
-        self.get_response = get_response
 
-    def __call__(self, request):
-        # Process request to log traffic
-        self.process_request(request)
-        response = self.get_response(request)
-        return response
-
+class TrafficMiddleware(MiddlewareMixin):
     def process_request(self, request):
-        device_type = 'other'
-        user_agent = request.META.get('HTTP_USER_AGENT', '').lower()
-        if 'mobile' in user_agent:
-            device_type = 'mobile'
-        elif 'tablet' in user_agent:
-            device_type = 'tablet'
-        elif 'desktop' in user_agent:
-            device_type = 'desktop'
+        # Check if the user is already counted in the session
+        if not request.session.get('is_counted'):
+            user_agent = request.META.get('HTTP_USER_AGENT', '').lower()
+            device_type = self.get_device_type(user_agent)
+            ip_address = self.get_ip_address(request)
+            
+            # Log the traffic
+            now = timezone.now()
+            today = timezone.now().date()
+            if not TrafficLog.objects.filter(ip_address=ip_address, user_agent=user_agent, timestamp__date=today).exists():
+                traffic_log, created = TrafficLog.objects.get_or_create(ip_address=ip_address, user_agent=user_agent, device_type=device_type)
 
-        TrafficLog.objects.create(device_type=device_type)
+            if not created:
+                # Update last activity timestamp if entry already exists
+                traffic_log.last_activity = now
+                traffic_log.save()
+
+            # Mark this session as counted
+            request.session['is_counted'] = True
+
+    def get_ip_address(self, request):
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            ip = x_forwarded_for.split(',')[0].strip()
+        else:
+            ip = request.META.get('REMOTE_ADDR')
+        return ip
+
+    def get_device_type(self, user_agent):
+        if re.search(r'mobile|android|iphone|ipad', user_agent):
+            return 'mobile'
+        elif re.search(r'tablet|ipad', user_agent):
+            return 'tablet'
+        elif re.search(r'windows|macintosh|linux', user_agent):
+            return 'desktop'
+        elif re.search(r'bot|spider', user_agent):
+            return 'bot'
+        return 'other'
+    

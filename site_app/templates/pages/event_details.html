@@ -22,20 +22,11 @@
                                 <div class="event-thumb-item event-thumb-img-1">
                                     <div class="event-meta">
                                         <h3>{{ events.title }}</h3>
-                                        <a class="event-address" href="#"><i class="fa fa-map-marker"></i> Sayidan
-                                            Street, Gondomanan, 8993, San Francisco, CA</a>
+                                        <a class="event-address" href="#"><i class="fa fa-map-marker"></i>Location</a>
                                         <a href="#" class="btn btn-brand btn-join">Join</a>
                                     </div>
                                 </div>
 
-                                <!-- <div class="event-thumb-item event-thumb-img-1">
-                                    <div class="event-meta">
-                                        <h3>Recently we are going to arrange a awesome get together!</h3>
-                                        <a class="event-address" href="#"><i class="fa fa-map-marker"></i> Sayidan
-                                            Street, Gondomanan, 8993, San Francisco, CA</a>
-                                        <a href="#" class="btn btn-brand btn-join">Join</a>
-                                    </div>
-                                </div> -->
                             </div>
                             <div class="event-countdown">
                                 <div class="event-countdown-counter" data-date="{{ events.start_date|date:'Y/m/d' }}"></div>
@@ -43,7 +34,7 @@
                             </div>
                         </div>
                         <h2>Details all Thing About This Event</h2>
-                        <p>{{ events.description }}</p>
+                        <p style="text-align: justify;">{{ events.description }}</p>
 
                         <div class="event-schedul">
                             <h3>Event Schedule</h3>

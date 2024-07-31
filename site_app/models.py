@@ -605,6 +605,8 @@ class AlumniOfTheMonth(models.Model):
 
 
 class TrafficLog(models.Model):
+    ip_address = models.GenericIPAddressField(null=True)
+    user_agent = models.TextField(null=True)
     DEVICE_CHOICES = [
         ('desktop', 'Desktop'),
         ('mobile', 'Mobile'),
@@ -614,3 +616,4 @@ class TrafficLog(models.Model):
 
     timestamp = models.DateTimeField(auto_now_add=True)
     device_type = models.CharField(max_length=10, choices=DEVICE_CHOICES)
+    last_activity = models.DateTimeField(auto_now=True)

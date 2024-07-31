@@ -21,7 +21,7 @@
                             <span class="year">1834</span>
                             <img src="{% if about_us.description_image.url != '' %} {{about_us.description_image.url}} {% else %} {% static 'images/about-page/about-img-1.jpg' %} {% endif %}" alt="About" class="img-fluid img-left">
                             <h2 class="h3">About The National Institute Of Transport Alumni</h2>
-                            <p>{{about_us.description}}</p>
+                            <p style="text-align: justify;">{{about_us.description}}</p>
                         </div>
                         {% endif %}
 
@@ -30,7 +30,7 @@
                             <span class="year">2015</span>
                             <img src="{% if about_us.achivements_image.url != '' %} {{about_us.achivements_image.url}} {% else %} {% static 'images/about-page/about-img-2.jpg' %} {% endif %}" alt="About" class="img-fluid img-right">
                             <h2 class="h3">Our Achivement in History</h2>
-                            <p>{{about_us.achivements}}</p>
+                            <p style="text-align: justify;">{{about_us.achivements}}</p>
                         </div>
                         {% endif %}
 
@@ -39,7 +39,7 @@
                             <span class="year">2006</span>
                             <img src="{% if about_us.mission_image.url != '' %} {{about_us.mission_image.url}} {% else %} {% static 'images/about-page/about-img-3.jpg' %} {% endif %}" alt="About" class="img-fluid img-left">
                             <h2 class="h3">Our New Mission</h2>
-                            <p>{{about_us.mission}}</p>
+                            <p style="text-align: justify;">{{about_us.mission}}</p>
                         </div>
                         {% endif %}
 
@@ -48,7 +48,7 @@
                             <span class="year">1920</span>
                             <img src="{% if about_us.vision_image.url != '' %} {{about_us.vision_image.url}} {% else %} {% static 'images/about-page/about-img-4.jpg' %} {% endif %}" alt="About" class="img-fluid img-right">
                             <h2 class="h3">Our New Vission</h2>
-                            <p>{{about_us.vision}}</p>
+                            <p style="text-align: justify;">{{about_us.vision}}</p>
                         </div>
                         {% endif %}
 
