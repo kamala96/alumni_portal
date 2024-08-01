@@ -220,6 +220,10 @@ class Organizer(models.Model):
 
 
 class EventsPost(models.Model):
+    STATUS = (
+        ('active', 'Active'),
+        ('in-active', 'In-Active'),
+    )
     title = models.CharField(max_length=200)
     organizer = models.ForeignKey(
         Organizer, on_delete=models.CASCADE, related_name='event_organizer', null=True, blank=True)
@@ -234,6 +238,9 @@ class EventsPost(models.Model):
         default=False, help_text='Whether it is publishable or not')
     is_published_on_slider = models.BooleanField(
         default=False, help_text='Whether it is publishable or not on the Slider')
+    audience = models.TextField(null=True, blank=True)
+    event_location = models.CharField(null=True, blank=True, max_length=100)
+    event_status = models.CharField(null=True, blank=True, max_length=100, choices=STATUS)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -244,6 +251,9 @@ class EventsPost(models.Model):
         ordering = ['-created_at']
         verbose_name = "Event Post"
         verbose_name_plural = "Event Posts"
+
+
+
 
 
 class NewsCategory(models.Model):

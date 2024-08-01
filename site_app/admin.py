@@ -43,11 +43,10 @@ class SiteSettingsAdmin(admin.ModelAdmin):
     search_fields = ('main_logo', 'favourite_icon')
 
 
+
 @admin.register(EventsPost)
 class EventsPostAdmin(admin.ModelAdmin):
-    list_display = ('title', 'updated_at')
-    # list_filter = ('is_active', 'created_at', 'updated_at')
-    # search_fields = ('main_logo', 'favourite_icon')
+    list_display = ('title', 'start_date', 'updated_at')
     prepopulated_fields = {'slug': ('title',)}
 
 
