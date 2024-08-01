@@ -417,7 +417,7 @@ def usre_profile_image(request):
             image = Image.open(profile_image)
 
             # Resize the image to 128x128 pixels
-            image = image.resize((128, 128), Image.ANTIALIAS)
+            image = image.resize((128, 128))
 
             # Save the resized image back to the ImageField
             temp_file = BytesIO()
@@ -429,7 +429,7 @@ def usre_profile_image(request):
             image = Image.open(cover_image)
 
             # Resize the image to 128x128 pixels
-            image = image.resize((800, 800), Image.ANTIALIAS)
+            image = image.resize((800, 800))
 
             # Save the resized image back to the ImageField
             temp_file = BytesIO()
