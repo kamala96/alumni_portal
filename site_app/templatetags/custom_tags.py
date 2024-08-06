@@ -112,7 +112,9 @@ def get_alumni_traffic_statistics():
     month_start = now.replace(day=1)
     year_start = now.replace(month=1, day=1)
 
-    online_visits = TrafficLog.objects.filter(timestamp__gte=now - timedelta(minutes=5)).count()
+    online_window = now - timedelta(minutes=5)
+
+    online_visits = TrafficLog.objects.filter(last_activity__gte=online_window).count()
     today_visits = TrafficLog.objects.filter(timestamp__gte=today_start).count()
     week_visits = TrafficLog.objects.filter(timestamp__gte=week_start).count()
     month_visits = TrafficLog.objects.filter(timestamp__gte=month_start).count()

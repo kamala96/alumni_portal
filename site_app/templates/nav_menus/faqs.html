@@ -16,7 +16,7 @@
                      <div class="single-event-details">
 
                          <div class="event-schedul">
-                             <h3>FREQUENTLY ASKED QUATIONS (FAQs)</h3>
+                             <h3>FREQUENTLY ASKED QUESTIONS (FAQs)</h3>
 
                              <div class="row justify-content-center">
                                  <div class="col-md-10">
@@ -24,12 +24,12 @@
                                          {% for faq in faqs %}
                                         <div class="accordion-item">
 
-                                             <h2 class="accordion-header" id="headingOne">
-                                                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                             <h2 class="accordion-header" id="heading{{ forloop.counter }}">
+                                                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ forloop.counter }}" aria-expanded="false" aria-controls="collapse{{ forloop.counter }}">
                                                      <span class="event-time">{{forloop.counter}}</span> {{faq.question}}
                                                  </button>
                                              </h2>
-                                             <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#cbx-event-accordion">
+                                             <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse{% if forloop.first %} show{% endif %}" aria-labelledby="heading{{ forloop.counter }}" data-bs-parent="#cbx-event-accordion">
                                                  <div class="accordion-body">
                                                   {{faq.answer}}
                                                  </div>

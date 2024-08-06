@@ -12,7 +12,7 @@
                         <div class="widgei-body">
                             <div class="footer-about">
                                 <img src="{% static 'images/logo/logo.png' %}" alt="Logo" class="img-fluid" />
-                                <p>
+                                <p style="text-align: justify;">
                                     {% if about_us %}
                                     {{ about_us.welcome_note|truncate_chars:200 }}
                                     {% endif %}
@@ -35,7 +35,7 @@
                         <h4 class="widget-title">Get In Touch</h4>
                         <div class="widgei-body">
                             <p>
-                                Do not Miss Our News Letter by subscribing hhhh
+                                Do not Miss Our News Letter by subscribing
                             </p>
                             <div class="newsletter-form">
                                 <form method="post" action="{% url 'add_subscribe' %}">

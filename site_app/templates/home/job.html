@@ -32,7 +32,7 @@
                                       </div>
                                   </div>
                                   <h3><a href="{% if job.external_link != None %}{{job.external_link}}{% else %}#{% endif %}" target="_blank">{{job.job_title}}</a></h3>
-                                  <p>{{job.job_description|truncate_chars:130}}</p>
+                                  <p style="text-align: justify;">{{job.job_description|truncate_chars:130}}</p>
                               </div>
                               <a href="{% if job.external_link != None %}{{job.external_link}}{% else %}#{% endif %}" target="_blank" class="btn btn-job">Apply now</a>
                               <!-- <a href="#" class="btn btn-job btn-expired disabled">Expired</a> -->

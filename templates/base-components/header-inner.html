@@ -74,72 +74,17 @@
                     {% endif %}
                     {% endfor %}
                 </ul>
-
-
-
-                {% comment %} 
-                <ul class="codeboxr-main-menu">
-                    <li>
-                        <a href="{% url 'handle_nav_menu_click' 'home' %}">Home</a>
-                    </li>
-                    <li><a href="{% url 'handle_nav_menu_click' 'about-us' %}">About</a></li>
-                    <li><a href="event.html">Event</a></li>
-                    <li><a href="gallery.html">Gallery</a></li>
-
-                    <li class="has-submenu menu-item-depth-0">
-                        <a href="blog.html">Blog</a>
-                        <ul class="sub-menu">
-                            <li><a href="blog.html">Blog List</a></li>
-                            <li>
-                                <a href="single-blog.html">Single Blog Right Sidebar</a>
-                            </li>
-                            <li>
-                                <a href="single-blog-leftsidebar.html">Single Bolg Left Sidebar</a>
-                            </li>
-                            <li>
-                                <a href="single-blog-nosidebar.html">Single Blog No Sidrebar</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="has-submenu menu-item-depth-0">
-                        <a href="#">Pages</a>
-
-                        <ul class="sub-menu">
-                            <li class="has-submenu">
-                                <a href="gallery.html">Gallery</a>
-                                <ul class="sub-menu">
-                                    <li>
-                                        <a href="gallery.html">Gallery</a>
-                                    </li>
-                                    <li>
-                                        <a href="single-album.html">Single Album</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li><a href="committee.html">Committee</a></li>
-                            <li><a href="directory.html">Directory</a></li>
-                            <li><a href="register.html">Register</a></li>
-                            <li><a href="career.html">Career</a></li>
-                            <li>
-                                <a href="typography.html">Typography</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="menu-item-depth-0">
-                        <a href="contact.html">Contact</a>
-                    </li>
-                </ul> {% endcomment %}
-
-
-                
             </div>
-            <div class="brand-search-form">
+
+            {% comment %} <div class="brand-search-form" style="padding:8px;">
                 <form action="">
-                    <button type="button"><i class="fa fa-search"></i></button>
-                    {% comment %} <input type="search" placeholder="Type and hit here"> {% endcomment %}
-
+                    {% csrf_token %}
+                    <button type="button" class="sub-menu" id="search-button" style="padding-right:30px;"><i class="fa fa-search"></i></button>
+                    <div id="search-input" style="display:none;">
+                        <input type="search" id="username"  placeholder="Type and hit enter"> 
+                    </div>
                 </form>
-            </div>
+            </div> {% endcomment %}
             <!-- /.menu-wrapper -->
         </nav>
         <!-- /.site-nav -->
