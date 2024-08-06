@@ -19,6 +19,36 @@ admin.site.register(User, UserAdmin)
 
 
 # Register your models here.
+@admin.register(AlumniProfile)
+class AlumniProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', 'graduation_year', 'department',
+                    'gender', 'compass', 'phone')
+    list_filter = ('department', 'graduation_year', 'gender', 'compass')
+    search_fields = ('user__username', 'user__email',
+                     'phone', 'region', 'country')
+    fieldsets = (
+        (None, {
+            'fields': ('user', 'birthday', 'gender', 'phone')
+        }),
+        ('Academic Information', {
+            'fields': ('department', 'compass', 'Entry_year', 'graduation_year', 'batch_year', 'graduated_course')
+        }),
+        ('SONIT Information', {
+            'fields': ('is_sonit_leader', 'sonit_leader_position')
+        }),
+        ('Location', {
+            'fields': ('region', 'country', 'location')
+        }),
+        ('Profile Pictures', {
+            'fields': ('profile_picture', 'cover_profile')
+        }),
+        ('Other Information', {
+            'fields': ('affiliation_type', 'complete_profile_status', 'failed_login_attempts', 'lockout_until', 'comments')
+        }),
+    )
+    list_per_page = 20
+
+
 @admin.register(TopHeader)
 class TopHeaderAdmin(admin.ModelAdmin):
     list_display = ('MenuFor', 'title', 'position', 'link_type',
@@ -41,7 +71,6 @@ class SiteSettingsAdmin(admin.ModelAdmin):
                     'is_active', 'created_at', 'updated_at')
     list_filter = ('is_active', 'created_at', 'updated_at')
     search_fields = ('main_logo', 'favourite_icon')
-
 
 
 @admin.register(EventsPost)
