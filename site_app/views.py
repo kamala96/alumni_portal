@@ -193,8 +193,8 @@ def handle_nav_menu_click(request, menu_slug):
         'news': news.get_page(page_number),
         'jobs': jobs.get_page(page_number),
         'about_us': about_us,
-        'committees': committees.filter(is_active=True).order_by('-order_id'), #[:5], about
-        'all_committees': committees.filter(is_active=True).order_by('-order_id'), #[:5], committee garally
+        'committees': committees.filter(is_active=True).order_by('order_id')[:8], #about
+        'all_committees': committees.filter(is_active=True).order_by('order_id'), #[:5], committee garally
         'alumni_speechs': alumni_speechs.filter(is_published=True).order_by('-order_id'), #[:5],
         'alumni_members': alumni_members.get_page(page_number),
         'total_alumni_member': alumni_members.count,

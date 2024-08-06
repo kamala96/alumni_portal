@@ -13,6 +13,7 @@
      <div class="committee-content-wrap section-padding">
          <div class="committee-member-list">
              <div class="container">
+                <div class="row">
                {% for committee in all_committees %}
                  {% if committee.alumni_position == 'president' %}
                  <div class="row">
@@ -22,29 +23,30 @@
                              <h3>{{committee.fullname.user.first_name}} {{committee.fullname.user.last_name}} <span class="committee-deg">{{committee.alumni_position}}</span></h3>
                          </div>
                      </div>
-                 </div>
+                </div>
 
                  {% elif committee.alumni_position == 'vice-president' or committee.alumni_position == 'asistance-secretary' or committee.alumni_position == 'secretary'  %}
-                 <div class="row">
+                 
                      <div class="col-lg-4 col-sm-6">
                          <div class="single-committee-member">
                              <img src="{% if committee.committee_profile_picture.url != '' %} {{ committee.committee_profile_picture.url }} {% else %} {% static 'images/committee/commitee-1.jpg' %} {% endif %}" class="img-fluid" alt="Committee" />
                              <h3>{{committee.fullname.user.first_name}} {{committee.fullname.user.last_name}} <span class="committee-deg">{{committee.alumni_position}}</span></h3>
                          </div>
                      </div>
-                 </div>
+                 
 
                  {% else %}
-                 <div class="row">
+                
                      <div class="col-lg-3 col-sm-6">
                          <div class="single-committee-member">
                              <img src="{% if committee.committee_profile_picture.url != '' %} {{ committee.committee_profile_picture.url }} {% else %} {% static 'images/committee/commitee-1.jpg' %} {% endif %}" class="img-fluid" alt="Committee" />
                              <h3>{{committee.fullname.user.first_name}} {{committee.fullname.user.last_name}} <span class="committee-deg">{{committee.alumni_position}}</span></h3>
                          </div>
                      </div>
-                 </div>
+                 
                  {% endif %}
                {% endfor %}
+            </div>
              </div>
          </div>
      </div>

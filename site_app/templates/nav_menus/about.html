@@ -114,7 +114,7 @@
                             <img src="{% if alumni_speech.publisher.profile_picture != '' %} {{alumni_speech.publisher.profile_picture.url}} {% else %} {% static 'images/testimonial/testi-3.png' %} {% endif %}" alt="Alumni" class="img-fluid" />
                         </div>
                         <i class="quote-icon"></i>
-                        <p> {{alumni_speech.speech}} </p>
+                        <p style="text-align: justify;"> {{alumni_speech.speech|truncate_chars:300 }} </p>
                         <h4>{{alumni_speech.publisher.user.first_name}} {{alumni_speech.publisher.user.last_name}} <span class="people-deg">Founder at {{alumni_speech.publisher.location}}</span></h4>
                     </div>
                     {% endfor %}
