@@ -124,6 +124,10 @@ def default_error_page(request):
 
 
 def handle_nav_menu_click(request, menu_slug):
+    keyword = request.GET.get('keyword', '')
+    dept = request.GET.get('dept', '')
+    month = request.GET.get('month', '')
+    year = request.GET.get('year', '')
     try:
         nav_menu = Navigationmenu.objects.get(slug=menu_slug)
     except Navigationmenu.DoesNotExist:
@@ -143,6 +147,13 @@ def handle_nav_menu_click(request, menu_slug):
 
     events = Paginator(EventsPost.objects.filter(
         is_published=True).order_by('-created_at'), 10)
+    if year and year != 'Year':
+        events = Paginator(EventsPost.objects.filter(start_date__year=year) | EventsPost.objects.filter(end_date__year=year), 10)
+    if month and month != 'Month':
+        events = Paginator(EventsPost.objects.filter(start_date__month=month) | EventsPost.objects.filter(end_date__month=month), 10)
+    if keyword:
+        events = Paginator(EventsPost.objects.filter(title__icontains=keyword) | EventsPost.objects.filter(description__icontains=keyword) | EventsPost.objects.filter(organizer__name__icontains=keyword) | EventsPost.objects.filter(event_location__icontains=keyword), 10)
+
     news = Paginator(NewsPost.objects.filter(
         is_published=True).order_by('-created_at'), 10)
     jobs = Paginator(JobPosting.objects.filter(
@@ -151,6 +162,13 @@ def handle_nav_menu_click(request, menu_slug):
     alumni_speechs = AlumniSpeech.objects.all()
     alumni_members = Paginator(AlumniProfile.objects.filter(
         user__is_active=True).order_by('-graduation_year'), 15)
+    
+    if keyword:
+        alumni_members = Paginator(AlumniProfile.objects.filter(user__first_name__icontains=keyword) | AlumniProfile.objects.filter(compass__icontains=keyword) | AlumniProfile.objects.filter(location__icontains=keyword) | AlumniProfile.objects.filter(graduation_year__icontains=keyword) | AlumniProfile.objects.filter(user__last_name__icontains=keyword), 15)
+
+    if dept and dept != 'Dept':
+        alumni_members = Paginator(AlumniProfile.objects.filter(department__icontains=dept), 15)
+
     alumni_album = Paginator(
         AlumniAlbum.objects.all().order_by('-created_at'), 3)
 
@@ -221,8 +239,11 @@ def handle_nav_menu_click(request, menu_slug):
         'GENDER_CHOICES': AlumniProfile.GENDER_CHOICES,
         'COMPAS': AlumniProfile.COMPAS_CHOICES,
         'SONIT_LEADER': AlumniProfile.SONIT_LEADER_CHOICES,
+        'COMPAS_CHOICES': AlumniProfile.COMPAS_CHOICES,
         'member_profile': member_profile,
         'faqs': AlumniFAQ.objects.filter(is_active=True).order_by('id'),
+        'month_range': range(1, 13),
+        'year_range': range(2010, datetime.now().year + 1),
     }
 
     return render(request, f'nav_menus/{template_name}', context)

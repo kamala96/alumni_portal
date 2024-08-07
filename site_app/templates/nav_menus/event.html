@@ -13,40 +13,29 @@
       <section id="page-content-wrap">
           <div class="event-page-content-wrap section-padding">
               <div class="container">
-                  <div class="row">
-                      <div class="col-lg-12">
-                          <div class="event-filter-area">
-                              <form action="https://codeboxr.net/themedemo/unialumni/html/index.html" class="form-inline d-flex">
-                                  <select name="year" id="year">
-                                      <option selected>Year</option>
-                                      <option>2018</option>
-                                      <option>2017</option>
-                                      <option>2016</option>
-                                      <option>2015</option>
-                                      <option>2014</option>
-                                  </select>
 
-                                  <select name="place" id="place">
-                                      <option selected>Place</option>
-                                      <option>Alabama</option>
-                                      <option>Alaska</option>
-                                      <option>Arizona</option>
-                                      <option>Colorado</option>
-                                      <option>Delaware</option>
-                                  </select>
-
-                                  <select name="type" id="type">
-                                      <option selected>Type</option>
-                                      <option>Meetup</option>
-                                      <option>Seminar</option>
-                                      <option>Get Together</option>
-                                  </select>
-
-                                  <button class="btn btn-brand">Filter</button>
-                              </form>
-                          </div>
-                      </div>
-                  </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="event-filter-area">
+                            <form action="{% url 'handle_nav_menu_click' 'event' %}" method="get" class="form-inline d-flex">
+                                <input type="search" placeholder="Type Your Keyword" name="keyword">
+                                <select name="month" id="type">
+                                    <option value="Month" selected>Search By Month</option>
+                                    {% for month in month_range  %}
+                                    <option value="{{month}}">{{month}}</option>
+                                    {% endfor %}
+                                </select>
+                                <select name="year" id="yr">
+                                    <option value="Year" selected>Search By Year</option>
+                                    {% for year in year_range %}
+                                        <option value="{{ year }}">{{ year }}</option>
+                                    {% endfor %}
+                                </select>
+                                <button class="btn btn-brand">Search</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
 
               
                   <div class="row">
