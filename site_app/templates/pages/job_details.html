@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+{% load tz %}
+{% load static %}
+{% load custom_tags %}
+{% block title %} Job {% endblock title %}
+
+{% block content %}
+
+{% include 'nav_menus/welcome_page.html' with welcome_page_content="Job Details" %}
+
+
+<div id="page-content-wrap">
+  <div class="blog-page-content-wrap section-padding">
+      <div class="container">
+
+        {% if jobs %}
+          <div class="row">
+
+              <!-- Blog content Area Start -->
+              <div class="col-lg-8">
+                  <article class="single-blog-content-wrap">
+                      <header class="article-head">
+                          <div class="single-blog-thumb">
+                              <img src="{% if jobs.company_logo.url != '' %} {{ jobs.company_logo.url }} {% else %} {% static 'images/job/compnay-logo-1.png' %} {% endif %}" class="img-fluid" alt="Blog">
+                          </div>
+                          <div class="single-blog-meta">
+                              <h2>{{ jobs.job_title }}</h2>
+                              <div class="posting-info">
+                                   • Deadline On: <a>{{ jobs.job_deadline_date|date:'d M Y' }} </a> • Notified by: <a href="#">{{ jobs.alumni_provider.first_name }} {{ jobs.alumni_provider.last_name }}</a>
+                                   {% if jobs.deadline_status != "Expired" %}
+                                   <a href="{% if jobs.external_link != None %}{{jobs.external_link}}{% else %}#{% endif %}" target="_blank" class="btn btn-primary" style="float: right; color: aliceblue;"><b>Apply Now</b></a>
+                                   {% endif %}
+                              </div>
+                          </div>
+                      </header>
+                      <section class="blog-details">
+                          <p style="text-align: justify;">{{ jobs.job_description }}</p>
+                          <p>
+                              <div class="row justify-content-center">
+                                   <div class="col-md-12">
+                                       <div class="accordion cbx-acacordion" id="cbx-event-accordion">
+                                           
+                                          <div class="accordion-item">
+                                               <h2 class="accordion-header" id="heading1">
+                                                   <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1" aria-expanded="false" aria-controls="collapse1">
+                                                       <span class="event-time">1</span> Job Detail Locations
+                                                   </button>
+                                               </h2>
+                                               <div id="collapse1" class="accordion-collapse collapse show" aria-labelledby="heading1" data-bs-parent="#cbx-event-accordion">
+                                                   <div class="accordion-body">
+                                                    <b>Company Name:</b> {{jobs.company_name}} ,<br>
+                                                    <b>Job Location:</b> {{jobs.job_location}} ,<br>
+                                                    <b>Job Category:</b> {{jobs.category.name}} ,<br>
+                                                    <b>Job Deadline:</b> {{jobs.job_deadline_date|date:'d M Y'}} ,<br>
+                                                    <b>Job Status:</b> {{jobs.employment_type}} ,<br>
+                                                    <b>Salary Range:</b> {{jobs.salary_range}}<br>
+                                                   </div>
+                                               </div>
+                                           </div>
+
+                                          </div>
+                                   </div>
+                               </div>
+                          </p>
+
+                          <p>
+                              <div class="row justify-content-center">
+                                   <div class="col-md-12">
+                                       <div class="accordion cbx-acacordion" id="cbx-event-accordion">
+                                           
+                                          <div class="accordion-item">
+                                               <h2 class="accordion-header" id="heading2">
+                                                   <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
+                                                       <span class="event-time">2</span> Job Requirements
+                                                   </button>
+                                               </h2>
+                                               <div id="collapse2" class="accordion-collapse collapse" aria-labelledby="heading2" data-bs-parent="#cbx-event-accordion">
+                                                   <div class="accordion-body">
+                                                    <b>Required Qualification:</b> {{jobs.required_qualifications}} ,<br>
+                                                    <b>Prefered Qualification:</b> {{jobs.preferred_qualifications}} ,<br>
+                                                    <b>Job Responsibilities:</b> {{jobs.responsibilities}} ,<br>
+                                                    <b>Application Procedure:</b> {{jobs.application_procedure}}<br>
+                                                   </div>
+                                               </div>
+                                           </div>
+
+                                          </div>
+                                   </div>
+                               </div>
+                          </p>
+
+                          <p>
+                              <div class="row justify-content-center">
+                                   <div class="col-md-12">
+                                       <div class="accordion cbx-acacordion" id="cbx-event-accordion">
+                                           
+                                          <div class="accordion-item">
+                                               <h2 class="accordion-header" id="heading3">
+                                                   <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3" aria-expanded="false" aria-controls="collapse3">
+                                                       <span class="event-time">3</span> Other Details
+                                                   </button>
+                                               </h2>
+                                               <div id="collapse3" class="accordion-collapse collapse" aria-labelledby="heading3" data-bs-parent="#cbx-event-accordion">
+                                                   <div class="accordion-body">
+                                                       <b>Job Benefit:</b> {{jobs.benefits}} ,<br>
+                                                       <b>Email:</b> {{jobs.contact_email}} ,<br>
+                                                       <b>Phone:</b> {{jobs.contact_phone}}
+                                                   </div>
+                                               </div>
+                                           </div>
+
+                                          </div>
+                                   </div>
+                               </div>
+                          </p>
+
+                          <footer class="post-share">
+                            <div class="row no-gutters ">
+                                <div class="col-8">
+                                    <div class="shareonsocial">
+                                        <span>Share:</span>
+                                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                        <a href="#"><i class="fab fa-twitter"></i></a>
+                                        <a href="#"><i class="fab fa-youtube-y"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </footer>
+                      </section>
+
+
+                  </article>
+              </div>
+              <!-- Blog content Area End -->
+
+
+              <!-- Sidebar Area Start -->
+              <div class="col-lg-4 order-first order-lg-last">
+
+                  <div class="sidebar-area-wrap">
+
+                      <!-- Single Sidebar Start -->
+                      <div class="single-sidebar-wrap">
+                          <h4 class="sidebar-title">Categories</h4>
+                          <div class="sidebar-body">
+                              <ul class="brand-unorderlist">
+                                  <li><a href="{% url 'handle_nav_menu_click' 'home' %}#alumni_of_the_month">Alumni Of The Month</a></li>
+                                  <li><a href="{% url 'handle_nav_menu_click' 'event' %}">Events</a></li>
+                                  <li><a href="{% url 'handle_nav_menu_click' 'job' %}">Jobs</a></li>
+
+                              </ul>
+                          </div>
+                      </div>
+                      <!-- Single Sidebar End -->
+                  </div>
+              </div>
+              <!-- Sidebar Area End -->
+          </div>
+          {% else %}
+          {% endif %}
+      </div>
+  </div>
+</div>
+
+
+{% endblock content %}

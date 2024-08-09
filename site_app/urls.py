@@ -21,6 +21,7 @@ urlpatterns = [
     path('event/<int:event_id>/', views.handle_event_click,
          name='handle_event_click'),
     path('news/<int:news_id>/', views.handle_news_click, name='handle_news_click'),
+    path('jobs/<int:job_id>/', views.handle_job_click, name='handle_job_click'),
     path('gallery/<int:album_id>/', views.handle_album_click,
          name='handle_album_click'),
     path('user/<int:user_id>/', views.handle_user_profile_click,

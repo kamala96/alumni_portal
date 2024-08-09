@@ -4,12 +4,28 @@ from django.db import models
 from django.contrib.auth.models import User
 from phonenumber_field.modelfields import PhoneNumberField
 from .validators import *
+from django.utils import timezone
 
 
 class AlumniProfile(models.Model):
     DEPARTIMENT_CHOICES = (
-        ('cct', 'Computing And Communication Technology'),
-        ('lts', 'Logistic And Transport Study'),
+        ('cct', 'Computing and Communication Technology'),
+        ('fom', 'Flying and Operations Management'),
+        ('ae', 'Aeronautical Engineering'),
+        ('mtm', 'Maritime Transport Management'),
+        ('moge', 'Marine, Oil and Gas Engineering'),
+        ('ame', 'Automotive and Mechanical Engineering'),
+        ('cte', 'Civil and Transportation Engineering'),
+        ('eete', 'Electrical, Electronics and Telecommunication Engineering'),
+        ('tsee', 'Transport Safety and Environmental Engineering'),
+        ('hevic', 'Heavy Equipment and Vehicle Inspection Centre'),
+        ('btsaic', 'Bureau for Transport Safety and Accident Investigation'),
+        ('pdt', 'Professional Drivers Training'),
+        ('ltm', 'Logistics and Transport Management'),
+        ('ms', 'Management Sciences'),
+        ('eaf', 'Economics, Accounting and Finance'),
+        ('hss', 'Humanities and Social Science'),
+        ('em', 'Education and Mathematics'),
 
     )
     COMPAS_CHOICES = (
@@ -354,6 +370,12 @@ class JobPosting(models.Model):
 
     def _str_(self):
         return self.job_title.upper()
+    
+    def deadline_status(self):
+        if self.job_deadline_date < timezone.now().date():
+            return "Expired"
+        else:
+            return "Apply"
 
 
 class FooterLink(models.Model):

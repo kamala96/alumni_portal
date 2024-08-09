@@ -284,6 +284,17 @@ def handle_news_click(request, news_id):
     return render(request, 'pages/news_details.html', context)
 
 
+
+def handle_job_click(request, job_id):
+    jobs = get_object_or_404(JobPosting, pk=job_id)
+
+    context = {
+        'jobs': jobs,
+    }
+
+    return render(request, 'pages/job_details.html', context)
+
+
 def handle_album_click(request, album_id):
     albums = AlumniAlbum.objects.all()
     # albums = get_object_or_404(NewsPost, pk=album_id)

@@ -57,7 +57,7 @@
                                    {% for alumni_member in alumni_members %}
                                      <tr>
                                          <td><img src="{% if alumni_member.profile_picture != '' %} {{alumni_member.profile_picture.url}} {% else %} {% static 'images/testimonial/testi-1.jpg' %} {% endif %}" alt="table">{{alumni_member.user.first_name}} {{alumni_member.user.last_name}}</td>
-                                         <td>{{alumni_member.department}}</td>
+                                         <td>{{alumni_member.department|upper}}</td>
                                          <td>{{alumni_member.graduation_year}}</td>
                                          <td>{{alumni_member.compass}}</td>
                                          <td>{{alumni_member.location}}</td>
