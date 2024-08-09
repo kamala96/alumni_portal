@@ -129,10 +129,11 @@
     <!-- Dependency Scripts -->
     <script id="script-bundle" src="{% static 'vendors/js/bundle.js' %}"></script>
 
-    {% comment %} <script id="color-switcher" src="{% static 'js/switcher.js' %}"></script> {% endcomment %}
+    <script id="color-switcher" src="{% static 'js/switcher.js' %}"></script>
 
     <!-- Site Scripts -->
     <script src="{% static 'js/app.js' %}"></script>
+
     <!-- Include jQuery and Owl Carousel JS -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
@@ -157,42 +158,65 @@
           });
         });
 
-        document.addEventListener('DOMContentLoaded', function () {
-          const threeDots = document.getElementById('three-dots');
-          const preheaderLeft = document.getElementById('preheader-left');
+        // document.addEventListener('DOMContentLoaded', function () {
+        //   const threeDots = document.getElementById('three-dots');
+        //   const preheaderLeft = document.getElementById('preheader-left');
       
-          function checkWindowSize() {
-            if (window.innerWidth <= 768) {
-              threeDots.style.display = 'block';
-              preheaderLeft.style.display = 'none';
-            } else {
-              threeDots.style.display = 'none';
-              preheaderLeft.style.display = 'flex';
-            }
-          }
+        //   function checkWindowSize() {
+        //     if (window.innerWidth <= 768) {
+        //       threeDots.style.display = 'block';
+        //       preheaderLeft.style.display = 'none';
+        //     } else {
+        //       threeDots.style.display = 'none';
+        //       preheaderLeft.style.display = 'flex';
+        //     }
+        //   }
       
-          threeDots.addEventListener('click', function () {
-            if (preheaderLeft.style.display === 'flex') {
-              preheaderLeft.style.display = 'none';
-            } else {
-              preheaderLeft.style.display = 'flex';
-              preheaderLeft.style.flexDirection = 'column';
-              preheaderLeft.style.backgroundColor = '#008fb0';
-              preheaderLeft.style.position = 'absolute';
-              preheaderLeft.style.top = '100%';
-              preheaderLeft.style.left = '0';
-              preheaderLeft.style.right = '0';
-              preheaderLeft.style.zIndex = '1000';
-              preheaderLeft.style.padding = '10px';
-            }
-          });
+        //   threeDots.addEventListener('click', function () {
+        //     if (preheaderLeft.style.display === 'flex') {
+        //       preheaderLeft.style.display = 'none';
+        //     } else {
+        //       preheaderLeft.style.display = 'flex';
+        //       preheaderLeft.style.flexDirection = 'column';
+        //       preheaderLeft.style.backgroundColor = '#008fb0';
+        //       preheaderLeft.style.position = 'absolute';
+        //       preheaderLeft.style.top = '100%';
+        //       preheaderLeft.style.left = '0';
+        //       preheaderLeft.style.right = '0';
+        //       preheaderLeft.style.zIndex = '1000';
+        //       preheaderLeft.style.padding = '10px';
+        //     }
+        //   });
       
-          window.addEventListener('resize', checkWindowSize);
-          checkWindowSize();
-        });
+        //   window.addEventListener('resize', checkWindowSize);
+        //   checkWindowSize();
+        // });
         
         </script>
 
+
+<!-- <script>
+  $(document).ready(function(){
+      var slider = $('.slider-active-wrap').owlCarousel({
+          items: 1, // Display one slide at a time
+          loop: true, // Enable looping
+          autoplay: true, // Enable autoplay
+          autoplayTimeout: 5000, // Set autoplay interval (in ms)
+          autoplayHoverPause: true, // Pause autoplay on hover
+          nav: true, // Show navigation buttons
+          dots: true // Show pagination dots
+      });
+
+      // Adjust autoplay speed based on the number of slides
+      var slideCount = {{ sliders|length }};
+      if (slideCount > 0) {
+          slider.trigger('play.owl.autoplay', [1000 * slideCount]); // Adjust autoplay speed
+      }
+  });
+
+</script> -->
+
+  
 </body>
 
 </html>

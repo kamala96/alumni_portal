@@ -2,8 +2,9 @@
 {% load static %}
 {% load custom_tags %}
 
+
 <section id="slider-area">
-    <div class="slider-active-wrap owl-carousel text-center text-md-start">
+    <div class="slider-active-wrap owl-carousel">
         <!-- For active sliders -->
         {% get_sliders as sliders %}
         
@@ -107,6 +108,19 @@
 <!-- End Eventic Section -->
 
 
+<script>
+$(document).ready(function() {
+    $('.slider-active-wrap').owlCarousel({
+        items: 1, // Number of items to show
+        loop: true, // Loop through slides
+        autoplay: true, // Auto-slide
+        autoplayTimeout: 5000, // Slide duration (3 seconds)
+        autoplayHoverPause: true, // Pause on hover
+        nav: true, // Show navigation arrows
+        dots: true, // Show pagination dots
+    });
+});
+</script>
 
       <!-- <section id="upcoming-area">
           <div class="container">
