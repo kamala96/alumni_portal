@@ -2,6 +2,13 @@
 {% load static %}
 {% load custom_tags %}
 
+<style>
+
+.owl-dots {
+        display: none !important;
+    }
+
+</style>
 
 <section id="slider-area">
     <div class="slider-active-wrap owl-carousel">
@@ -107,20 +114,40 @@
 
 <!-- End Eventic Section -->
 
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Owl Carousel JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+
 
 <script>
-$(document).ready(function() {
-    $('.slider-active-wrap').owlCarousel({
-        items: 1, // Number of items to show
-        loop: true, // Loop through slides
-        autoplay: true, // Auto-slide
-        autoplayTimeout: 5000, // Slide duration (3 seconds)
-        autoplayHoverPause: true, // Pause on hover
-        nav: true, // Show navigation arrows
-        dots: true, // Show pagination dots
+
+$(document).ready(function(){
+        var $slider = $(".slider-active-wrap");
+        
+        // Initialize Owl Carousel
+        $slider.owlCarousel({
+            items: 1, // Display one item at a time
+            loop: true, // Enable looping
+            autoplay: true, // Enable autoplay
+            autoplayTimeout: 6000, // Delay between slides
+            autoplaySpeed: 5000, // Transition speed
+            animateOut: 'fadeOut', // Out animation
+            animateIn: 'fadeIn', // In animation
+            dots: true, // Enable dots
+            nav: false, // Hide navigation arrows
+            autoplayHoverPause: true, // Pause autoplay on hover
+
+        });
+
+        // Show dots according to the number of sliders
+        var slideCount = $slider.find('.owl-item:not(.cloned)').length;
+        $('.owl-dot').slice(0, slideCount).show();
     });
-});
+
 </script>
+
 
       <!-- <section id="upcoming-area">
           <div class="container">
