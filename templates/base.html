@@ -158,39 +158,37 @@
           });
         });
 
-        // document.addEventListener('DOMContentLoaded', function () {
-        //   const threeDots = document.getElementById('three-dots');
-        //   const preheaderLeft = document.getElementById('preheader-left');
+         document.addEventListener('DOMContentLoaded', function () {
+           const threeDots = document.getElementById('three-dots');
+           const preheaderLeft = document.getElementById('preheader-left');
+                function checkWindowSize() {
+             if (window.innerWidth <= 768) {
+               threeDots.style.display = 'block';
+               preheaderLeft.style.display = 'none';
+             } else {
+               threeDots.style.display = 'none';
+               preheaderLeft.style.display = 'flex';
+             }
+           }
+                threeDots.addEventListener('click', function () {
+             if (preheaderLeft.style.display === 'flex') {
+               preheaderLeft.style.display = 'none';
+             } else {
+               preheaderLeft.style.display = 'flex';
+               preheaderLeft.style.flexDirection = 'column';
+               preheaderLeft.style.backgroundColor = '#008fb0';
+               preheaderLeft.style.position = 'absolute';
+               preheaderLeft.style.top = '100%';
+               preheaderLeft.style.left = '0';
+               preheaderLeft.style.right = '0';
+               preheaderLeft.style.zIndex = '1000';
+               preheaderLeft.style.padding = '10px';
+             }
+           });
       
-        //   function checkWindowSize() {
-        //     if (window.innerWidth <= 768) {
-        //       threeDots.style.display = 'block';
-        //       preheaderLeft.style.display = 'none';
-        //     } else {
-        //       threeDots.style.display = 'none';
-        //       preheaderLeft.style.display = 'flex';
-        //     }
-        //   }
-      
-        //   threeDots.addEventListener('click', function () {
-        //     if (preheaderLeft.style.display === 'flex') {
-        //       preheaderLeft.style.display = 'none';
-        //     } else {
-        //       preheaderLeft.style.display = 'flex';
-        //       preheaderLeft.style.flexDirection = 'column';
-        //       preheaderLeft.style.backgroundColor = '#008fb0';
-        //       preheaderLeft.style.position = 'absolute';
-        //       preheaderLeft.style.top = '100%';
-        //       preheaderLeft.style.left = '0';
-        //       preheaderLeft.style.right = '0';
-        //       preheaderLeft.style.zIndex = '1000';
-        //       preheaderLeft.style.padding = '10px';
-        //     }
-        //   });
-      
-        //   window.addEventListener('resize', checkWindowSize);
-        //   checkWindowSize();
-        // });
+           window.addEventListener('resize', checkWindowSize);
+           checkWindowSize();
+         });
         
         </script>
 
