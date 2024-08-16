@@ -146,6 +146,28 @@ $(document).ready(function(){
         $('.owl-dot').slice(0, slideCount).show();
     });
 
+
+
+
+
+    $(document).ready(function(){
+        var $slider = $(".upcoming-event-content");
+        
+        // Initialize Owl Carousel
+        $slider.owlCarousel({
+            items: 1, // Display one item at a time
+            loop: true, // Enable looping
+            autoplay: true, // Enable autoplay
+            autoplayTimeout: 8000, // Delay between slides
+            autoplaySpeed: 6000, // Transition speed
+            animateOut: 'fadeOut', // Out animation
+            animateIn: 'fadeIn', // In animation
+            dots: true, // Enable dots
+            nav: false, // Hide navigation arrows
+            autoplayHoverPause: true, // Pause autoplay on hover
+
+        });
+    });
 </script>
 
 
